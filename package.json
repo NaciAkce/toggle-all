@@ -4,17 +4,34 @@
   "description": "Javascript plugin toggle dropdown, accordion, tabs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint '**/*.js'",
+    "lint:fix": "node node_modules/prettier-eslint '**/*.js' --write"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NaciAkce/toggle-all.git"
   },
-  "keywords": ["toggle", "accordion", "tabs", "menu"],
+  "keywords": [
+    "toggle",
+    "accordion",
+    "tabs",
+    "menu"
+  ],
   "author": "Naci Akce",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/NaciAkce/toggle-all/issues"
   },
-  "homepage": "https://github.com/NaciAkce/toggle-all#readme"
+  "homepage": "https://github.com/NaciAkce/toggle-all#readme",
+  "devDependencies": {
+    "eslint": "^5.15.3",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "prettier-eslint": "^8.8.2"
+  }
 }
