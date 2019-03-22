@@ -1,0 +1,20 @@
+{
+  "name": "toggle-all",
+  "version": "1.0.0",
+  "description": "Javascript plugin toggle dropdown, accordion, tabs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NaciAkce/toggle-all.git"
+  },
+  "keywords": ["toggle", "accordion", "tabs", "menu"],
+  "author": "Naci Akce",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NaciAkce/toggle-all/issues"
+  },
+  "homepage": "https://github.com/NaciAkce/toggle-all#readme"
+}
