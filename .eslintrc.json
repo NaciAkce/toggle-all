@@ -1,15 +1,26 @@
 {
+    "root": true,
     "env": {
         "browser": true,
         "es6": true
     },
-    "extends": ["plugin:prettier/recommended"],
-
+    "extends": [
+        "plugin:prettier/recommended",
+        "plugin:react/recommended"
+    ],
     "parserOptions": {
         "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "rules": {
+        "prettier/prettier": [
+            "error",
+            {
+                "singleQuote": true,
+                "printWidth": 120,
+                "trailingComma": "none"
+            }
+        ],
         "quotes": [
             1,
             "single"

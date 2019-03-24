@@ -1,4 +1,17 @@
 {
     "editor.formatOnSave": true,
+    "emmet.triggerExpansionOnTab": true,
+    "emmet.syntaxProfiles": {
+        "javascript": "jsx, javascriptreact, vue, scss, html",
+        "xml": {
+            "attr_quotes": "single"
+        }
+    },
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact, jsx, javascript, html",
+        "jsx-sublime-babel-tags": "javascriptreact",
+        "html": "html",
+        "css": "css"
+    },
     "prettier.eslintIntegration": true
 }
