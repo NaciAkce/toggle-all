@@ -1,3 +1,5 @@
+import './scss/styles.scss';
+
 const $ = element => document.querySelector(element);
 const $$ = elements => document.querySelectorAll(elements);
 export default class Toggle {
