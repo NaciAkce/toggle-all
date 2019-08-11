@@ -1,0 +1,151 @@
+// ---------------------------------------
+// Buttons
+// Main Button Classes are .btn-primary and .btn-secondary
+
+// general
+$btn-border-radius-sm: 4px;
+$btn-border-radius-lg: 100px;
+$btn-border-radius-base: 26px;
+$btn-color-disabled: $c-gray-light;
+$btn-font-weight: $fw-semibold;
+$btn-font: $f-base;
+$btn-font-size: $fs-base;
+$btn-letter-spacing: $ls-base;
+
+// primary
+$btn-primary-color: $c-base;
+$btn-primary-color-hover: $c-white;
+$btn-primary-bg: $c-primary;
+$btn-primary-bg-hover: $c-secondary;
+$btn-primary-border: $c-primary;
+$btn-primary-border-hover: $c-secondary;
+
+// secondary
+$btn-secondary-color: $c-secondary;
+$btn-secondary-color-hover: $c-primary;
+$btn-secondary-bg: transparent;
+$btn-secondary-bg-hover: transparent;
+$btn-secondary-border: $c-secondary;
+$btn-secondary-border-hover: $c-primary;
+
+.btn {
+    background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+    border: $border-base;
+    border-radius: $btn-border-radius-sm;
+    cursor: pointer;
+    display: inline-block;
+    font-family: $btn-font;
+    font-size: $btn-font-size;
+    letter-spacing: $btn-letter-spacing;
+    overflow: hidden;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
+    transition: border-color 0.25s ease-in-out, color 0.25s ease-in-out, background-color 0.25s ease-in-out;
+    vertical-align: middle;
+
+    // variants
+    &--primary {
+        @include button-variant(
+            $btn-primary-color,
+            $btn-primary-color-hover,
+            $btn-primary-bg,
+            $btn-primary-bg-hover,
+            $btn-primary-border,
+            $btn-primary-border-hover
+        );
+    }
+
+    &--secondary {
+        @include button-variant(
+            $btn-secondary-color,
+            $btn-secondary-color-hover,
+            $btn-secondary-bg,
+            $btn-secondary-bg-hover,
+            $btn-secondary-border,
+            $btn-secondary-border-hover
+        );
+    }
+
+    &--icon {
+        @extend .align-items-center;
+        @extend .d-flex;
+        @extend .justify-content-center;
+
+        [class^='i-'] {
+            &:not(:only-child) {
+                @extend .ml-xs;
+            }
+        }
+    }
+
+    &--disabled,
+    fieldset[disabled] & {
+        pointer-events: none; // Future-proof disabling of clicks on `<a>` elements
+    }
+
+    &--round {
+        border-radius: 50%;
+        height: 2rem;
+        padding: 0;
+        width: 2rem;
+
+        @include media-breakpoint-up(sm) {
+            height: 2.8rem;
+            width: 2.8rem;
+        }
+    }
+
+    &--reset {
+        background-color: transparent;
+        border: 0 none;
+        border-radius: 0;
+    }
+
+    // sizes
+    &--base {
+        @include button-size($base, $md, $btn-font-size, $lh-base, $btn-border-radius-sm, $btn-font-weight);
+    }
+
+    &--xs {
+        @include button-size($sm, $sm, $fs-xs, $lh-xs, $btn-border-radius-sm, $fw-normal);
+    }
+
+    &--md {
+        @include button-size($md, $lg, $btn-font-size, $lh-base, $btn-border-radius-sm, $fw-semibold);
+    }
+
+    &--xl {
+        @include button-size($lg, $xl, $fs-lg, $lh-xl, $btn-border-radius-lg, $fw-semibold);
+    }
+
+    &__group {
+        .btn + .btn {
+            margin-left: $md;
+        }
+    }
+}
+
+// Specificity overrides
+input[type='submit'],
+input[type='reset'],
+input[type='button'] {
+    &.btn--block {
+        width: 100%;
+    }
+}
+
+// if you want to have basic buttons
+// simply extend .btn-primary or .btn-secondary
+// for variatns in sizes additionally extend .btn--xl etc.
+.btn-primary {
+    @extend .btn;
+    @extend .btn--base;
+    @extend .btn--primary;
+}
+
+.btn-secondary {
+    @extend .btn;
+    @extend .btn--base;
+    @extend .btn--secondary;
+}

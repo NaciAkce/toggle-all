@@ -1,0 +1,65 @@
+// ----------------------------------------
+// links
+$c-link: $c-primary;
+$c-link-hover: darken($c-primary, 20%);
+$td-link: none;
+$td-link-hover: none;
+
+// variant used for %link--secondary -> can be deleted if not needed
+$c-link-accent: $c-secondary;
+$c-link-accent-hover: darken($c-secondary, 20%);
+$td-link-accent: underline;
+$td-link-accent-hover: underline;
+
+%link {
+    color: $c-link;
+    text-decoration: $td-link;
+    transition: $transition-base;
+
+    &:hover {
+        color: $c-link-hover;
+        text-decoration: $td-link-hover;
+    }
+
+    &--secondary {
+        color: $c-link-accent;
+
+        &:hover {
+            color: $c-link-accent-hover;
+        }
+    }
+
+    &__icon {
+        @extend .d-flex;
+        @extend .align-items-center;
+
+        [class^='i-'] {
+
+            &:not(:only-child) {
+
+                &:first-child {
+                    @extend .mr-sm;
+                }
+            }
+        }
+    }
+
+    &__text {
+        white-space: nowrap;
+    }
+}
+
+// can be used to remove decoration
+%link-reset {
+    border-bottom: none;
+    text-decoration: none;
+
+    &:hover {
+        border-bottom: none;
+        text-decoration: none;
+    }
+}
+
+a {
+    @extend %link;
+}

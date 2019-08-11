@@ -1,0 +1,77 @@
+///////////////////////////
+// FORM RESET
+// To set basic styles for input fields
+
+$input-background-color: $c-white !default;
+$input-background-color--disabled: $c-gray-light !default;
+$input-color: $c-base !default;
+$input-placeholder-color: lighten($c-base, 60%) !default;
+$input-border: 1px solid $c-base !default;
+$input-border-radius: 5px !default;
+$input-font-size: $fs-base !default;
+$input-line-height: $lh-base !default;
+
+input {
+    background-clip: padding-box;
+    background-color: $input-background-color;
+    border: $input-border;
+    border-radius: $input-border-radius;
+    color: $input-color;
+    display: block;
+    font-size: $input-font-size;
+    line-height: $input-line-height;
+    padding: 0.5rem;
+    width: 100%;
+
+    &:focus {
+        @extend %box-shadow--focus;
+    }
+
+    &::-ms-expand { // sass-lint:disable-line no-vendor-prefixes
+        background-color: transparent;
+        border: 0;
+    }
+
+    &::placeholder {
+        color: $input-placeholder-color;
+    }
+
+    &:disabled,
+    &[readonly] {
+        background-color: $input-background-color--disabled;
+    }
+}
+
+select {
+    @extend input;
+    appearance: none;
+    vertical-align: middle;
+
+    &:focus::-ms-value { // sass-lint:disable-line no-vendor-prefixes
+        background-color: $input-background-color;
+        color: $input-color;
+    }
+
+    &::-ms-expand { // sass-lint:disable-line no-vendor-prefixes
+        display: none;
+    }
+}
+
+textarea {
+    @extend input;
+}
+
+.form {
+    &__group {
+        @extend .mb-lg;
+    }
+}
+
+.control {
+    &--inline {
+        @extend .d-flex;
+        > div:not(:last-child) {
+            @extend .mr-md;
+        }
+    }
+}

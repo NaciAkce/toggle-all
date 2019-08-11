@@ -1,0 +1,67 @@
+.list {
+    font-size: $fs-base;
+    line-height: $lh-xl;
+    list-style-type: none;
+    margin: 0;
+    padding-left: 0;
+
+    li {
+        padding-left: 25px;
+        position: relative;
+
+        &:before {
+            left: 0;
+            position: absolute;
+        }
+
+        ul,
+        ol {
+            li {
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}
+
+ul.list {
+    & > li {
+
+        &::before {
+            background-color: $c-primary;
+            border-radius: 50%;
+            content: '';
+            height: 6px;
+            top: ($fs-base / 1.2);
+            width: 6px;
+        }
+
+        ul {
+            li {
+                &::before {
+                    background-color: $c-secondary;
+                }
+            }
+        }
+    }
+}
+
+ol.list {
+    counter-reset: li;
+
+    & > li {
+
+        &:before {
+            color: $c-base;
+            content: counter(li) '.';
+            counter-increment: li;
+        }
+
+        ol {
+            & > li {
+                &:before {
+                    content: counter(li, lower-alpha) '.';
+                }
+            }
+        }
+    }
+}

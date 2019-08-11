@@ -1,0 +1,83 @@
+$checkbox__color: $c-white !default;
+
+$checkbox__before-gap: 2.2rem !default;
+$checkbox__before-width: $checkbox__before-gap - 0.5rem !default;
+$checkbox__before-height: $checkbox__before-width !default;
+
+$checkbox__border: 1px solid $c-base !default;
+$checkbox__border-radius: 3px !default;
+$checkbox__border-color-focus: $c-secondary !default;
+$checkbox__border-color-checked: $c-primary !default;
+
+$checkbox__background: $c-white !default;
+$checkbox__background-active: darken($checkbox__background, 5%) !default;
+$checkbox__background-checked: $c-primary !default;
+$checkbox__background: $c-white !default;
+
+.checkbox {
+    display: block;
+    padding-left: $checkbox__before-gap;
+    position: relative;
+
+    &__field {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+
+        &:checked ~ .checkbox__label {
+
+            &::before {
+                background-color: $checkbox__background-checked;
+                border-color: $checkbox__border-color-checked;
+            }
+
+            &::after {
+                @extend .i-ok:before;
+            }
+        }
+
+        &:focus ~ .checkbox__label::before {
+            @extend %box-shadow--focus;
+        }
+
+        &:active ~ .checkbox__label::before {
+            background-color: $checkbox__background-active;
+        }
+    }
+}
+
+
+.checkbox {
+
+    &__label {
+        @extend .mb-sm;
+
+        &::before {
+            background-color: $checkbox__background;
+            border: $checkbox__border;
+            border-radius: $checkbox__border-radius;
+            content: "";
+            display: block;
+            height: $checkbox__before-height;
+            left: 0;
+            position: absolute;
+            top: 0;
+            user-select: none;
+            width: $checkbox__before-width;
+        }
+
+        &::after {
+            @extend [class*='i-'];
+            @extend .align-items-center;
+            @extend .d-flex;
+            @extend .justify-content-center;
+            color: $checkbox__color;
+            height: $checkbox__before-height;
+            left: 0;
+            position: absolute;
+            text-align: center;
+            top: 0;
+            width: $checkbox__before-width;
+        }
+    }
+}

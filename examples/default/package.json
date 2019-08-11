@@ -1,0 +1,12 @@
+{
+  "name": "default",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "toggle-all": "file:../.."
+  },
+  "devDependencies": {
+    "serve": "^10.1.2"
+  }
+}

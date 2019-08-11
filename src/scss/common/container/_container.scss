@@ -1,0 +1,34 @@
+// ----------------------------------
+// CONTAINER
+// use to extend on your containers / sections
+// eg. .section-text {@extend %section} .frame-type-text {@extend %container--lg}
+
+%container--xl {
+    @extend .container;
+    max-width: $w-container-xl;
+}
+
+%container--lg {
+    @extend .container;
+    max-width: $w-container-lg;
+}
+
+%container--md {
+    @extend .container;
+    max-width: $w-container-md;
+}
+
+%container--sm {
+    @extend .container;
+    max-width: $w-container-sm;
+}
+
+%container--custom {
+    @extend .container;
+    max-width: $w-container-custom;
+}
+
+%section {
+    display: block;
+    margin-bottom: 4rem;
+}

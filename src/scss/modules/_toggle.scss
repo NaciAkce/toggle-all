@@ -1,0 +1,302 @@
+%shadow-triangle {
+    box-shadow: -4px 4px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.section {
+    @extend .py-xl;
+
+    &:nth-child(even) {
+        background-color: $c-gray-lightest;
+    }
+}
+
+.container {
+    @extend %container--xl;
+}
+
+.tabs {
+    &__content {
+        @extend .mt-lg;
+        @extend .mb-lg;
+    }
+
+    &__list {
+        @extend .d-flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    &__link {
+        @extend .mr-lg;
+        color: $c-base;
+        text-transform: uppercase;
+        text-decoration: none;
+        &.is--active {
+            border-bottom: 2px solid #1d1d1d;
+            color: #1d1d1d;
+        }
+    }
+
+    &__body {
+        @extend .d-none;
+        transition: opacity 0.2s cubic-bezier(0.42, 0, 0.34, 1.01);
+        opacity: 0;
+
+        &.is--active {
+            @extend .d-block;
+        }
+
+        &.is--show {
+            opacity: 1;
+        }
+    }
+}
+
+.accordion {
+    &__card {
+        ~ .accordion__card {
+            .accordion__button {
+                border-top: 0 none;
+            }
+        }
+
+        &:last-child {
+            .accordion__body {
+                border-bottom: 0 none;
+            }
+        }
+    }
+
+    &__body {
+        @extend .pt-lg;
+        @extend .pb-lg;
+        @extend .px-md;
+        overflow: hidden;
+        transition: height 0.3s ease-out;
+        &:not(.is--active) {
+            transition: height 0.3s ease-out;
+            display: none;
+        }
+
+        &.is--active {
+            border-bottom: 1px solid $c-gray-light;
+        }
+    }
+
+    &__icon {
+        &:before {
+            @extend [class*='i-']:before;
+            @extend .i-down-open:before;
+        }
+    }
+
+    &__button {
+        @extend .py-md;
+        @extend .px-md;
+        @extend .d-flex;
+        @extend .align-items-center;
+        @extend .justify-content-between;
+        background: transparent;
+        border: 1px solid $c-gray-light;
+        width: 100%;
+    }
+
+    .is--active .accordion__icon:before {
+        content: '\e806';
+    }
+}
+.collapsing {
+    position: relative;
+    height: 0px;
+    transition: height 0.3s ease-out;
+}
+
+.dropdown {
+    position: relative;
+    @extend .d-none;
+
+    &.is--active {
+        @extend .d-block;
+    }
+
+    &__button {
+        @extend .py-sm;
+        @extend .px-sm;
+        @extend .d-flex;
+        @extend .align-items-center;
+        @extend .justify-content-between;
+        background: transparent;
+        border: 1px solid $c-gray-light;
+        height: 36px;
+        width: 36px;
+
+        &.is--active {
+            .dropdown__close {
+                @extend .d-flex;
+                @extend .align-items-center;
+            }
+            .dropdown__open {
+                @extend .d-none;
+            }
+        }
+    }
+
+    &__open {
+        @extend .d-flex;
+        @extend .align-items-center;
+        &:before {
+            @extend [class*='i-']:before;
+            @extend .i-menu-2:before;
+        }
+    }
+
+    &__close {
+        @extend .d-none;
+        &:before {
+            @extend [class*='i-']:before;
+            @extend .i-cancel:before;
+        }
+    }
+
+    &__container {
+        @extend .pt-lg;
+        @extend .pb-lg;
+
+        @extend %shadow-sm;
+        background-color: $c-white;
+        position: absolute;
+
+        &:not(.is--active) {
+            display: none;
+        }
+    }
+
+    &__list {
+        @extend .m-0;
+        @extend .px-0;
+        @extend .py-0;
+
+        list-style: none;
+    }
+
+    &__item {
+        @extend .py-sm;
+        @extend .px-md;
+        @extend .d-block;
+        border-bottom: 1px solid $c-gray-light;
+        color: $c-base;
+    }
+
+    &__link {
+        color: $c-base;
+    }
+}
+
+// Menu
+.simple {
+    &__content {
+        padding-bottom: 150px;
+    }
+
+    &-menu {
+        &--fixed {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            z-index: 2;
+
+            transition: right 0.3s ease 0.1ms;
+            &.dropdown__container {
+                &:not(.is--active) {
+                    display: block;
+                    right: -100%;
+                }
+            }
+            &.is--active {
+                right: 0;
+            }
+        }
+    }
+}
+
+.tool-tip {
+    &__content {
+        @extend .d-inline-block;
+        position: relative;
+    }
+
+    &__toggle {
+        @extend .ml-sm;
+        background: transparent;
+        border: 1px solid $c-black;
+        color: $c-black;
+        font-size: 0.875rem;
+        height: 2rem;
+        padding: 0.1rem;
+        width: 2rem;
+
+        &:after {
+            border: 1px solid $c-black;
+            height: calc(100% - 4px);
+            width: calc(100% - 4px);
+        }
+    }
+
+    &__dropdown {
+        @extend .pt-md;
+        @extend .pb-lg;
+        @extend .px-lg;
+        @extend %shadow-xs;
+        background: $c-white;
+        bottom: calc(100% + 15px);
+        display: none;
+        font-size: $fs-sm;
+        font-weight: $fw-normal;
+        max-width: 100%;
+        position: absolute;
+        right: -20px;
+        text-transform: none;
+        z-index: 5;
+
+        &:after {
+            @extend %shadow-triangle;
+            border: 0.625rem solid black;
+            border-color: transparent transparent $c-white $c-white;
+            bottom: -0.975rem;
+            content: '';
+            height: 0;
+            position: absolute;
+            right: 30px;
+            transform: rotate(-45deg) translate(0, 0);
+            transform-origin: 0 0;
+            width: 0;
+
+            @include media-breakpoint-up(md) {
+                bottom: -0.825rem;
+                left: calc(50% - 8px);
+                right: auto;
+                transform: rotate(-45deg) translate(-50%, 0);
+            }
+        }
+
+        @include media-breakpoint-up(md) {
+            max-width: inherit;
+            right: -187px;
+            transform: translate(-15px, 0);
+            width: 374px;
+        }
+
+        &.is--active {
+            display: block;
+        }
+    }
+
+    &__icon {
+        &:before {
+            @extend .mx-0;
+        }
+    }
+}

@@ -1,0 +1,180 @@
+/////////////////////////////////////
+// GENERAL STYLES FOR CONTENT
+// standard html elements within the content-wrapper
+// sass-lint:disable no-vendor-prefixes
+
+body {
+    // sass-lint:disable no-vendor-prefixes
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    // sass-lint:enable no-vendor-prefixes
+    background-color: $c-bg-base;
+    color: $c-base;
+    font-family: $f-base;
+    font-size: $fs-base;
+    font-weight: $fw-base;
+    line-height: $lh-base;
+    position: relative;
+    text-align: left;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @extend .mb-base;
+    margin-top: 0;
+    text-transform: uppercase;
+
+    &.ce-headline-center {
+        text-align: center;
+    }
+
+    &.ce-headline-right {
+        text-align: right;
+    }
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: $f-heading;
+    line-height: $lh-heading;
+    word-wrap: break-word;
+}
+
+h1 {
+    font-family: $f-heading;
+    font-size: $fs-lg;
+    font-weight: $fw-heading;
+    line-height: $lh-heading;
+    margin-bottom: 2.5rem;
+    word-wrap: break-word;
+
+    @include media-breakpoint-up(md) {
+        font-size: $fs-xl;
+    }
+
+    span {
+        display: block;
+        font-family: $f-base;
+        font-size: $fs-sm;
+        font-weight: $fw-base;
+    }
+}
+
+h2 {
+    @extend .mb-md;
+    font-size: $fs-md;
+    font-weight: $fw-heading;
+
+    @include media-breakpoint-up(lg) {
+        font-size: $fs-lg;
+    }
+}
+
+h3 {
+    font-size: $fs-base;
+    font-weight: $fw-semibold;
+
+    @include media-breakpoint-up(lg) {
+        font-size: $fs-md;
+    }
+}
+
+h4 {
+    font-size: $fs-sm;
+}
+
+h5 {
+    font-size: $fs-sm;
+}
+
+h6 {
+    font-size: $fs-sm;
+}
+
+.paragraph {
+    @extend .mb-base;
+    font-size: $fs-base;
+    line-height: $lh-base;
+    margin-top: 0;
+}
+
+p {
+    @extend .paragraph;
+
+    &.text-center {
+        text-align: center;
+    }
+
+    &.text-justify {
+        text-align: justify;
+    }
+
+    &.text-right {
+        text-align: right;
+    }
+}
+
+strong {
+    font-weight: $fw-bold;
+}
+
+figure {
+    margin: 0;
+}
+
+img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+}
+
+.image-caption {
+    color: $c-gray;
+    font-size: $fs-sm;
+    margin-top: 0.5rem;
+}
+
+blockquote {
+    padding-left: 20px;
+    position: relative;
+
+    p {
+        font-size: $fs-lg;
+
+        @include media-breakpoint-down(sm) {
+            font-size: $fs-base;
+        }
+    }
+
+    &::before {
+        background-color: $c-primary;
+        bottom: 0;
+        content: '';
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 6px;
+    }
+}
+
+.footnote {
+    font-size: $fs-sm;
+}
+
+.preformatted {
+    @extend .p-base;
+    @extend .mt-md;
+    background: $c-gray;
+    overflow: scroll;
+}
+
+pre {
+    @extend .preformatted;
+}

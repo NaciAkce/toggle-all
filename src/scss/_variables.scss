@@ -1,0 +1,146 @@
+// ---------------------------------------
+// Variables
+
+// grid definitions
+$enable-grid-classes: true;
+$grid-gutter-width: 30px;
+$grid-columns: 12;
+
+// container widths
+$w-container-sm: 780px;
+$w-container-md: 992px;
+$w-container-lg: 1170px;
+$w-container-xl: 1300px;
+$w-container-custom: 560px;
+
+// overrides bootsrap container widths
+// because we mostly use fluid containers with max widths
+// if you want to have hard breaktpoints for containers
+// add them here
+$container-max-widths: (
+    xl: $w-container-lg
+);
+
+// for media queries and infixes
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1140px
+);
+
+// Spacer
+// example usage including media query: @extend .mt-md-xl; -> adds margin-top: $xl; if screen wider than md;
+// example usage without media query: @extend .mt-lg; -> adds margin-top: $lg;
+$xs: 0.2rem;
+$sm: 0.5rem;
+$md: 1.25rem;
+$lg: 1.7rem;
+$xl: 2.5rem;
+$base: 1rem;
+
+$spacer: 1rem;
+$spacers: ();
+$spacers: map-merge(
+    (
+        0: 0,
+        xs: $xs,
+        sm: $sm,
+        base: $base,
+        md: $md,
+        lg: $lg,
+        xl: $xl
+    ),
+    $spacers
+);
+
+// ---------------------------------------
+// Colors
+$c-white: #ffffff;
+$c-black: #000000;
+$c-red: #e62739;
+$c-orange: #fb8122;
+$c-yellow: #f3e367;
+$c-green: #99c221;
+$c-blue: #2962ff;
+$c-teal: #98dafc;
+$c-pink: #ff5b77;
+$c-purple: #9068be;
+
+// Grayscale Colors
+$c-gray-lightest: #f6f6f6;
+$c-gray-light: #e4e4e4;
+$c-gray: #929d9e;
+$c-gray-dark: #7f8688;
+$c-gray-darkest: #4c4555;
+
+// Design Colors
+$c-primary: $c-yellow;
+$c-secondary: $c-gray-dark;
+$c-base: $c-black;
+
+// System Colors
+$c-success: $c-green;
+$c-info: $c-yellow;
+$c-warning: $c-orange;
+$c-danger: $c-red;
+
+// Background
+$c-bg-light: $c-gray-light;
+$c-bg-dark: $c-black;
+$c-bg-base: $c-white;
+
+// Borders
+$c-border-light: $c-gray-light;
+$c-border-dark: $c-gray-dark;
+$c-border-base: $c-gray;
+
+$border-light: 1px solid $c-border-light;
+$border-dark: 1px solid $c-border-dark;
+$border-base: 1px solid $c-border-base;
+
+// Typography
+$f-sans-serif: 'Open Sans', 'Helvetica', Arial, sans-serif;
+$f-serif: Georgia, 'Times New Roman', serif;
+$f-monospace: Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+$f-icon: 'Client';
+$f-base: $f-sans-serif;
+
+// font weight
+$fw-light: 300;
+$fw-normal: 400;
+$fw-semibold: 600;
+$fw-bold: 700;
+$fw-base: $fw-normal;
+
+// Line height
+$lh-xs: 1;
+$lh-base: 1.65;
+$lh-xl: 2;
+
+// font size
+$fs-xs: 0.75rem; //12px
+$fs-sm: 0.875rem; //14px
+$fs-base: 16px; // for body
+$fs-md: 1.25rem; // 20px for (h3) body
+$fs-lg: 1.625rem; // 26px (for H2)
+$fs-xl: 2rem; // 32px (for H1)
+
+$fs-teaser-base: 2.5rem; // 40px
+$fs-teaser-lg: 3.75rem; // 60px (for Banner etc)
+$fs-teaser-xl: 5rem; // 80px (for Banner etc)
+
+// letter spacing
+$ls-base: 0;
+$ls-sm: 0.05rem;
+$ls-lg: 0.1rem;
+
+// Heading
+$f-heading: $f-sans-serif;
+$fw-heading: $fw-bold;
+$lh-heading: 1.2;
+
+// elper
+$transition-base: all 0.3s ease-in-out;
+$transition-fade: opacity 0.25s linear;

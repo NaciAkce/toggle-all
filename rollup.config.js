@@ -3,7 +3,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import autoprefixer from 'autoprefixer';
 import postcss from 'postcss';
-import sass from 'rollup-plugin-sass';
+import scss from 'rollup-plugin-scss'
 
 const dist = 'dist';
 const bundle = 'bundle';
@@ -19,7 +19,7 @@ export default {
             format: 'cjs'
         },
         {
-            name: 'toggleAll',
+            name: 'toggle',
             file: `${dist}/${bundle}.umd.js`,
             globals: {
                 react: 'React'
@@ -33,7 +33,8 @@ export default {
     ],
     plugins: [
         resolve(),
-        sass({
+        scss({
+            output: true,
             output: `${dist}/styles.css`,
             processor: css =>
                 postcss([autoprefixer])
