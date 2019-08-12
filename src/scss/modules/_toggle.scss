@@ -2,6 +2,10 @@
     box-shadow: -4px 4px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
+div[class*='col-md'] {
+    @extend .mt-lg;
+}
+
 .section {
     @extend .py-xl;
 
@@ -114,11 +118,6 @@
 
 .dropdown {
     position: relative;
-    @extend .d-none;
-
-    &.is--active {
-        @extend .d-block;
-    }
 
     &__button {
         @extend .py-sm;
@@ -166,6 +165,7 @@
         @extend %shadow-sm;
         background-color: $c-white;
         position: absolute;
+        z-index: 1;
 
         &:not(.is--active) {
             display: none;
@@ -224,7 +224,8 @@
 
 .tool-tip {
     &__content {
-        @extend .d-inline-block;
+        @extend .d-flex;
+        @extend .justify-content-center;
         position: relative;
     }
 
@@ -257,7 +258,8 @@
         font-weight: $fw-normal;
         max-width: 100%;
         position: absolute;
-        right: -20px;
+        left: 50%;
+        transform: translate(-50%, 0);
         text-transform: none;
         z-index: 5;
 
@@ -265,27 +267,18 @@
             @extend %shadow-triangle;
             border: 0.625rem solid black;
             border-color: transparent transparent $c-white $c-white;
-            bottom: -0.975rem;
+            bottom: -0.625rem;
             content: '';
             height: 0;
             position: absolute;
-            right: 30px;
-            transform: rotate(-45deg) translate(0, 0);
+            left: calc(50% - 4px);
+            transform: rotate(-45deg) translate(-50%, 0);
             transform-origin: 0 0;
             width: 0;
-
-            @include media-breakpoint-up(md) {
-                bottom: -0.825rem;
-                left: calc(50% - 8px);
-                right: auto;
-                transform: rotate(-45deg) translate(-50%, 0);
-            }
         }
 
         @include media-breakpoint-up(md) {
             max-width: inherit;
-            right: -187px;
-            transform: translate(-15px, 0);
             width: 374px;
         }
 

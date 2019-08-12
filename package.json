@@ -11,13 +11,16 @@
         "lint": "eslint '**/*.js'",
         "server": "browser-sync start --server 'dist' --files 'dist'",
         "watch:server": "concurrently --kill-others \"yarn run dev\" \"yarn run server\"",
-        "lint:fix": "node node_modules/prettier-eslint '**/*.js' --write"
+        "lint:fix": "node node_modules/prettier-eslint '**/*.js' --write",
+        "storybook": "start-storybook -p 9001 -c storybook",
+        "storybook:build": "build-storybook  -c storybook"
     },
     "browserslist": [
-        "> 0.25%",
-        "ie 11",
-        "not op_mini all",
-        "not dead"
+        "Chrome >= 72",
+        "ChromeAndroid >= 72",
+        "Firefox >= 65",
+        "iOS >=12",
+        "IE >= 11"
     ],
     "engines": {
         "node": ">=8"
@@ -35,7 +38,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/NaciAkce/toggle-all.git"
+        "url": "https://github.com/NaciAkce/toggle-all.git"
     },
     "keywords": [
         "toggle",
@@ -54,7 +57,11 @@
         "@babel/plugin-proposal-class-properties": "^7.5.5",
         "@babel/preset-env": "^7.5.5",
         "@babel/preset-react": "^7.0.0",
+        "@storybook/addon-options": "^5.1.10",
+        "@storybook/html": "^5.1.10",
         "autoprefixer": "^9.6.1",
+        "babel-loader": "^8.0.6",
+        "browser-sync": "^2.26.7",
         "concurrently": "^4.1.1",
         "eslint": "^6.1.0",
         "eslint-config-prettier": "^6.0.0",
@@ -67,15 +74,19 @@
         "eslint-plugin-standard": "^4.0.0",
         "husky": "^3.0.3",
         "lint-staged": "^9.2.1",
+        "node-sass": "^4.12.0",
         "postcss": "^7.0.17",
         "prettier-eslint": "^9.0.0",
         "rollup": "^1.19.4",
         "rollup-plugin-babel": "^4.3.3",
         "rollup-plugin-node-resolve": "^5.2.0",
-        "rollup-plugin-sass": "^1.2.2",
+        "rollup-plugin-scss": "^1.0.2",
         "rollup-plugin-terser": "^5.1.1",
-        "browser-sync": "^2.26.7",
-        "node-sass": "^4.12.0",
-        "rollup-watch": "^4.3.1"
+        "rollup-watch": "^4.3.1",
+        "sass-loader": "^7.2.0"
+    },
+    "dependencies": {
+        "@storybook/addon-actions": "^5.1.10",
+        "@storybook/addons": "^5.1.10"
     }
 }

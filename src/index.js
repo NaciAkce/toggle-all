@@ -178,6 +178,7 @@ const Toggle = (userSettings = {}) => {
         const allElements = filtered
             .reduce((all, toggle, index, arr) => {
                 let grouped = [];
+
                 const newArray = [
                     {
                         type: 'drop',
