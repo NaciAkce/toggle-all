@@ -1,6 +1,63 @@
-import './scss/styles.scss';
+/* eslint-disable prettier/prettier */
+
 const $ = element => document.querySelector(element);
 const $$ = elements => document.querySelectorAll(elements);
+
+if (!Element.prototype.matches) {
+    Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+}
+
+if (!Element.prototype.closest) {
+    Element.prototype.closest = function (s) {
+        var el = this;
+
+        do {
+            if (el.matches(s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+    };
+}
+
+/**
+ * @param  {Node}   elem     The element
+ * @param  {String} selector The selector to match against
+ * @return {Node}            The sibling
+ */
+const getNextSibling = function (elem, selector) {
+    const sibling = elem.nextElementSibling;
+
+    if (!selector) return sibling;
+
+    while (sibling) {
+        if (sibling.matches(selector)) return sibling;
+        sibling = sibling.nextElementSibling;
+    }
+};
+
+/**
+ * Return true if active tab is clicked
+ * @param {Node} item
+ * @param {Node} target
+ * @param {String} splitselectorToggle
+ * @return {Boolean}....
+ */
+const isTabActive = (item, target, splitselectorToggle) => item.value === target || item.value === $(target.getAttribute(splitselectorToggle));
+
+/**
+ * Item Object
+ * @param {String} type
+ * @param {NNode} value
+ * @param {String} role
+ * @param {String} toggleActiveClass
+ * @return {Object}.....Item Object
+ */
+const createElementObject = (type, value, role, toggleActiveClass) => ({
+    type: type,
+    value: value,
+    role: role ? role : 'default',
+    active: value.classList.contains(toggleActiveClass)
+});
 
 const defaultConfig = {
     selectorToggle: '[data-toggle]',
@@ -8,8 +65,11 @@ const defaultConfig = {
     selectorGroup: '[data-toggle-group]',
     selectorValidate: '[data-toggle-validate]',
     selectorRole: '[data-toggle-role]',
+    selectorBack: '[data-toggle-back]',
+    selectorNext: '[data-toggle-next]',
     toggleActiveClass: 'is--active',
     toggleErrorClass: 'is--error',
+    toggleCollapseClass: 'is--collapsing',
     toggleShowClass: 'is--show',
     stopVideo: true,
     callbackOpen: false,
@@ -24,8 +84,11 @@ const Toggle = (userSettings = {}) => {
         selectorGroup,
         selectorValidate,
         selectorRole,
+        selectorBack,
+        selectorNext,
         toggleActiveClass,
         toggleErrorClass,
+        toggleCollapseClass,
         toggleShowClass,
         stopVideo,
         callbackOpen,
@@ -64,9 +127,8 @@ const Toggle = (userSettings = {}) => {
         body.addEventListener('click', closeActiveGlobal);
     };
 
-    // eslint-disable-next-line complexity
     const toggleItems = event => {
-        if (!event.target.closest(selectorToggle)) return;
+        if (!event.target.closest(selectorToggle) || event.target.closest(selectorBack)) return;
         event.preventDefault();
 
         const target = event.target.closest(selectorToggle);
@@ -75,91 +137,57 @@ const Toggle = (userSettings = {}) => {
 
         const allElements = allToggles(toggles, target);
 
-        if (!allElements) return;
-
         for (let item of allElements) {
-            if (
-                item.value.classList.contains(toggleActiveClass) &&
-                item.role === 'tab' &&
-                (item.value === target || item.value === $(target.getAttribute(splitselectorToggle)))
-            )
-                return;
+            const isActive = item.active;
 
-            if (item.value.classList.contains(toggleActiveClass)) {
-                var form =
-                    item.type === 'drop' && item.value.hasAttribute(splitselectorValidate)
-                        ? item.value.querySelectorAll('[required]')
-                        : false;
 
-                if (form) {
-                    const arrOfInputs = [].slice.call(form);
-                    const isValid = checkValidity(arrOfInputs);
+            switchType(item, target, splitselectorToggle);
+            if (isActive) {
+                const isValid = checkValidity(item);
+                if (isValid) break;
 
-                    if (isValid) {
-                        isValid[0].focus();
-                        isValid[0].classList.add(toggleErrorClass);
-                        setTimeout(() => {
-                            const ElementPosition = isValid[0].getBoundingClientRect().top;
-                            window.scrollBy({ top: ElementPosition, left: 0, behavior: 'smooth' });
-                        }, 250);
-                        break;
-                    } else {
-                        form.forEach(
-                            item => item.classList.contains(toggleErrorClass) && item.classList.remove(toggleErrorClass)
-                        );
-                    }
-                }
-                close(item);
+                // close(item);
             } else {
-                open(item);
+                // open(item);
             }
+        }
+    };
+
+    const switchType = (item, target, splitselectorToggle) => {
+        switch (item.role) {
+            case 'accordion':
+                if (item.active) {
+                    item.type === 'drop' ? collapseSection(item.value) : close(item);
+                } else {
+                    item.type === 'drop' ? expandSection(item.value) : open(item);
+                }
+                break;
+            case 'tab':
+                if (item.active) {
+                    if (isTabActive(item, target, splitselectorToggle)) return;
+                    close(item);
+                    item.role === 'tab' && item.value.classList.remove(toggleShowClass);
+                } else {
+                    open(item);
+                    setTimeout(() => item.value.classList.add(toggleShowClass), 15);
+                }
+                break;
+            default:
+                item.active ? close(item) : open(item);
+                break;
         }
     };
 
     const open = item => {
         callbackOpen && callbackOpen(item);
-
-        if (item.type === 'drop' && item.role === 'accordion') {
-            expandSection(item.value);
-        } else {
-            item.value.classList.add(toggleActiveClass);
-            item.type === 'toggle' && item.value.setAttribute('aria-expanded', true);
-            setTimeout(() => item.role === 'tab' && item.value.classList.add(toggleShowClass), 15);
-        }
+        item.value.classList.add(toggleActiveClass);
+        item.type === 'toggle' && item.value.setAttribute('aria-expanded', true);
     };
 
     const close = item => {
         callbackClose && callbackClose(item);
-        if (item.type === 'drop' && item.role === 'accordion') {
-            collapseSection(item.value);
-        } else {
-            item.value.classList.remove(toggleActiveClass);
-            item.type === 'toggle' && item.value.setAttribute('aria-expanded', false);
-            item.role === 'tab' && item.value.classList.remove(toggleShowClass);
-        }
-    };
-
-    const checkValidity = items => {
-        const valid = items.filter(item => !item.checkValidity());
-
-        return valid.length !== 0 ? valid : false;
-    };
-
-    const closeActiveGlobal = event => {
-        const groupGlobal = $(`${selectorGlobal}.${toggleActiveClass}`);
-
-        if (!groupGlobal) return;
-
-        if (
-            event.target.closest(`${selectorGlobal}.${toggleActiveClass}`) !== null ||
-            event.target.closest(groupGlobal.getAttribute(splitselectorToggle)) !== null
-        )
-            return;
-
-        const getToggleTarget = $(groupGlobal.getAttribute(splitselectorToggle));
-
-        groupGlobal.classList.remove(toggleActiveClass);
-        getToggleTarget.classList.remove(toggleActiveClass);
+        item.value.classList.remove(toggleActiveClass);
+        item.type === 'toggle' && item.value.setAttribute('aria-expanded', false);
     };
 
     const allToggles = (toggles, target) => {
@@ -169,88 +197,115 @@ const Toggle = (userSettings = {}) => {
 
         const groupedToggle = group
             ? [].slice
-                  .call($$(`[${splitselectorGroup}="${group}"]`))
-                  .filter(e => e !== target && e.classList.contains(toggleActiveClass))
-            : false;
-        const drop = $(selector);
-        const filtered = toggles.filter(elem => elem.getAttribute(splitselectorToggle) === selector);
+                .call($$(`[${splitselectorGroup}="${group}"]`))
+                .filter(e => e !== target && e.classList.contains(toggleActiveClass))
+                .reduce((obj, item) => {
+                    const dropItem = $(item.getAttribute(splitselectorToggle)),
+                        toggle = createElementObject('toggle', item, role, toggleActiveClass),
+                        drop = createElementObject('drop', dropItem, role, toggleActiveClass);
+                    return [...obj, toggle, drop];
+                }, [])
+            : [];
 
-        const allElements = filtered
-            .reduce((all, toggle, index, arr) => {
-                let grouped = [];
+        const allToggles = target.closest(selectorNext)
+            ? [createElementObject('toggle', target, role, toggleActiveClass)]
+            : toggles
+                .filter(toggle => toggle.getAttribute(splitselectorToggle) === selector)
+                .map(toggle => createElementObject('toggle', toggle, role, toggleActiveClass));
 
-                const newArray = [
-                    {
-                        type: 'drop',
-                        value: drop,
-                        role: role ? role : 'default'
-                    },
-                    {
-                        type: 'toggle',
-                        value: toggle,
-                        role: role ? role : 'default'
-                    }
-                ];
+        const drops = target.closest(selectorNext)
+            ? [createElementObject('drop', getNextSibling(target, selector), role, toggleActiveClass)]
+            : [].slice.call($$(selector)).map(drop => {
+                return createElementObject('drop', drop, role, toggleActiveClass);
+            });
 
-                if (groupedToggle.length > 0) {
-                    const groupDrop = $(groupedToggle[0].getAttribute(splitselectorToggle));
-                    grouped = [
-                        {
-                            type: 'drop',
-                            value: groupDrop,
-                            role: role
-                        },
-                        {
-                            type: 'toggle',
-                            value: groupedToggle[0],
-                            role: role
-                        }
-                    ];
-                }
-                return [...all, ...grouped, ...newArray];
-            }, [])
-            .reduce((acc, current) => {
-                const x = acc.find(item => item.value === current.value) || current.value === null;
-                if (!x) {
-                    return acc.concat([current]);
-                } else {
-                    return acc;
-                }
-            }, []);
+        const allElements = [...drops, ...groupedToggle, ...allToggles];
 
         return allElements;
     };
 
+    const checkValidity = item => {
+        var form =
+            item.type === 'drop' && item.value.hasAttribute(splitselectorValidate)
+                ? item.value.querySelectorAll('[required]')
+                : false;
+
+        if (!form) return false;
+        if (form) {
+            const arrOfInputs = [].slice.call(form),
+                checkUnValid = arrOfInputs.filter(item => !item.checkValidity()),
+                valid = checkUnValid.length !== 0 ? valid : false;
+
+            if (valid) {
+                valid[0].focus();
+                valid[0].classList.add(toggleErrorClass);
+                setTimeout(() => {
+                    const ElementPosition = valid[0].getBoundingClientRect().top;
+                    window.scrollBy({ top: ElementPosition, left: 0, behavior: 'smooth' });
+                }, 250);
+                return true;
+            } else {
+                form.forEach(
+                    item => item.classList.contains(toggleErrorClass) && item.classList.remove(toggleErrorClass)
+                );
+                return false;
+            }
+        }
+    };
+
+    const closeActiveGlobal = event => {
+        const groupGlobal = [].slice.call($$(`${selectorGlobal}.${toggleActiveClass}`));
+
+        if (groupGlobal.length === 0) return;
+
+        if (
+            event.target.closest(`${selectorGlobal}.${toggleActiveClass}`) !== null ||
+            event.target.closest(groupGlobal[0].getAttribute(splitselectorToggle)) !== null
+        )
+            return;
+
+        const getToggleTarget = groupGlobal.map(item => $(item.getAttribute(splitselectorToggle)));
+
+        groupGlobal.forEach(item => item.classList.remove(toggleActiveClass));
+        getToggleTarget.forEach(item => item.classList.remove(toggleActiveClass));
+    };
+
     const collapseSection = item => {
-        item.classList.add('collapsing');
-        var sectionHeight = item.scrollHeight;
-        var elementTransition = item.style.transition;
-        item.style.transition = '';
-
-        requestAnimationFrame(function() {
+        const sectionHeight = item.scrollHeight;
+        window.requestAnimationFrame(function () {
             item.style.height = sectionHeight + 'px';
-            item.style.transition = elementTransition;
-
-            requestAnimationFrame(function() {
+            item.classList.add(toggleCollapseClass);
+            window.requestAnimationFrame(function () {
                 item.style.height = 0 + 'px';
-                item.classList.remove('collapsing');
-                item.classList.remove(toggleActiveClass);
+                item.addEventListener('transitionend', transitionEndCollapse);
+
             });
         });
+
     };
 
     function expandSection(item) {
+        const sectionHeight = item.scrollHeight;
         item.classList.add(toggleActiveClass);
-        item.classList.add('collapsing');
-        var sectionHeight = item.scrollHeight;
+        item.classList.add(toggleCollapseClass);
         item.style.height = sectionHeight + 'px';
-        item.addEventListener('transitionend', transitionEnd);
+        item.addEventListener('transitionend', transitionEndExpand);
     }
 
-    function transitionEnd(e) {
-        e.target.removeEventListener('transitionend', transitionEnd);
-        e.target.style.height = null;
-        e.target.classList.remove('collapsing');
+    function transitionEndExpand(event) {
+        const target = event.target;
+        target.removeEventListener('transitionend', transitionEndExpand);
+        target.classList.remove(toggleCollapseClass);
+        target.style.height = null;
+    }
+
+    function transitionEndCollapse(event) {
+        const target = event.target;
+        target.classList.remove(toggleCollapseClass);
+        target.removeEventListener('transitionend', transitionEndCollapse);
+        target.classList.remove(toggleActiveClass);
+        target.style.height = null;
+
     }
 
     init();

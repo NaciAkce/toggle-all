@@ -72,16 +72,16 @@ div[class*='col-md'] {
         }
     }
 
+    &__dropdown {
+        &:not(.is--active) {
+            display: none;
+        }
+    }
+
     &__body {
         @extend .pt-lg;
         @extend .pb-lg;
         @extend .px-md;
-        overflow: hidden;
-        transition: height 0.3s ease-out;
-        &:not(.is--active) {
-            transition: height 0.3s ease-out;
-            display: none;
-        }
 
         &.is--active {
             border-bottom: 1px solid $c-gray-light;
@@ -110,10 +110,11 @@ div[class*='col-md'] {
         content: '\e806';
     }
 }
-.collapsing {
+.is--collapsing {
     position: relative;
-    height: 0px;
-    transition: height 0.3s ease-out;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.25s ease;
 }
 
 .dropdown {
@@ -190,35 +191,6 @@ div[class*='col-md'] {
 
     &__link {
         color: $c-base;
-    }
-}
-
-// Menu
-.simple {
-    &__content {
-        padding-bottom: 150px;
-    }
-
-    &-menu {
-        &--fixed {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            width: 300px;
-            z-index: 2;
-
-            transition: right 0.3s ease 0.1ms;
-            &.dropdown__container {
-                &:not(.is--active) {
-                    display: block;
-                    right: -100%;
-                }
-            }
-            &.is--active {
-                right: 0;
-            }
-        }
     }
 }
 

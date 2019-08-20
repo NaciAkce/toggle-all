@@ -3,7 +3,7 @@ import Toggle from '../src/index';
 
 document.addEventListener('DOMContentLoaded', Toggle);
 
-storiesOf('Button', module)
+storiesOf('Toggle', module)
     .add('Simple Example', () => {
         return `
             <section class="section section__toggle">

@@ -1,0 +1,74 @@
+// Menu
+
+.nav {
+    &__content {
+        padding-bottom: 150px;
+    }
+
+    &__dropdown {
+        &:not(.is--active) {
+            display: none;
+        }
+    }
+
+    &--fixed {
+        background: $c-white;
+        bottom: 0;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 300px;
+        z-index: 2;
+        overflow: hidden;
+        overflow-y: scroll;
+
+        transition: right 0.3s ease 0.1ms;
+        &:not(.is--active) {
+            display: block;
+            right: -100%;
+        }
+        &.is--active {
+            right: 0;
+        }
+    }
+
+    &__list {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    &__link {
+        @extend .px-md;
+        @extend .py-base;
+        color: $c-base;
+        position: relative;
+        display: block;
+        transition: color 0.1s;
+        border-bottom: 1px solid $c-border-light;
+    }
+
+    &__item {
+    }
+
+    &__sub {
+        .nav__item {
+            @extend .pl-base;
+        }
+    }
+
+    &__parent {
+        &:before {
+            @extend [class*='i-']:before;
+            @extend .i-down-open:before;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translate(0, -50%);
+        }
+
+        &.is--active:before {
+            content: '\e806';
+        }
+    }
+}
