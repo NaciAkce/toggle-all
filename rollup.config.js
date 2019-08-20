@@ -3,7 +3,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import autoprefixer from 'autoprefixer';
 import postcss from 'postcss';
-import scss from 'rollup-plugin-scss'
+import scss from 'rollup-plugin-scss';;
 
 const dist = 'dist';
 const bundle = 'bundle';
@@ -33,14 +33,7 @@ export default {
     ],
     plugins: [
         resolve(),
-        scss({
-            output: true,
-            output: `${dist}/styles.css`,
-            processor: css =>
-                postcss([autoprefixer])
-                    .process(css, { from: undefined })
-                    .then(styles => styles.css)
-        }),
+
         babel({
             exclude: 'node_modules/**'
         }),
