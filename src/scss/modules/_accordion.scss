@@ -1,0 +1,52 @@
+.accordion {
+    &__card {
+        ~ .accordion__card {
+            .accordion__button {
+                border-top: 0 none;
+            }
+        }
+
+        &:last-child {
+            .accordion__dropdown {
+                border-bottom: 0 none;
+            }
+        }
+    }
+
+    &__dropdown {
+        &:not(.is--active) {
+            display: none;
+        }
+        &.is--active {
+            border-bottom: 1px solid $c-gray-light;
+        }
+    }
+
+    &__body {
+        @extend .pt-lg;
+        @extend .pb-lg;
+        @extend .px-md;
+    }
+
+    &__icon {
+        &:before {
+            @extend [class*='i-']:before;
+            @extend .i-down-open:before;
+        }
+    }
+
+    &__button {
+        @extend .py-md;
+        @extend .px-md;
+        @extend .d-flex;
+        @extend .align-items-center;
+        @extend .justify-content-between;
+        background: transparent;
+        border: 1px solid $c-gray-light;
+        width: 100%;
+    }
+
+    .is--active .accordion__icon:before {
+        content: '\e806';
+    }
+}

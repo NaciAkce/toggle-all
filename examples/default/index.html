@@ -5,19 +5,22 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="./bundle.umd.js" defer></script>
+        <script src="./main.js" defer></script>
+        <link rel="prefetch" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700&display=swap"
+              as="style" crossorigin>
+        <link rel="stylesheet" href="styles.css">
         <title>Default Example</title>
     </head>
 
     <body>
-        <a class="sr-only sr-only-focusable" id="skipHeader" title="main content"
-           href="/content#content"><span></span></a>
         <section class="section section__toggle">
             <div class="py-sm"></div>
-            <div class="simple container">
+            <div class="container">
                 <header>
-                    <h2>Simple Dropdowns</h2>
+                    <h2>nav Dropdowns</h2>
                 </header>
-                <div class="simple__content">
+                <div class="nav__content">
                     <div class="div contaner">
                         <div class="row">
                             <div class="col-md-4">
@@ -38,9 +41,9 @@
                             <div class="col-md-4">
                                 <h3>Tooltip</h3>
                                 <div class="tool-tip__content"><button
-                                            class="tool-tip__toggle btn btn--default btn--round" data-toggle-global
-                                            data-toggle="#tool-tip-dropdown-1" aria-labelledby="Tooltip"><span
-                                              class="i-info"></span></button>
+                                            class="tool-tip__toggle btn btn--default btn--round"
+                                            data-toggle="#tool-tip-dropdown-1" data-toggle-role="tooltip"
+                                            aria-labelledby="Tooltip"><span class="i-info"></span></button>
                                     <div class="tool-tip__dropdown" id="tool-tip-dropdown-1">
                                         magni modi exercitationem debitis ducimus assumenda ratione corporis, illum
                                         eius,.
@@ -48,32 +51,160 @@
                                             <a class="dropdown__toggle" href="#" role="button" id="dropdownMenuLink"
                                                data-toggle="#dropdown" aria-haspopup="true" aria-labelledby="Tooltip"
                                                aria-expanded="false">
-                                                open simple dropdown
+                                                open nav dropdown
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 simple-menu">
+                            <div class="col-md-4">
                                 <h3>Menu</h3>
                                 <span class="sr-only" id="toggle-btn">Toggle Navigation</span>
-                                <button class="dropdown__button" data-toggle="#nav" data-toggle-global
-                                        data-toggle-global aria-labelledby="toggle-btn"><span
+                                <button class="dropdown__button" data-toggle="#nav" aria-labelledby="toggle-btn"><span
                                           class="dropdown__open"></span><span class="dropdown__close"></span></button>
-                                <div id="nav" class="dropdown__container simple-menu--fixed">
-                                    <button class="dropdown__button is--active" data-toggle="#nav"
-                                            data-toggle-global><span class="dropdown__close"></span></button>
-                                    <ul class="dropdown__list">
-                                        <li class="dropdown__item"><a href="#" class="dropdown__link "
-                                               title="Cult &amp; Card"><span class="dropdown__link-text">Cult &amp;
-                                                    Card</span></a></li>
-                                        <li class="dropdown__item"><a href="#" class="dropdown__link "
-                                               title="Abos"><span class="dropdown__link-text">Abos</span></a></li>
-                                        <li class="dropdown__item"><a href="#" class="dropdown__link "
-                                               title="Weitere Angebote"><span class="dropdown__link-text">Weitere
-                                                    Angebote</span></a></li>
-                                    </ul>
-                                </div>
+                                <nav id="nav" class="nav nav--fixed">
+                                    <!-- Close button for mobile version -->
+                                    <button class="dropdown__button" data-toggle="#nav"><span
+                                              class="dropdown__close"></span></button>
+                                    <div class="nav__wrap" data-toggle-next>
+                                        <ul class="nav__list nav__list-0">
+                                            <li class="nav__item">
+                                                <a class="nav__link nav__toggle  nav__parent"
+                                                   data-toggle=".nav__dropdown" href="#">Vegetables</a>
+                                                <!-- Submenu 1 -->
+                                                <ul class="nav__list  nav__list-1  nav__sub nav__dropdown">
+                                                    <li class="nav__item"><a class="nav__link" href="#">Stalk
+                                                            Vegetables</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Roots &
+                                                            Seeds</a></li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Cabbages</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Salad Greens</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Mushrooms</a>
+                                                    </li>
+                                                    <li class="nav__item">
+                                                        <a class="nav__link nav__toggle nav__parent  nav__link--last-child"
+                                                           data-toggle=".nav__dropdown" href="#">Sale %</a>
+                                                        <!-- Submenu 1-1 -->
+                                                        <ul class="nav__list  nav__list-2  nav__sub nav__dropdown">
+                                                            <li class="nav__item"><a class="nav__link" href="#">Fair
+                                                                    Trade Roots</a>
+                                                            </li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Dried
+                                                                    Veggies</a></li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Our
+                                                                    Brand</a></li>
+                                                            <li class="nav__item"><a
+                                                                   class="nav__link  nav__link--last-child"
+                                                                   href="#">Homemade</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a class="nav__link nav__toggle  nav__parent"
+                                                   data-toggle=".nav__dropdown" href="#">Fruits</a>
+                                                <!-- Submenu 2 -->
+                                                <ul class="nav__list  nav__list-1  nav__sub nav__dropdown">
+                                                    <li class="nav__item"><a class="nav__link" href="#">Citrus
+                                                            Fruits</a></li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Berries</a></li>
+                                                    <li class="nav__item"><a class="nav__link nav__toggle nav__parent"
+                                                           data-toggle=".nav__dropdown" href="#">Special Selection</a>
+                                                        <!-- Submenu 2-1 -->
+                                                        <ul class="nav__list  nav__list-2  nav__sub nav__dropdown">
+                                                            <li class="nav__item"><a class="nav__link" href="#">Exotic
+                                                                    Mixes</a></li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Wild
+                                                                    Pick</a></li>
+                                                            <li class="nav__item"><a
+                                                                   class="nav__link nav__link--last-child"
+                                                                   href="#">Vitamin
+                                                                    Boosters</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link  nav__link--last-child"
+                                                           href="#">Tropical
+                                                            Fruits</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Melons</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a class="nav__link nav__toggle  nav__parent"
+                                                   data-toggle=".nav__dropdown" href=" #">Grains</a>
+                                                <!-- Submenu 3 -->
+                                                <ul class="nav__list  nav__list-1   nav__sub nav__sub nav__dropdown">
+                                                    <li class="nav__item"><a class="nav__link" href="#">Buckwheat</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Millet</a></li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Quinoa</a></li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Wild Rice</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Durum Wheat</a>
+                                                    </li>
+                                                    <li class="nav__item">
+                                                        <a class="nav__link nav__toggle nav__parent nav__link--last-child"
+                                                           data-toggle=".nav__dropdown" href="#">Promo
+                                                            Packs</a>
+                                                        <!-- Submenu 3-1 -->
+                                                        <ul
+                                                            class="nav__list  nav__list-2   nav__sub nav__sub nav__dropdown">
+                                                            <li class="nav__item"><a class="nav__link" href="#">Starter
+                                                                    Kit</a></li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">The
+                                                                    Essential 8</a>
+                                                            </li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Bolivian
+                                                                    Secrets</a>
+                                                            </li>
+                                                            <li class="nav__item"><a
+                                                                   class="nav__link nav__link--last-child"
+                                                                   href="#">Flour
+                                                                    Packs</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a class="nav__link nav__toggle  nav__parent"
+                                                   data-toggle=".nav__dropdown" href="#">Mylk & Drinks</a>
+                                                <!-- Submenu 4 -->
+                                                <ul class="nav__list  nav__list-1   nav__sub nav__sub nav__dropdown">
+                                                    <li class="nav__item"><a class="nav__link" href="#">Grain Mylks</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Seed Mylks</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Nut Mylks</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Nutri Drinks</a>
+                                                    </li>
+                                                    <li class="nav__item">
+                                                        <a class="nav__link nav__toggle nav__parent nav__link--last-child"
+                                                           data-toggle=".nav__dropdown" href="#">Selection</a>
+                                                        <!-- Submenu 4-1 -->
+                                                        <ul
+                                                            class="nav__list  nav__list-2   nav__sub nav__sub nav__dropdown">
+                                                            <li class="nav__item"><a class="nav__link" href="#">Nut Mylk
+                                                                    Packs</a>
+                                                            </li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Amino
+                                                                    Acid Heaven</a>
+                                                            </li>
+                                                            <li class="nav__item"><a
+                                                                   class="nav__link nav__link--last-child"
+                                                                   href="#">Allergy
+                                                                    Free</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </nav>
                             </div>
                         </div>
                     </div>
@@ -82,19 +213,19 @@
         </section>
         <section class="section section__toggle">
             <div class="py-sm"></div>
-            <div class="simple container">
+            <div class="container">
                 <header>
-                    <h2>Simple Dropdowns Grouped</h2>
+                    <h2>nav Dropdowns Grouped</h2>
                 </header>
-                <div class="simple__content">
+                <div class="nav__content">
                     <div class="div contaner">
                         <div class="row">
                             <div class="col-md-4">
                                 <h3>Dropdown</h3>
                                 <div class="dropdown show">
                                     <a class="btn btn-primary dropdown__toggle" href="#" role="button"
-                                       id="dropdownMenuLink" data-toggle="#dropdown1" data-toggle-group="group-1"
-                                       aria-haspopup="true" aria-expanded="false">
+                                       id="dropdownMenuLink" data-toggle="#dropdown1" data-toggle-global
+                                       data-toggle-group="group-1" aria-haspopup="true" aria-expanded="false">
                                         Dropdown link
                                     </a>
                                     <div class="dropdown__container" id="dropdown1" aria-labelledby="dropdownMenuLink">
@@ -107,42 +238,166 @@
                             <div class="col-md-4">
                                 <h3>Tooltip</h3>
                                 <div class="tool-tip__content"><button
-                                            class="tool-tip__toggle btn btn--default btn--round" data-toggle-global
-                                            data-toggle-group="group-1" data-toggle="#tool-tip-dropdown-11"
-                                            aria-labelledby="Tooltip"><span class="i-info"></span></button>
+                                            class="tool-tip__toggle btn btn--default btn--round"
+                                            data-toggle-role="tooltip" data-toggle-global data-toggle-group="group-1"
+                                            data-toggle="#tool-tip-dropdown-11" aria-labelledby="Tooltip"><span
+                                              class="i-info"></span></button>
                                     <div class="tool-tip__dropdown" id="tool-tip-dropdown-11">
                                         magni modi exercitationem debitis ducimus assumenda ratione corporis, illum
-                                        eius,.
-                                        <div>
-                                            <a class="dropdown__toggle" href="#" role="button" id="dropdownMenuLink"
-                                               data-toggle="#dropdown1" aria-haspopup="true" aria-labelledby="Tooltip"
-                                               aria-expanded="false">
-                                                open simple dropdown
-                                            </a>
-                                        </div>
+                                        eius,
+                                        <a href="#">
+                                            link
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 simple-menu">
+                            <div class="col-md-4">
                                 <h3>Menu</h3>
                                 <span class="sr-only" id="toggle-btn">Toggle Navigation</span>
-                                <button class="dropdown__button" data-toggle-group="group-1" data-toggle="#nav1"
+                                <button class="dropdown__button" data-toggle-group="group-1" data-toggle="#nav2"
                                         data-toggle-global data-toggle-global aria-labelledby="toggle-btn"><span
                                           class="dropdown__open"></span><span class="dropdown__close"></span></button>
-                                <div id="nav1" class="dropdown__container simple-menu--fixed">
-                                    <button class="dropdown__button is--active" data-toggle="#nav1"
+                                <nav id="nav2" class="nav nav--fixed">
+                                    <!-- Close button for mobile version -->
+                                    <button class="dropdown__button is--active" data-toggle="#nav2"
                                             data-toggle-global><span class="dropdown__close"></span></button>
-                                    <ul class="dropdown__list">
-                                        <li class="dropdown__item"><a href="#" class="dropdown__link "
-                                               title="Cult &amp; Card"><span class="dropdown__link-text">Cult &amp;
-                                                    Card</span></a></li>
-                                        <li class="dropdown__item"><a href="#" class="dropdown__link "
-                                               title="Abos"><span class="dropdown__link-text">Abos</span></a></li>
-                                        <li class="dropdown__item"><a href="#" class="dropdown__link "
-                                               title="Weitere Angebote"><span class="dropdown__link-text">Weitere
-                                                    Angebote</span></a></li>
-                                    </ul>
-                                </div>
+                                    <div class="nav__wrap" data-toggle-next>
+                                        <ul class="nav__list nav__list-0">
+                                            <li class="nav__item">
+                                                <a class="nav__link nav__toggle  nav__parent"
+                                                   data-toggle=".nav__dropdown" href="#">Vegetables</a>
+                                                <!-- Submenu 1 -->
+                                                <ul class="nav__list  nav__list-1  nav__sub nav__dropdown">
+                                                    <li class="nav__item"><a class="nav__link" href="#">Stalk
+                                                            Vegetables</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Roots &
+                                                            Seeds</a></li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Cabbages</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Salad Greens</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Mushrooms</a>
+                                                    </li>
+                                                    <li class="nav__item">
+                                                        <a class="nav__link nav__toggle nav__parent  nav__link--last-child"
+                                                           data-toggle=".nav__dropdown" href="#">Sale %</a>
+                                                        <!-- Submenu 1-1 -->
+                                                        <ul class="nav__list  nav__list-2  nav__sub nav__dropdown">
+                                                            <li class="nav__item"><a class="nav__link" href="#">Fair
+                                                                    Trade Roots</a>
+                                                            </li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Dried
+                                                                    Veggies</a></li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Our
+                                                                    Brand</a></li>
+                                                            <li class="nav__item"><a
+                                                                   class="nav__link  nav__link--last-child"
+                                                                   href="#">Homemade</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a class="nav__link nav__toggle  nav__parent"
+                                                   data-toggle=".nav__dropdown" href="#">Fruits</a>
+                                                <!-- Submenu 2 -->
+                                                <ul class="nav__list  nav__list-1  nav__sub nav__dropdown">
+                                                    <li class="nav__item"><a class="nav__link" href="#">Citrus
+                                                            Fruits</a></li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Berries</a></li>
+                                                    <li class="nav__item"><a class="nav__link nav__toggle nav__parent"
+                                                           data-toggle=".nav__dropdown" href="#">Special Selection</a>
+                                                        <!-- Submenu 2-1 -->
+                                                        <ul class="nav__list  nav__list-2  nav__sub nav__dropdown">
+                                                            <li class="nav__item"><a class="nav__link" href="#">Exotic
+                                                                    Mixes</a></li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Wild
+                                                                    Pick</a></li>
+                                                            <li class="nav__item"><a
+                                                                   class="nav__link nav__link--last-child"
+                                                                   href="#">Vitamin
+                                                                    Boosters</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link  nav__link--last-child"
+                                                           href="#">Tropical
+                                                            Fruits</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Melons</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a class="nav__link nav__toggle  nav__parent"
+                                                   data-toggle=".nav__dropdown" href=" #">Grains</a>
+                                                <!-- Submenu 3 -->
+                                                <ul class="nav__list  nav__list-1  nav__sub nav__dropdown">
+                                                    <li class="nav__item"><a class="nav__link" href="#">Buckwheat</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Millet</a></li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Quinoa</a></li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Wild Rice</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Durum Wheat</a>
+                                                    </li>
+                                                    <li class="nav__item">
+                                                        <a class="nav__link nav__toggle nav__parent nav__link--last-child"
+                                                           data-toggle=".nav__dropdown" href="#">Promo
+                                                            Packs</a>
+                                                        <!-- Submenu 3-1 -->
+                                                        <ul class="nav__list  nav__list-2  nav__sub nav__dropdown">
+                                                            <li class="nav__item"><a class="nav__link" href="#">Starter
+                                                                    Kit</a></li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">The
+                                                                    Essential 8</a>
+                                                            </li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Bolivian
+                                                                    Secrets</a>
+                                                            </li>
+                                                            <li class="nav__item"><a
+                                                                   class="nav__link nav__link--last-child"
+                                                                   href="#">Flour
+                                                                    Packs</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="nav__item">
+                                                <a class="nav__link nav__toggle  nav__parent"
+                                                   data-toggle=".nav__dropdown" href="#">Mylk & Drinks</a>
+                                                <!-- Submenu 4 -->
+                                                <ul class="nav__list  nav__list-1  nav__sub nav__dropdown">
+                                                    <li class="nav__item"><a class="nav__link" href="#">Grain Mylks</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Seed Mylks</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Nut Mylks</a>
+                                                    </li>
+                                                    <li class="nav__item"><a class="nav__link" href="#">Nutri Drinks</a>
+                                                    </li>
+                                                    <li class="nav__item">
+                                                        <a class="nav__link nav__toggle nav__parent nav__link--last-child"
+                                                           data-toggle=".nav__dropdown" href="#">Selection</a>
+                                                        <!-- Submenu 4-1 -->
+                                                        <ul class="nav__list  nav__list-2  nav__sub nav__dropdown">
+                                                            <li class="nav__item"><a class="nav__link" href="#">Nut Mylk
+                                                                    Packs</a>
+                                                            </li>
+                                                            <li class="nav__item"><a class="nav__link" href="#">Amino
+                                                                    Acid Heaven</a>
+                                                            </li>
+                                                            <li class="nav__item"><a
+                                                                   class="nav__link nav__link--last-child"
+                                                                   href="#">Allergy
+                                                                    Free</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </nav>
                             </div>
                         </div>
                     </div>
@@ -165,20 +420,25 @@
                                                 aria-expanded="true">Accordion 1 <span
                                                   class="accordion__icon"></span></button>
                                     </div>
-                                    <div class="accordion__body is--active" aria-labelledby="headingOne"
+                                    <div class="accordion__dropdown is--active" aria-labelledby="headingOne"
                                          id="first-accordion">
-                                        <h4 class="accordion__header">heading 1</h4>
-                                        <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur adipisicing
-                                            elit.
-                                            Incidunt
-                                            libero ipsum, veniam
-                                            magni modi exercitationem debitis ducimus assumenda ratione corporis, illum
-                                            eius,
-                                            laborum tempore cumque amet id perspiciatis nostrum unde?</p>
-                                        <p class="accordion__text">Lorem ipsum dolor sit, amet consectetur adipisicing
-                                            elit.
-                                            Ipsum,
-                                            maiores.</p>
+                                        <div class="accordion__body">
+                                            <h4 class="accordion__header">heading 1</h4>
+                                            <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur
+                                                adipisicing
+                                                elit.
+                                                Incidunt
+                                                libero ipsum, veniam
+                                                magni modi exercitationem debitis ducimus assumenda ratione corporis,
+                                                illum
+                                                eius,
+                                                laborum tempore cumque amet id perspiciatis nostrum unde?</p>
+                                            <p class="accordion__text">Lorem ipsum dolor sit, amet consectetur
+                                                adipisicing
+                                                elit.
+                                                Ipsum,
+                                                maiores.</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="accordion__card">
@@ -188,16 +448,20 @@
                                                 aria-expanded="true">Accordion 1<span
                                                   class="accordion__icon"></span></button>
                                     </div>
-                                    <div class="accordion__body" aria-labelledby="headingTwo" id="second-accordion">
-                                        <h4 class="tabs__header">heading 1</h4>
-                                        <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                            Laboriosam
-                                            officiis voluptas
-                                            maiores deserunt ullam aliquam?</p>
-                                        <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                            Accusamus,
-                                            officia accusantium
-                                            quod fuga porro eius animi earum excepturi omnis! Reprehenderit!</p>
+                                    <div class="accordion__dropdown" aria-labelledby="headingTwo" id="second-accordion">
+                                        <div class="accordion__body">
+                                            <h4 class="tabs__header">heading 1</h4>
+                                            <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing
+                                                elit.
+                                                Laboriosam
+                                                officiis voluptas
+                                                maiores deserunt ullam aliquam?</p>
+                                            <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing
+                                                elit.
+                                                Accusamus,
+                                                officia accusantium
+                                                quod fuga porro eius animi earum excepturi omnis! Reprehenderit!</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="accordion__card">
@@ -207,29 +471,37 @@
                                                 aria-controls="third" aria-expanded="true">Accordion 1 <span
                                                   class="accordion__icon"></span></button>
                                     </div>
-                                    <div class="accordion__body" aria-labelledby="headingThree" id="third-accordion">
-                                        <h4 class="accordion__header">heading 2</h4>
-                                        <p class="accordion__text">Lorem ipsum dolor sit amet consectetur adipisicing
-                                            elit.
-                                            Consectetur
-                                            odio cum eveniet
-                                            excepturi eum provident molestias ad ipsa unde dignissimos illo porro animi
-                                            earum
-                                            aliquam perspiciatis id omnis, adipisci incidunt. Qui, beatae. Beatae animi
-                                            totam
-                                            obcaecati at quae, iste facere fuga nemo pariatur esse nihil?</p>
-                                        <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur adipisicing
-                                            elit.
-                                            Doloremque
-                                            commodi eos
-                                            voluptatem numquam pariatur deleniti repellat fugiat eligendi nulla
-                                            molestiae sunt
-                                            praesentium vero sequi distinctio error quibusdam maiores natus magnam,
-                                            explicabo
-                                            hic
-                                            sed alias dolores, quis eum! Reprehenderit atque cupiditate dolorum? Saepe,
-                                            doloribus
-                                            veniam? Nulla!</p>
+                                    <div class="accordion__dropdown" aria-labelledby="headingThree"
+                                         id="third-accordion">
+                                        <div class="accordion__body">
+                                            <h4 class="accordion__header">heading 2</h4>
+                                            <p class="accordion__text">Lorem ipsum dolor sit amet consectetur
+                                                adipisicing
+                                                elit.
+                                                Consectetur
+                                                odio cum eveniet
+                                                excepturi eum provident molestias ad ipsa unde dignissimos illo porro
+                                                animi
+                                                earum
+                                                aliquam perspiciatis id omnis, adipisci incidunt. Qui, beatae. Beatae
+                                                animi
+                                                totam
+                                                obcaecati at quae, iste facere fuga nemo pariatur esse nihil?</p>
+                                            <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur
+                                                adipisicing
+                                                elit.
+                                                Doloremque
+                                                commodi eos
+                                                voluptatem numquam pariatur deleniti repellat fugiat eligendi nulla
+                                                molestiae sunt
+                                                praesentium vero sequi distinctio error quibusdam maiores natus magnam,
+                                                explicabo
+                                                hic
+                                                sed alias dolores, quis eum! Reprehenderit atque cupiditate dolorum?
+                                                Saepe,
+                                                doloribus
+                                                veniam? Nulla!</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -243,19 +515,25 @@
                                                 aria-controls="fourth" aria-expanded="true">Accordion 1 Grouped <span
                                                   class="accordion__icon"></span></button>
                                     </div>
-                                    <div class="accordion__body" aria-labelledby="headingFour" id="fourth-accordion">
-                                        <h4 class="accordion__header">heading 1</h4>
-                                        <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur adipisicing
-                                            elit.
-                                            Incidunt
-                                            libero ipsum, veniam
-                                            magni modi exercitationem debitis ducimus assumenda ratione corporis, illum
-                                            eius,
-                                            laborum tempore cumque amet id perspiciatis nostrum unde?</p>
-                                        <p class="accordion__text">Lorem ipsum dolor sit, amet consectetur adipisicing
-                                            elit.
-                                            Ipsum,
-                                            maiores.</p>
+                                    <div class="accordion__dropdown" aria-labelledby="headingFour"
+                                         id="fourth-accordion">
+                                        <div class="accordion__body">
+                                            <h4 class="accordion__header">heading 1</h4>
+                                            <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur
+                                                adipisicing
+                                                elit.
+                                                Incidunt
+                                                libero ipsum, veniam
+                                                magni modi exercitationem debitis ducimus assumenda ratione corporis,
+                                                illum
+                                                eius,
+                                                laborum tempore cumque amet id perspiciatis nostrum unde?</p>
+                                            <p class="accordion__text">Lorem ipsum dolor sit, amet consectetur
+                                                adipisicing
+                                                elit.
+                                                Ipsum,
+                                                maiores.</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="accordion__card">
@@ -265,17 +543,21 @@
                                                 aria-controls="fifth" aria-expanded="true">Accordion
                                             1 Grouped<span class="accordion__icon"></span></button>
                                     </div>
-                                    <div class="accordion__body  is--active" aria-labelledby="headingFive"
+                                    <div class="accordion__dropdown is--active" aria-labelledby="headingFive"
                                          id="fifth-accordion">
-                                        <h4 class="tabs__header">heading 1</h4>
-                                        <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                            Laboriosam
-                                            officiis voluptas
-                                            maiores deserunt ullam aliquam?</p>
-                                        <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                            Accusamus,
-                                            officia accusantium
-                                            quod fuga porro eius animi earum excepturi omnis! Reprehenderit!</p>
+                                        <div class="accordion__body">
+                                            <h4 class="tabs__header">heading 1</h4>
+                                            <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing
+                                                elit.
+                                                Laboriosam
+                                                officiis voluptas
+                                                maiores deserunt ullam aliquam?</p>
+                                            <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing
+                                                elit.
+                                                Accusamus,
+                                                officia accusantium
+                                                quod fuga porro eius animi earum excepturi omnis! Reprehenderit!</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="accordion__card">
@@ -285,29 +567,36 @@
                                                 aria-controls="sixth" aria-expanded="true">Accordion 1
                                             Grouped<span class="accordion__icon"></span></button>
                                     </div>
-                                    <div class="accordion__body" aria-labelledby="headingSix" id="sixth-accordion">
-                                        <h4 class="accordion__header">heading 2</h4>
-                                        <p class="accordion__text">Lorem ipsum dolor sit amet consectetur adipisicing
-                                            elit.
-                                            Consectetur
-                                            odio cum eveniet
-                                            excepturi eum provident molestias ad ipsa unde dignissimos illo porro animi
-                                            earum
-                                            aliquam perspiciatis id omnis, adipisci incidunt. Qui, beatae. Beatae animi
-                                            totam
-                                            obcaecati at quae, iste facere fuga nemo pariatur esse nihil?</p>
-                                        <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur adipisicing
-                                            elit.
-                                            Doloremque
-                                            commodi eos
-                                            voluptatem numquam pariatur deleniti repellat fugiat eligendi nulla
-                                            molestiae sunt
-                                            praesentium vero sequi distinctio error quibusdam maiores natus magnam,
-                                            explicabo
-                                            hic
-                                            sed alias dolores, quis eum! Reprehenderit atque cupiditate dolorum? Saepe,
-                                            doloribus
-                                            veniam? Nulla!</p>
+                                    <div class="accordion__dropdown" aria-labelledby="headingSix" id="sixth-accordion">
+                                        <div class="accordion__body">
+                                            <h4 class="accordion__header">heading 2</h4>
+                                            <p class="accordion__text">Lorem ipsum dolor sit amet consectetur
+                                                adipisicing
+                                                elit.
+                                                Consectetur
+                                                odio cum eveniet
+                                                excepturi eum provident molestias ad ipsa unde dignissimos illo porro
+                                                animi
+                                                earum
+                                                aliquam perspiciatis id omnis, adipisci incidunt. Qui, beatae. Beatae
+                                                animi
+                                                totam
+                                                obcaecati at quae, iste facere fuga nemo pariatur esse nihil?</p>
+                                            <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur
+                                                adipisicing
+                                                elit.
+                                                Doloremque
+                                                commodi eos
+                                                voluptatem numquam pariatur deleniti repellat fugiat eligendi nulla
+                                                molestiae sunt
+                                                praesentium vero sequi distinctio error quibusdam maiores natus magnam,
+                                                explicabo
+                                                hic
+                                                sed alias dolores, quis eum! Reprehenderit atque cupiditate dolorum?
+                                                Saepe,
+                                                doloribus
+                                                veniam? Nulla!</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -383,10 +672,6 @@
                 </div>
             </div>
         </section>
-        <script src="./node_modules/toggle-all/dist/bundle.umd.js"></script>
-        <script>
-            const init = new window.toggleAll()
-        </script>
     </body>
 
 </html>

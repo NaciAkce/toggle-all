@@ -128,7 +128,7 @@ const Toggle = (userSettings = {}) => {
     };
 
     const toggleItems = event => {
-        if (!event.target.closest(selectorToggle) || event.target.closest(selectorBack)) return;
+        if (!event.target.closest(selectorToggle) && !event.target.closest(selectorBack)) return;
         event.preventDefault();
 
         const target = event.target.closest(selectorToggle);
@@ -140,16 +140,13 @@ const Toggle = (userSettings = {}) => {
         for (let item of allElements) {
             const isActive = item.active;
 
-
-            switchType(item, target, splitselectorToggle);
             if (isActive) {
                 const isValid = checkValidity(item);
                 if (isValid) break;
 
-                // close(item);
-            } else {
-                // open(item);
             }
+
+            switchType(item, target, splitselectorToggle);
         }
     };
 
@@ -271,7 +268,7 @@ const Toggle = (userSettings = {}) => {
     };
 
     const collapseSection = item => {
-        const sectionHeight = item.scrollHeight;
+        var sectionHeight = item.scrollHeight;
         window.requestAnimationFrame(function () {
             item.style.height = sectionHeight + 'px';
             item.classList.add(toggleCollapseClass);
@@ -285,26 +282,24 @@ const Toggle = (userSettings = {}) => {
     };
 
     function expandSection(item) {
-        const sectionHeight = item.scrollHeight;
         item.classList.add(toggleActiveClass);
         item.classList.add(toggleCollapseClass);
+        var sectionHeight = item.scrollHeight;
         item.style.height = sectionHeight + 'px';
         item.addEventListener('transitionend', transitionEndExpand);
     }
 
     function transitionEndExpand(event) {
-        const target = event.target;
-        target.removeEventListener('transitionend', transitionEndExpand);
-        target.classList.remove(toggleCollapseClass);
-        target.style.height = null;
+        event.target.removeEventListener('transitionend', transitionEndExpand);
+        event.target.classList.remove(toggleCollapseClass);
+        event.target.style.height = null;
     }
 
     function transitionEndCollapse(event) {
-        const target = event.target;
-        target.classList.remove(toggleCollapseClass);
-        target.removeEventListener('transitionend', transitionEndCollapse);
-        target.classList.remove(toggleActiveClass);
-        target.style.height = null;
+        event.target.classList.remove(toggleCollapseClass);
+        event.target.removeEventListener('transitionend', transitionEndCollapse);
+        event.target.classList.remove(toggleActiveClass);
+        event.target.style.height = null;
 
     }
 
