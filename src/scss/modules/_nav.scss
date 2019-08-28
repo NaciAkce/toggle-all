@@ -21,14 +21,23 @@
         z-index: 2;
         overflow: hidden;
         overflow-y: scroll;
+    }
+
+    &--transition {
+        right: -100%;
 
         transition: right 0.3s ease 0.1ms;
         &:not(.is--active) {
-            display: block;
-            right: -100%;
+            display: none;
         }
-        &.is--active {
+
+        &.is--show {
             right: 0;
+        }
+    }
+    &--default {
+        &:not(.is--active) {
+            display: none;
         }
     }
 

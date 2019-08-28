@@ -1,6 +1,9 @@
 %shadow-triangle {
     box-shadow: -4px 4px 4px 0 rgba(0, 0, 0, 0.1);
 }
+%shadow-triangle2 {
+    box-shadow: -4px 4px 4px -3px rgba(0, 0, 0, 0.1);
+}
 
 div[class*='col-md'] {
     @extend .mt-lg;
@@ -16,52 +19,6 @@ div[class*='col-md'] {
 
 .container {
     @extend %container--xl;
-}
-
-.tabs {
-    &__content {
-        @extend .mt-lg;
-        @extend .mb-lg;
-    }
-
-    &__list {
-        @extend .d-flex;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    &__link {
-        @extend .mr-lg;
-        color: $c-base;
-        text-transform: uppercase;
-        text-decoration: none;
-        &.is--active {
-            border-bottom: 2px solid #1d1d1d;
-            color: #1d1d1d;
-        }
-    }
-
-    &__body {
-        @extend .d-none;
-        transition: opacity 0.2s cubic-bezier(0.42, 0, 0.34, 1.01);
-        opacity: 0;
-
-        &.is--active {
-            @extend .d-block;
-        }
-
-        &.is--show {
-            opacity: 1;
-        }
-    }
-}
-
-.is--collapsing {
-    position: relative;
-    height: 0;
-    overflow: hidden;
-    transition: height 0.25s ease;
 }
 
 .dropdown {
@@ -138,77 +95,5 @@ div[class*='col-md'] {
 
     &__link {
         color: $c-base;
-    }
-}
-
-.tool-tip {
-    &__content {
-        @extend .d-flex;
-        @extend .justify-content-center;
-        position: relative;
-    }
-
-    &__toggle {
-        @extend .ml-sm;
-        background: transparent;
-        border: 1px solid $c-black;
-        color: $c-black;
-        font-size: 0.875rem;
-        height: 2rem;
-        padding: 0.1rem;
-        width: 2rem;
-
-        &:after {
-            border: 1px solid $c-black;
-            height: calc(100% - 4px);
-            width: calc(100% - 4px);
-        }
-    }
-
-    &__dropdown {
-        @extend .pt-md;
-        @extend .pb-lg;
-        @extend .px-lg;
-        @extend %shadow-xs;
-        background: $c-white;
-        bottom: calc(100% + 15px);
-        display: none;
-        font-size: $fs-sm;
-        font-weight: $fw-normal;
-        max-width: 100%;
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%, 0);
-        text-transform: none;
-        z-index: 5;
-
-        &:after {
-            @extend %shadow-triangle;
-            border: 0.625rem solid black;
-            border-color: transparent transparent $c-white $c-white;
-            bottom: -0.625rem;
-            content: '';
-            height: 0;
-            position: absolute;
-            left: calc(50% - 4px);
-            transform: rotate(-45deg) translate(-50%, 0);
-            transform-origin: 0 0;
-            width: 0;
-        }
-
-        @include media-breakpoint-up(md) {
-            max-width: inherit;
-            width: 374px;
-        }
-
-        &.is--active {
-            display: block;
-        }
-    }
-
-    &__icon {
-        &:before {
-            @extend .mx-0;
-        }
     }
 }

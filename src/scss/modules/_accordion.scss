@@ -20,6 +20,13 @@
         &.is--active {
             border-bottom: 1px solid $c-gray-light;
         }
+
+        &.is--collapsing {
+            position: relative;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.25s ease;
+        }
     }
 
     &__body {
