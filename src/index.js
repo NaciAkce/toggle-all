@@ -1,11 +1,14 @@
 /* eslint-disable prettier/prettier */
-
+import { throttle, useMedia } from './Helper';
 const $ = element => document.querySelector(element);
 const $$ = elements => document.querySelectorAll(elements);
 
 let start, end;
 let transitionCollapse = false,
-    transitionExpand = false;
+    transitionExpand = false,
+    setMedia = null;
+
+const ENTER_KEY_CODE = 13;
 
 if (!Element.prototype.matches) {
     Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
@@ -23,8 +26,8 @@ if (!Element.prototype.closest) {
     };
 }
 
-/*!
- * @param  {Node}  elem The element to check
+/** 
+ * @param  {Node}.......The element to check
  * @return {Object}     A set of booleans for each side of the element
  */
 const isOutOfViewport = function (elem) {
@@ -76,11 +79,11 @@ const isTabActive = (item, target, splitselectorToggle) => item.value === target
  * @param {String} toggleActiveClass
  * @return {Object}.....Item Object
  */
-const createElementObject = (type, value, role, toggleActiveClass, selectorAnimate) => ({
+const createElementObject = (type, value, role, toggleActiveClass, selectorAnimate, active) => ({
     type: type,
     value: value,
     role: role ? role : 'default',
-    active: value.classList.contains(toggleActiveClass),
+    active: active ? false : value.classList.contains(toggleActiveClass),
     animate: value.hasAttribute(selectorAnimate) ? value.getAttribute(selectorAnimate) : false
 });
 
@@ -95,13 +98,13 @@ const createElementObject = (type, value, role, toggleActiveClass, selectorAnima
  * @param {String} splitselectorGroup 
  * @return {Array}
  */
-const getGrouped = (target, toggleActiveClass, selectorAnimate, group, role, splitselectorToggle, splitselectorGroup) => [].slice
+const getGrouped = (target, toggleActiveClass, selectorAnimate, group, role, splitselectorToggle, splitselectorGroup, active) => [].slice
     .call($$(`[${splitselectorGroup}="${group}"]`))
-    .filter(e => e !== target && e.classList.contains(toggleActiveClass))
+    .filter(e => e !== target && e.classList.contains(toggleActiveClass, active))
     .reduce((obj, item) => {
         const dropItem = $(item.getAttribute(splitselectorToggle)),
-            toggle = createElementObject('toggle', item, role, toggleActiveClass),
-            drop = createElementObject('drop', dropItem, role, toggleActiveClass, selectorAnimate);
+            toggle = createElementObject('toggle', item, role, toggleActiveClass, null, active),
+            drop = createElementObject('drop', dropItem, role, toggleActiveClass, selectorAnimate, active);
         return [...obj, toggle, drop];
     }, []);
 
@@ -115,11 +118,11 @@ const getGrouped = (target, toggleActiveClass, selectorAnimate, group, role, spl
  * @param {String} splitselectorToggle 
  * @return {Array}
  */
-const getToggles = (target, toggleActiveClass, selector, role, next, splitselectorToggle) => next
-    ? [createElementObject('toggle', target, role, toggleActiveClass)]
+const getToggles = (target, toggleActiveClass, selector, role, next, splitselectorToggle, active) => next
+    ? [createElementObject('toggle', target, role, toggleActiveClass, null, active)]
     : [].slice
         .call($$(`[${splitselectorToggle}="${selector}"]`))
-        .map(toggle => createElementObject('toggle', toggle, role, toggleActiveClass));
+        .map(toggle => createElementObject('toggle', toggle, role, toggleActiveClass, null, active));
 
 /**
  * Get Drops
@@ -131,10 +134,10 @@ const getToggles = (target, toggleActiveClass, selector, role, next, splitselect
  * @param {String} selectorNext 
  * @return {Array}
  */
-const getDrops = (target, toggleActiveClass, selectorAnimate, selector, role, next) => next
-    ? [createElementObject('drop', getNextSibling(target, selector), role, toggleActiveClass, selectorAnimate)]
+const getDrops = (target, toggleActiveClass, selectorAnimate, selector, role, next, active) => next
+    ? [createElementObject('drop', getNextSibling(target, selector), role, toggleActiveClass, selectorAnimate, active)]
     : [].slice.call($$(selector)).map(drop => {
-        return createElementObject('drop', drop, role, toggleActiveClass, selectorAnimate);
+        return createElementObject('drop', drop, role, toggleActiveClass, selectorAnimate, active);
     });
 
 /**
@@ -195,7 +198,7 @@ const animateHeight = (item, toggleCollapseClass, toggleActiveClass) => {
  * @param {String} toggleShowClass 
  * @param {String} toggleActiveClass 
  */
-const animateDefault = (item, toggleShowClass, toggleActiveClass) => {
+const animateDefaultCollapse = (item, toggleShowClass, toggleActiveClass) => {
     const collapseSection = item => {
         if (item.role === 'tab') {
             item.value.classList.remove(toggleShowClass);
@@ -208,6 +211,22 @@ const animateDefault = (item, toggleShowClass, toggleActiveClass) => {
         }
 
     };
+
+    function transitionEndCollapse(event) {
+        event.target.removeEventListener('transitionend', transitionEndCollapse);
+        event.target.classList.remove(toggleActiveClass);
+        transitionCollapse = false;
+    }
+    collapseSection(item);
+};
+
+/**
+ * 
+ * @param {Node} item 
+ * @param {String} toggleShowClass 
+ * @param {String} toggleActiveClass 
+ */
+const animateDefaultExpand = (item, toggleShowClass, toggleActiveClass) => {
 
     function expandSection(item) {
         transitionExpand = true;
@@ -222,21 +241,9 @@ const animateDefault = (item, toggleShowClass, toggleActiveClass) => {
 
     function transitionEndExpand(event) {
         event.target.removeEventListener('transitionend', transitionEndExpand);
-
         transitionExpand = false;
     }
-
-    function transitionEndCollapse(event) {
-        event.target.removeEventListener('transitionend', transitionEndCollapse);
-        event.target.classList.remove(toggleActiveClass);
-        transitionCollapse = false;
-    }
-
-    if (item.active) {
-        return collapseSection(item);
-    } else {
-        return expandSection(item);
-    }
+    expandSection(item);
 };
 
 /**
@@ -246,38 +253,55 @@ const animateDefault = (item, toggleShowClass, toggleActiveClass) => {
  */
 const splitSelector = (selector) => selector.replace(/\[|\]/g, '');
 
+/**
+ * 
+ * @param {Node} item 
+ */
 const setPosition = (item) => {
     if (item.type === 'toggle') return;
+    window.requestAnimationFrame(function () {
+        item.value.setAttribute('style', 'position: absolute; visibility: hidden; display: block; pointer-events: none');
+        item.value.classList.remove('is--position-bottom', 'is--position-top', 'is--position-left', 'is--position-right');
 
-    item.value.setAttribute('style', 'position: absolute; visibility: hidden; display: block; pointer-events: none');
-    item.value.classList.remove('is--position-bottom', 'is--position-top', 'is--position-left', 'is--position-right');
+        const position = isOutOfViewport(item.value);
 
-    const position = isOutOfViewport(item.value);
+        item.value.removeAttribute('style');
 
-    item.value.removeAttribute('style');
+        if (position.top) {
+            item.value.classList.add('is--position-bottom');
+            item.value.classList.remove('is--position-top');
+        }
 
-    if (position.top) {
-        item.value.classList.add('is--position-bottom');
-        item.value.classList.remove('is--position-top');
-    }
+        if (position.bottom) {
+            item.value.classList.add('is--position-top');
+            item.value.classList.remove('is--position-bottom');
+        }
 
-    if (position.bottom) {
-        item.value.classList.add('is--position-top');
-        item.value.classList.remove('is--position-bottom');
-    }
+        if (position.left) {
+            item.value.classList.add('is--position-left');
+            item.value.classList.remove('is--position-right');
+        }
 
-    if (position.left) {
-        item.value.classList.add('is--position-left');
-        item.value.classList.remove('is--position-right');
-    }
+        if (position.right) {
+            item.value.classList.add('is--position-right');
+            item.value.classList.remove('is--position-left');
+        }
 
-    if (position.right) {
-        item.value.classList.add('is--position-right');
-        item.value.classList.remove('is--position-left');
-    }
+    });
 
 
 };
+
+/**
+ * 
+ * @param {Node} target 
+ * @param {String} type 
+ * @param {String} selectorToggle 
+ */
+const getEventTarget = (target, type, selectorToggle) => ({
+    item: target.querySelector(selectorToggle),
+    active: type === 'mouseenter' ? true : false
+});
 
 const defaultConfig = {
     selectorToggle: '[data-toggle]',
@@ -288,11 +312,13 @@ const defaultConfig = {
     selectorBack: '[data-toggle-back]',
     selectorNext: '[data-toggle-next]',
     selectorAnimate: '[data-toggle-animate]',
+    selectorHover: '[data-toggle-hover]',
     toggleActiveClass: 'is--active',
     toggleErrorClass: 'is--error',
     toggleCollapseClass: 'is--collapsing',
     toggleShowClass: 'is--show',
     onHover: false,
+    onnHoverMediaQuery: '(max-width: 768px)',
     stopVideo: true,
     callbackOpen: false,
     callbackClose: false,
@@ -309,11 +335,13 @@ const Toggle = (userSettings = {}) => {
         selectorBack,
         selectorNext,
         selectorAnimate,
+        selectorHover,
         toggleActiveClass,
         toggleErrorClass,
         toggleCollapseClass,
         toggleShowClass,
         onHover,
+        onnHoverMediaQuery,
         stopVideo,
         callbackOpen,
         callbackClose,
@@ -323,9 +351,12 @@ const Toggle = (userSettings = {}) => {
         ...userSettings
     };
 
-    let toggles = [].slice.call($$(selectorToggle));
-
-    if (!toggles.length > 0) return;
+    let toggles = [].slice.call($$(selectorToggle)),
+        allHoverElements = [],
+        activeElement,
+        tHandler = null,
+        eventType = null,
+        isActive = null;
 
     const body = $('body'),
         isiOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false,
@@ -333,6 +364,7 @@ const Toggle = (userSettings = {}) => {
         splitselectorValidate = selectorValidate.replace(/\[|\]/g, ''),
         splitselectorGroup = selectorGroup.replace(/\[|\]/g, ''),
         splitselectorAnimate = selectorAnimate.replace(/\[|\]/g, ''),
+        splitselectorHover = selectorHover.replace(/\[|\]/g, ''),
         splitselectorRole = selectorRole.replace(/\[|\]/g, '');
 
     const init = () => {
@@ -340,14 +372,33 @@ const Toggle = (userSettings = {}) => {
         destroy();
 
         isiOS && body.classList.add('is--ios');
-        console.log('onHover', onHover);
+
+        if (onHover) {
+            allHoverElements = [].slice.call($$(selectorHover));
+            tHandler = throttle(detectMouse, 100);
+            checkEvent();
+            setMedia = useMedia(onnHoverMediaQuery, matchMedia);
+            if (setMedia) {
+                isActive = true;
+            }
+        }
+
         events();
+
     };
 
     const destroy = () => {
         isiOS && body.classList.remove('is--ios');
         document.removeEventListener('click', clickHandler);
         body.removeEventListener('click', closeActiveGlobal);
+        if (onHover && isActive) {
+            allHoverElements.map(item => {
+                mouseEvents.map(type => {
+                    item.removeEventListener(type, mouseHandler);
+                });
+                item.removeEventListener('keydown', keyHandler);
+            });
+        }
     };
 
     const events = () => {
@@ -355,11 +406,96 @@ const Toggle = (userSettings = {}) => {
         body.addEventListener('click', closeActiveGlobal);
     };
 
-    const clickHandler = () => {
+    const matchMedia = (mq) => {
+
+        const matches = mq.matches;
+
+        if (
+            matches &&
+            (isActive === false || isActive === null)
+        ) {
+            isActive = true;
+            checkEvent();
+        }
+        if (!matches && (isActive === true || isActive === null)) {
+            isActive = false;
+            checkEvent();
+        }
+
+    };
+
+    const detectMouse = event => {
+        // remove event bindings, so it only runs once
+        if (
+            (eventType !== null &&
+                eventType === event.type &&
+                (isActive && eventType === 'touchstart')) ||
+            (!isActive && eventType === event.type)
+        )
+            return;
+
+        eventType = isActive ? 'touchstart' : event.type;
+        handleMouseEvent(eventType);
+
+        [('touchstart', 'mouseover')].map(function (events) {
+            document.removeEventListener(events, tHandler, false);
+        });
+    };
+
+    const checkEvent = () => {
+        ['touchstart', 'mouseover'].map(function (events) {
+            document.addEventListener(events, tHandler, false);
+        });
+    };
+
+    const clickHandler = (event) => {
 
         start = performance.now();
-
+        if (eventType === 'mouseover' && event.target.parentElement.hasAttribute(splitselectorHover)) return;
         if (!event.target.closest(selectorToggle) && !event.target.closest(selectorBack)) return;
+
+        event.preventDefault();
+        if (transitionExpand || transitionCollapse) return;
+
+        toggleItems(event);
+    };
+
+    const handleMouseEvent = (eventType) => {
+
+        const mouseEvents = ['mouseenter', 'mouseleave'];
+
+        if (eventType === 'touchstart') {
+            allHoverElements.map(item => {
+                mouseEvents.map(type => {
+                    item.removeEventListener(type, mouseHandler);
+                });
+                item.removeEventListener('keydown', keyHandler);
+            });
+        }
+
+        if (eventType === 'mouseover') {
+            allHoverElements.map(item => {
+                mouseEvents.map(type => {
+                    item.addEventListener(type, mouseHandler);
+                });
+                item.addEventListener('keydown', keyHandler);
+            });
+
+        }
+    };
+
+    const mouseHandler = (event) => {
+        if (!event.target.matches(selectorHover)) return;
+
+        if (transitionExpand || transitionCollapse) return;
+        const eventTarget = getEventTarget(event.target, event.type, selectorToggle);
+
+        toggleItems(eventTarget);
+    };
+
+    // TODO: Own KeyHAndler
+    const keyHandler = (event) => {
+        if (event.keyCode !== ENTER_KEY_CODE) return;
         event.preventDefault();
         if (transitionExpand || transitionCollapse) return;
 
@@ -368,67 +504,64 @@ const Toggle = (userSettings = {}) => {
 
     const toggleItems = event => {
 
+        const target = event.target ? event.target.closest(selectorToggle) : event.item;
+        const active = event.active ? event.active : null;
         callbackToggle && callbackToggle(target);
 
-        const target = event.target.closest(selectorToggle),
-            selector = target.getAttribute(splitselectorToggle),
+        const selector = target.getAttribute(splitselectorToggle),
             group = target.getAttribute(splitselectorGroup),
             role = target.getAttribute(splitselectorRole),
             next = target.closest(selectorNext),
-            allGrouped = group ? getGrouped(target, toggleActiveClass, splitselectorAnimate, group, role, splitselectorToggle, splitselectorGroup) : [],
-            allToggles = getToggles(target, toggleActiveClass, selector, role, next, splitselectorToggle),
-            allDrops = getDrops(target, toggleActiveClass, splitselectorAnimate, selector, role, next),
-            allElements = [...allGrouped, ...allToggles, ...allDrops];
+            allGrouped = group ? getGrouped(target, toggleActiveClass, splitselectorAnimate, group, role, splitselectorToggle, splitselectorGroup, active) : [],
+            allToggles = getToggles(target, toggleActiveClass, selector, role, next, splitselectorToggle, active),
+            allDrops = getDrops(target, toggleActiveClass, splitselectorAnimate, selector, role, next, active),
+            allElements = [...allGrouped, ...allToggles, ...allDrops],
+            elementsBehaviour = toggleBehaviour(allElements, target);
 
-        for (let item of allElements) {
+
+        allElements.forEach((item, index) => {
             const isActive = item.active;
-
+            const { isAnimateHeight, isAnimate, tabActive } = elementsBehaviour[index];
+            if (tabActive) return;
             if (isActive) {
                 const isValid = checkValidity(item);
-                if (isValid) break;
+                if (isValid) return;
             }
-            switchBehaviour(item, target, splitselectorToggle);
-        }
-        end = performance.now();
-        console.log('toggleItems ' + (end - start) + 'ms.');
+
+            if (isAnimateHeight) {
+                animateHeight(item, toggleCollapseClass, toggleActiveClass);
+            } else if (isAnimate) {
+                item.active ? animateDefaultCollapse(item, toggleShowClass, toggleActiveClass) : animateDefaultExpand(item, toggleShowClass, toggleActiveClass);
+            } else {
+                item.active ? close(item) : open(item);
+            }
+        });
+
     };
 
-    const switchBehaviour = (item, target, splitselectorToggle) => {
-
-        const isAnimateHeight = item.type === 'drop' && item.animate === 'height';
-        const isAnimate = item.type === 'drop' && item.animate === 'default';
-        const tabActive = item.role === 'tab' && item.active && isTabActive(item, target, splitselectorToggle);
-
-        if (tabActive) return;
-
-
-        if (item.role === 'tooltip') {
-            setPosition(item);
-        }
-
-        if (isAnimateHeight) {
-            animateHeight(item, toggleCollapseClass, toggleActiveClass);
-        } else if (isAnimate) {
-            animateDefault(item, toggleShowClass, toggleActiveClass);
-        } else {
-            item.active ? close(item) : open(item);
-        }
+    const toggleBehaviour = (all, target) => {
+        return all.map(item => ({
+            isAnimateHeight: item.type === 'drop' && item.animate === 'height',
+            isAnimate: item.type === 'drop' && item.animate === 'default',
+            tabActive: item.role === 'tab' && item.active && isTabActive(item, target, splitselectorToggle)
+        }));
     };
 
     const open = item => {
         callbackOpen && callbackOpen(item);
+
+        item.role === 'tooltip' && setPosition(item);
         item.value.classList.add(toggleActiveClass);
         item.type === 'toggle' && item.value.setAttribute('aria-expanded', true);
-        end = performance.now();
-        console.log('open ' + (end - start) + 'ms.');
+
     };
 
     const close = item => {
         callbackClose && callbackClose(item);
+
         item.value.classList.remove(toggleActiveClass);
         item.type === 'toggle' && item.value.setAttribute('aria-expanded', false);
-        end = performance.now();
-        console.log('close ' + (end - start) + 'ms.');
+
     };
 
     const checkValidity = item => {

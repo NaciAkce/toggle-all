@@ -42,8 +42,8 @@
     }
 
     &__list {
-        margin: 0;
-        padding: 0;
+        @extend .p-0;
+        @extend .m-0;
         list-style-type: none;
     }
 
@@ -58,6 +58,7 @@
     }
 
     &__item {
+        @extend .p-xs;
     }
 
     &__sub {
