@@ -6,7 +6,8 @@
     },
     "extends": [
         "plugin:prettier/recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:jest/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": 2018,
