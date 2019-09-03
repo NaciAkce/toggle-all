@@ -1,5 +1,3 @@
-@include font-face('icons', '../Fonts/Icons/icons', normal, normal, fallback);
-
 [class*='i-']:before {
     // sass-lint:disable no-vendor-prefixes
     -moz-osx-font-smoothing: grayscale;

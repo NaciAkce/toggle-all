@@ -8,6 +8,8 @@ let transitionCollapse = false,
     transitionExpand = false,
     setMedia = null;
 
+const mouseEvents = ['mouseenter', 'mouseleave'];
+
 const ENTER_KEY_CODE = 13;
 
 if (!Element.prototype.matches) {
@@ -83,7 +85,7 @@ const createElementObject = (type, value, role, toggleActiveClass, selectorAnima
     type: type,
     value: value,
     role: role ? role : 'default',
-    active: active ? false : value.classList.contains(toggleActiveClass),
+    active: value.classList.contains(toggleActiveClass),
     animate: value.hasAttribute(selectorAnimate) ? value.getAttribute(selectorAnimate) : false
 });
 
@@ -98,11 +100,11 @@ const createElementObject = (type, value, role, toggleActiveClass, selectorAnima
  * @param {String} splitselectorGroup 
  * @return {Array}
  */
-const getGrouped = (target, toggleActiveClass, selectorAnimate, group, role, splitselectorToggle, splitselectorGroup, active) => [].slice
+const getGrouped = (target, toggleActiveClass, selectorAnimate, group, role, splitselectorToggle, splitselectorGroup, active, next) => [].slice
     .call($$(`[${splitselectorGroup}="${group}"]`))
-    .filter(e => e !== target && e.classList.contains(toggleActiveClass, active))
-    .reduce((obj, item) => {
-        const dropItem = $(item.getAttribute(splitselectorToggle)),
+    .filter(e => e !== target && e.classList.contains(toggleActiveClass))
+    .reduce((obj, item, index, array) => {
+        const dropItem = next ? getNextSibling(item, item.getAttribute(splitselectorToggle)) : $(item.getAttribute(splitselectorToggle)),
             toggle = createElementObject('toggle', item, role, toggleActiveClass, null, active),
             drop = createElementObject('drop', dropItem, role, toggleActiveClass, selectorAnimate, active);
         return [...obj, toggle, drop];
@@ -289,7 +291,6 @@ const setPosition = (item) => {
 
     });
 
-
 };
 
 /**
@@ -318,7 +319,7 @@ const defaultConfig = {
     toggleCollapseClass: 'is--collapsing',
     toggleShowClass: 'is--show',
     onHover: false,
-    onnHoverMediaQuery: '(max-width: 768px)',
+    onnHoverMediaQuery: '(max-width: 992px)',
     stopVideo: true,
     callbackOpen: false,
     callbackClose: false,
@@ -407,7 +408,6 @@ const Toggle = (userSettings = {}) => {
     };
 
     const matchMedia = (mq) => {
-
         const matches = mq.matches;
 
         if (
@@ -462,8 +462,6 @@ const Toggle = (userSettings = {}) => {
 
     const handleMouseEvent = (eventType) => {
 
-        const mouseEvents = ['mouseenter', 'mouseleave'];
-
         if (eventType === 'touchstart') {
             allHoverElements.map(item => {
                 mouseEvents.map(type => {
@@ -488,6 +486,7 @@ const Toggle = (userSettings = {}) => {
         if (!event.target.matches(selectorHover)) return;
 
         if (transitionExpand || transitionCollapse) return;
+
         const eventTarget = getEventTarget(event.target, event.type, selectorToggle);
 
         toggleItems(eventTarget);
@@ -512,12 +511,11 @@ const Toggle = (userSettings = {}) => {
             group = target.getAttribute(splitselectorGroup),
             role = target.getAttribute(splitselectorRole),
             next = target.closest(selectorNext),
-            allGrouped = group ? getGrouped(target, toggleActiveClass, splitselectorAnimate, group, role, splitselectorToggle, splitselectorGroup, active) : [],
+            allGrouped = group ? getGrouped(target, toggleActiveClass, splitselectorAnimate, group, role, splitselectorToggle, splitselectorGroup, active, next) : [],
             allToggles = getToggles(target, toggleActiveClass, selector, role, next, splitselectorToggle, active),
             allDrops = getDrops(target, toggleActiveClass, splitselectorAnimate, selector, role, next, active),
             allElements = [...allGrouped, ...allToggles, ...allDrops],
             elementsBehaviour = toggleBehaviour(allElements, target);
-
 
         allElements.forEach((item, index) => {
             const isActive = item.active;
