@@ -263,36 +263,32 @@ const splitSelector = (selector) => selector.replace(/\[|\]/g, '');
  */
 const setPosition = (item) => {
     if (item.type === 'toggle') return;
-    window.requestAnimationFrame(function () {
-        item.value.setAttribute('style', 'position: absolute; visibility: hidden; display: block; pointer-events: none');
-        item.value.classList.remove('is--position-bottom', 'is--position-top', 'is--position-left', 'is--position-right');
+    item.value.setAttribute('style', 'position: absolute; visibility: hidden; display: block; pointer-events: none');
+    item.value.classList.remove('is--position-bottom', 'is--position-top', 'is--position-left', 'is--position-right');
 
-        const position = isOutOfViewport(item.value);
+    const position = isOutOfViewport(item.value);
 
-        item.value.removeAttribute('style');
+    item.value.removeAttribute('style');
 
-        if (position.top) {
-            item.value.classList.add('is--position-bottom');
-            item.value.classList.remove('is--position-top');
-        }
+    if (position.top) {
+        item.value.classList.add('is--position-bottom');
+        item.value.classList.remove('is--position-top');
+    }
 
-        if (position.bottom) {
-            item.value.classList.add('is--position-top');
-            item.value.classList.remove('is--position-bottom');
-        }
+    if (position.bottom) {
+        item.value.classList.add('is--position-top');
+        item.value.classList.remove('is--position-bottom');
+    }
 
-        if (position.left) {
-            item.value.classList.add('is--position-left');
-            item.value.classList.remove('is--position-right');
-        }
+    if (position.left) {
+        item.value.classList.add('is--position-left');
+        item.value.classList.remove('is--position-right');
+    }
 
-        if (position.right) {
-            item.value.classList.add('is--position-right');
-            item.value.classList.remove('is--position-left');
-        }
-
-    });
-
+    if (position.right) {
+        item.value.classList.add('is--position-right');
+        item.value.classList.remove('is--position-left');
+    }
 };
 
 /**
