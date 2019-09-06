@@ -81,13 +81,15 @@ const isTabActive = (item, target, splitselectorToggle) => item.value === target
  * @param {String} toggleActiveClass
  * @return {Object}.....Item Object
  */
-const createElementObject = (type, value, role, toggleActiveClass, selectorAnimate, active) => ({
-    type: type,
-    value: value,
-    role: role ? role : 'default',
-    active: value.classList.contains(toggleActiveClass),
-    animate: value.hasAttribute(selectorAnimate) ? value.getAttribute(selectorAnimate) : false
-});
+const createElementObject = (type, value, role, toggleActiveClass, selectorAnimate, active) => {
+    return {
+        type: type,
+        value: value,
+        role: role ? role : 'default',
+        active: active !== null && value.classList.contains(toggleActiveClass) ? false : value.classList.contains(toggleActiveClass),
+        animate: value.hasAttribute(selectorAnimate) ? value.getAttribute(selectorAnimate) : false
+    };
+};
 
 /**
  * Get Grouped
@@ -105,8 +107,8 @@ const getGrouped = (target, toggleActiveClass, selectorAnimate, group, role, spl
     .filter(e => e !== target && e.classList.contains(toggleActiveClass))
     .reduce((obj, item, index, array) => {
         const dropItem = next ? getNextSibling(item, item.getAttribute(splitselectorToggle)) : $(item.getAttribute(splitselectorToggle)),
-            toggle = createElementObject('toggle', item, role, toggleActiveClass, null, active),
-            drop = createElementObject('drop', dropItem, role, toggleActiveClass, selectorAnimate, active);
+            toggle = createElementObject('toggle', item, role, toggleActiveClass, null, active = null),
+            drop = createElementObject('drop', dropItem, role, toggleActiveClass, selectorAnimate, active = null);
         return [...obj, toggle, drop];
     }, []);
 
@@ -299,10 +301,14 @@ const setPosition = (item) => {
  * @param {String} type 
  * @param {String} selectorToggle 
  */
-const getEventTarget = (target, type, selectorToggle) => ({
-    item: target.querySelector(selectorToggle),
-    active: type === 'mouseenter' ? true : false
-});
+const getEventTarget = (target, type, selectorToggle, toggleActiveClass) => {
+    // console.log(target.querySelector(selectorToggle), target.querySelector(selectorToggle).classList.contains(toggleActiveClass), type, type === 'mouseenter');
+    const item = target.querySelector(selectorToggle);
+    return {
+        item: item,
+        active: type === 'mouseenter' ? true : null
+    };
+};
 
 const defaultConfig = {
     selectorToggle: '[data-toggle]',
@@ -487,7 +493,7 @@ const Toggle = (userSettings = {}) => {
 
         if (transitionExpand || transitionCollapse) return;
 
-        const eventTarget = getEventTarget(event.target, event.type, selectorToggle);
+        const eventTarget = getEventTarget(event.target, event.type, selectorToggle, toggleActiveClass);
 
         toggleItems(eventTarget);
     };
