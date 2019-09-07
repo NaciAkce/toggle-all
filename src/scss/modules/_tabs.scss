@@ -23,9 +23,8 @@
     }
 
     &__body {
-        transition: opacity 0.2s cubic-bezier(0.42, 0, 0.34, 1.01);
+        will-change: opacity;
         opacity: 0;
-
         &:not(.is--active) {
             display: none;
         }

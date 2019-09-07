@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zxx">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="description" content="Toggle all with one event listener. Tabs, Dropdowns, Accordions, Navigation">
         <script src="./bundle.umd.js" defer></script>
         <script src="./main.js" defer></script>
-        <link rel="prefetch" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700&display=swap"
-              as="style" crossorigin>
+        <link rel="stylesheet" href="fonts.css">
         <link rel="stylesheet" href="styles.css">
         <title>Default Example</title>
     </head>
@@ -27,11 +27,12 @@
                                 <h3>Dropdown</h3>
                                 <div class="dropdown show">
                                     <a class="btn btn-primary dropdown__toggle" href="#" role="button"
-                                       id="dropdownMenuLink" data-toggle="#dropdown" aria-haspopup="true"
+                                       id="dropdownMenuLink-one" data-toggle="#dropdown" aria-haspopup="true"
                                        aria-expanded="false">
                                         Dropdown link
                                     </a>
-                                    <div class="dropdown__container" id="dropdown" aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown__container" id="dropdown"
+                                         aria-labelledby="dropdownMenuLink-one">
                                         <a class="dropdown__item" href="#">Action</a>
                                         <a class="dropdown__item" href="#">Another action</a>
                                         <a class="dropdown__item" href="#">Something else here</a>
@@ -43,13 +44,14 @@
                                 <div class="tool-tip__content"><button
                                             class="tool-tip__toggle btn btn--default btn--round"
                                             data-toggle="#tool-tip-dropdown-1" data-toggle-role="tooltip"
-                                            aria-labelledby="Tooltip"><span class="i-info"></span></button>
+                                            aria-label="Tooltip" aria-describedby="tool-tip-dropdown-1"><span
+                                              class="i-info"></span></button>
                                     <div class="tool-tip__dropdown" id="tool-tip-dropdown-1">
                                         magni modi exercitationem debitis ducimus assumenda ratione corporis, illum
                                         eius,.
                                         <div>
                                             <a class="dropdown__toggle" href="#" role="button" id="dropdownMenuLink"
-                                               data-toggle="#dropdown" aria-haspopup="true" aria-labelledby="Tooltip"
+                                               data-toggle="#dropdown" aria-haspopup="true" aria-describedby="dropdown"
                                                aria-expanded="false">
                                                 open nav dropdown
                                             </a>
@@ -62,13 +64,13 @@
                                 <span class="sr-only" id="toggle-btn">Toggle Navigation</span>
                                 <button class="dropdown__button" data-toggle="#nav" aria-labelledby="toggle-btn"><span
                                           class="dropdown__open"></span><span class="dropdown__close"></span></button>
-                                <nav id="nav" class="nav nav--fixed">
+                                <nav id="nav" class="nav nav--fixed nav--default">
                                     <!-- Close button for mobile version -->
                                     <button class="dropdown__button" data-toggle="#nav"><span
                                               class="dropdown__close"></span></button>
                                     <div class="nav__wrap" data-toggle-next>
                                         <ul class="nav__list nav__list-0">
-                                            <li class="nav__item">
+                                            <li class="nav__item" data-toggle-hover>
                                                 <a class="nav__link nav__toggle  nav__parent"
                                                    data-toggle=".nav__dropdown" href="#">Vegetables</a>
                                                 <!-- Submenu 1 -->
@@ -224,11 +226,12 @@
                                 <h3>Dropdown</h3>
                                 <div class="dropdown show">
                                     <a class="btn btn-primary dropdown__toggle" href="#" role="button"
-                                       id="dropdownMenuLink" data-toggle="#dropdown1" data-toggle-global
+                                       id="dropdownMenuLink-two" data-toggle="#dropdown1" data-toggle-global
                                        data-toggle-group="group-1" aria-haspopup="true" aria-expanded="false">
                                         Dropdown link
                                     </a>
-                                    <div class="dropdown__container" id="dropdown1" aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown__container" id="dropdown1"
+                                         aria-labelledby="dropdownMenuLink-two">
                                         <a class="dropdown__item" href="#">Action</a>
                                         <a class="dropdown__item" href="#">Another action</a>
                                         <a class="dropdown__item" href="#">Something else here</a>
@@ -240,7 +243,8 @@
                                 <div class="tool-tip__content"><button
                                             class="tool-tip__toggle btn btn--default btn--round"
                                             data-toggle-role="tooltip" data-toggle-global data-toggle-group="group-1"
-                                            data-toggle="#tool-tip-dropdown-11" aria-labelledby="Tooltip"><span
+                                            data-toggle="#tool-tip-dropdown-11" aria-label="Tooltip 2"
+                                            aria-describedby="tool-tip-dropdown-11"><span
                                               class="i-info"></span></button>
                                     <div class="tool-tip__dropdown" id="tool-tip-dropdown-11">
                                         magni modi exercitationem debitis ducimus assumenda ratione corporis, illum
@@ -253,11 +257,11 @@
                             </div>
                             <div class="col-md-4">
                                 <h3>Menu</h3>
-                                <span class="sr-only" id="toggle-btn">Toggle Navigation</span>
+                                <span class="sr-only" id="toggle-btn-two">Toggle Navigation</span>
                                 <button class="dropdown__button" data-toggle-group="group-1" data-toggle="#nav2"
-                                        data-toggle-global data-toggle-global aria-labelledby="toggle-btn"><span
+                                        data-toggle-global aria-labelledby="toggle-btn-two"><span
                                           class="dropdown__open"></span><span class="dropdown__close"></span></button>
-                                <nav id="nav2" class="nav nav--fixed">
+                                <nav id="nav2" class="nav nav--fixed nav--transition" data-toggle-animate="default">
                                     <!-- Close button for mobile version -->
                                     <button class="dropdown__button is--active" data-toggle="#nav2"
                                             data-toggle-global><span class="dropdown__close"></span></button>
@@ -281,7 +285,8 @@
                                                     </li>
                                                     <li class="nav__item">
                                                         <a class="nav__link nav__toggle nav__parent  nav__link--last-child"
-                                                           data-toggle=".nav__dropdown" href="#">Sale %</a>
+                                                           data-toggle=".nav__dropdown" tabindex="-1" href="#">Sale
+                                                            %</a>
                                                         <!-- Submenu 1-1 -->
                                                         <ul class="nav__list  nav__list-2  nav__sub nav__dropdown">
                                                             <li class="nav__item"><a class="nav__link" href="#">Fair
@@ -445,7 +450,7 @@
                                     <div class="accordion__header" id="headingTwo">
                                         <button class="accordion__button" data-toggle="#second-accordion"
                                                 data-toggle-role="accordion" aria-controls="second"
-                                                aria-expanded="true">Accordion 1<span
+                                                aria-expanded="false">Accordion 1<span
                                                   class="accordion__icon"></span></button>
                                     </div>
                                     <div class="accordion__dropdown" aria-labelledby="headingTwo" id="second-accordion">
@@ -468,7 +473,7 @@
                                     <div class="accordion__header" id="headingThree">
                                         <button class="accordion__button" data-toggle="#third-accordion"
                                                 data-toggle-group="#accordion" data-toggle-role="accordion"
-                                                aria-controls="third" aria-expanded="true">Accordion 1 <span
+                                                aria-controls="third" aria-expanded="false">Accordion 1 <span
                                                   class="accordion__icon"></span></button>
                                     </div>
                                     <div class="accordion__dropdown" aria-labelledby="headingThree"
@@ -512,11 +517,11 @@
                                     <div class="accordion__header" id="headingFour">
                                         <button class="accordion__button" data-toggle="#fourth-accordion"
                                                 data-toggle-group="#accordion2" data-toggle-role="accordion"
-                                                aria-controls="fourth" aria-expanded="true">Accordion 1 Grouped <span
-                                                  class="accordion__icon"></span></button>
+                                                aria-controls="fourth-accordion" aria-expanded="false">Accordion 1
+                                            Grouped <span class="accordion__icon"></span></button>
                                     </div>
-                                    <div class="accordion__dropdown" aria-labelledby="headingFour"
-                                         id="fourth-accordion">
+                                    <div class="accordion__dropdown" aria-labelledby="headingFour" id="fourth-accordion"
+                                         data-toggle-animate="height">
                                         <div class="accordion__body">
                                             <h4 class="accordion__header">heading 1</h4>
                                             <p class="accordion__text">Lorem ipsum, dolor sit amet consectetur
@@ -540,11 +545,11 @@
                                     <div class="accordion__header" id="headingFive">
                                         <button class="accordion__button  is--active" data-toggle="#fifth-accordion"
                                                 data-toggle-group="#accordion2" data-toggle-role="accordion"
-                                                aria-controls="fifth" aria-expanded="true">Accordion
+                                                aria-controls="fifth-accordion" aria-expanded="true">Accordion
                                             1 Grouped<span class="accordion__icon"></span></button>
                                     </div>
                                     <div class="accordion__dropdown is--active" aria-labelledby="headingFive"
-                                         id="fifth-accordion">
+                                         id="fifth-accordion" data-toggle-animate="height">
                                         <div class="accordion__body">
                                             <h4 class="tabs__header">heading 1</h4>
                                             <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing
@@ -564,10 +569,11 @@
                                     <div class="accordion__header" id="headingSix">
                                         <button class="accordion__button" data-toggle="#sixth-accordion"
                                                 data-toggle-role="accordion" data-toggle-group="#accordion2"
-                                                aria-controls="sixth" aria-expanded="true">Accordion 1
+                                                aria-controls="sixth-accordion" aria-expanded="false">Accordion 1
                                             Grouped<span class="accordion__icon"></span></button>
                                     </div>
-                                    <div class="accordion__dropdown" aria-labelledby="headingSix" id="sixth-accordion">
+                                    <div class="accordion__dropdown" aria-labelledby="headingSix" id="sixth-accordion"
+                                         data-toggle-animate="height">
                                         <div class="accordion__body">
                                             <h4 class="accordion__header">heading 2</h4>
                                             <p class="accordion__text">Lorem ipsum dolor sit amet consectetur
@@ -611,26 +617,20 @@
                     <h2>Tabs</h2>
                 </header>
                 <div class="tabs__content">
-                    <ul class="tabs__list" id="myTab" role="tablist">
-                        <li class="tabs__item">
-                            <a class="tabs__link is--active" id="first-tab" data-toggle="#first"
-                               data-toggle-group="#myTab" data-toggle-role="tab" href="#first" role="tab"
-                               aria-controls="first" aria-selected="true">Home</a>
-                        </li>
-                        <li class="tabs__item">
-                            <a class="tabs__link" id="profile-tab" data-toggle="#second" data-toggle-group="#myTab"
-                               data-toggle-role="tab" href="#first" role="tab" aria-controls="first"
-                               aria-selected="false">Profile</a>
-                        </li>
-                        <li class="tabs__item">
-                            <a class="tabs__link" id="contact-tab" data-toggle="#third" data-toggle-group="#myTab"
-                               data-toggle-role="tab" href="#first" role="tab" aria-controls="first"
-                               aria-selected="false">Contact</a>
-                        </li>
-                    </ul>
+                    <div class="tabs__list" id="myTab" role="tablist">
+                        <a class="tabs__link is--active" id="first-tab" data-toggle="#first" data-toggle-group="#myTab"
+                           data-toggle-role="tab" href="#first" role="tab" aria-controls="first"
+                           aria-selected="true">Home</a>
+                        <a class="tabs__link" id="second-tab" data-toggle="#second" data-toggle-group="#myTab"
+                           data-toggle-role="tab" href="#first" role="tab" aria-controls="first"
+                           aria-selected="false">Profile</a>
+                        <a class="tabs__link" id="third-tab" data-toggle="#third" data-toggle-group="#myTab"
+                           data-toggle-role="tab" href="#first" role="tab" aria-controls="first"
+                           aria-selected="false">Contact</a>
+                    </div>
                     <div class="tabs__content">
                         <div class="tabs__body is--active is--show" role="tabpanel" aria-labelledby="first-tab"
-                             id="first">
+                             id="first" data-toggle-animate="default">
                             <h4 class="tabs__header">Tab heading 1</h4>
                             <p class="tabs__text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Incidunt
                                 libero ipsum, veniam
@@ -639,7 +639,8 @@
                             <p class="tabs__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum,
                                 maiores.</p>
                         </div>
-                        <div class="tabs__body" role="tabpanel" aria-labelledby="second-tab" id="second">
+                        <div class="tabs__body" role="tabpanel" aria-labelledby="second-tab" id="second"
+                             data-toggle-animate="default">
                             <h4 class="tabs__header">Tab heading 2</h4>
                             <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                 Consectetur
@@ -657,7 +658,8 @@
                                 doloribus
                                 veniam? Nulla!</p>
                         </div>
-                        <div class="tabs__body" role="tabpanel" aria-labelledby="third-tab" id="third">
+                        <div class="tabs__body" role="tabpanel" aria-labelledby="third-tab" id="third"
+                             data-toggle-animate="default">
                             <h4 class="tabs__header">Tab heading 3</h4>
                             <p class="tabs__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                 Laboriosam

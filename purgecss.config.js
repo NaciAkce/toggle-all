@@ -1,7 +1,7 @@
 module.exports = {
     content: ['src/index.html'],
     css: ['src/styles.css', 'src/fonts.css'],
-    whitelistPatterns: [/is--$/],
+    whitelistPatterns: [/^is--/],
     extractors: [
         {
             extractor: class {

@@ -14,8 +14,6 @@ $td-link-accent-hover: underline;
 %link {
     color: $c-link;
     text-decoration: $td-link;
-    transition: $transition-base;
-
     &:hover {
         color: $c-link-hover;
         text-decoration: $td-link-hover;
@@ -34,9 +32,7 @@ $td-link-accent-hover: underline;
         @extend .align-items-center;
 
         [class^='i-'] {
-
             &:not(:only-child) {
-
                 &:first-child {
                     @extend .mr-sm;
                 }

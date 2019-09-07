@@ -43,6 +43,7 @@ $btn-secondary-border-hover: $c-primary;
     touch-action: manipulation;
     transition: border-color 0.25s ease-in-out, color 0.25s ease-in-out, background-color 0.25s ease-in-out;
     vertical-align: middle;
+    will-change: border-color background-color;
 
     // variants
     &--primary {

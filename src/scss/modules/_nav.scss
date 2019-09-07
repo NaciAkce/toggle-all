@@ -27,6 +27,7 @@
         right: -100%;
 
         transition: right 0.3s ease 0.1ms;
+        will-change: right;
         &:not(.is--active) {
             display: none;
         }
@@ -54,6 +55,7 @@
         position: relative;
         display: block;
         transition: color 0.1s;
+        will-change: color;
         border-bottom: 1px solid $c-border-light;
     }
 
