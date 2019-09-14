@@ -23,7 +23,9 @@
         "server": "browser-sync start --server 'dist' --files 'dist'",
         "watch:server": "concurrently --kill-others \"yarn run dev\" \"yarn run css:watch\" \"yarn run server\"",
         "storybook": "start-storybook -p 9001 -c storybook",
-        "storybook:build": "build-storybook  -c storybook"
+        "storybook:build": "build-storybook  -c storybook",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist"
     },
     "browserslist": [
         "Chrome >= 72",
@@ -62,7 +64,7 @@
     "bugs": {
         "url": "https://github.com/NaciAkce/toggle-all/issues"
     },
-    "homepage": "https://github.com/NaciAkce/toggle-all#readme",
+    "homepage": "https://naciakce.github.io/toggle-all",
     "devDependencies": {
         "@babel/core": "^7.5.5",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
@@ -87,6 +89,7 @@
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-react": "^7.14.3",
         "eslint-plugin-standard": "^4.0.1",
+        "gh-pages": "^2.1.1",
         "husky": "^3.0.5",
         "jest": "^24.9.0",
         "lint-staged": "^9.2.5",
