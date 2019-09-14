@@ -4,6 +4,8 @@
 
 Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped and supports also on hover also
 
+[Demo](https://naciakce.github.io/toggle-all/)
+
 ## Options
 
 ```js
