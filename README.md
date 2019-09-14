@@ -1,4 +1,6 @@
 # Toggle
+[![Build Status](https://travis-ci.org/NaciAkce/toggle-all.svg?branch=master)](https://travis-ci.org/NaciAkce/toggle-all)
+[![Coverage Status](https://coveralls.io/repos/github/NaciAkce/toggle-all/badge.svg?branch=master)](https://coveralls.io/github/NaciAkce/toggle-all?branch=master)
 
 Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped and supports also on hover also
 
