@@ -10,15 +10,15 @@ Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped an
     selectorGlobal: '[data-toggle-global]', // Close Toggle if click outside
     selectorGroup: '[data-toggle-group]', // Group toggles
     selectorValidate: '[data-toggle-validate]', // Form Validation - Prevent Closing if invalid
-    selectorRole: '[data-toggle-role]', // tab, accordion, tooltip,  defsult 
+    selectorRole: '[data-toggle-role]', // tab, accordion, tooltip, overlay, default 
     selectorBack: '[data-toggle-back]', // Close Toggle
-    selectorNext: '[data-toggle-next]', // Selects next Sibling. Add to Parent. Use Case  for Nested Multiple driopdowns 
-    selectorAnimate: '[data-toggle-animate]', // Animate. Values: default, height
+    selectorNext: '[data-toggle-next]', // Selects next Sibling. Add to Parent. Use Case: for Nested Multiple driopdowns with same classes instead of unique IDs
+    selectorAnimate: '[data-toggle-animate]', // Animate. Values: default(all other css transitions), height(accordion)
     selectorHover: '[data-toggle-hover]', // Add to direct Parent 
     toggleActiveClass: 'is--active',
     toggleErrorClass: 'is--error',
     toggleCollapseClass: 'is--collapsing', // Class while animating height
-    toggleShowClass: 'is--show', // Class for default animation
+    toggleShowClass: 'is--show', // Class while default animation
     onHover: false,
     onnHoverMediaQuery: '(max-width: 992px)', // Disable hover e.g  smaller then 992px
     stopVideo: true,
