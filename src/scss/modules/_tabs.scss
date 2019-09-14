@@ -23,6 +23,7 @@
     }
 
     &__body {
+        transition: opacity 200ms ease-in;
         will-change: opacity;
         opacity: 0;
         &:not(.is--active) {

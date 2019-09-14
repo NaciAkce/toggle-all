@@ -4,16 +4,33 @@
 %shadow-triangle2 {
     box-shadow: -4px 4px 4px -3px rgba(0, 0, 0, 0.1);
 }
+body {
+    &.is--ios {
+        cursor: pointer;
+    }
+}
 
+html {
+    touch-action: manipulation;
+}
+
+button {
+    cursor: pointer;
+}
 div[class*='col-md'] {
+    position: initial;
     @extend .mt-lg;
 }
 
 .section {
     @extend .py-xl;
-
+    position: relative;
     &:nth-child(even) {
         background-color: $c-gray-lightest;
+    }
+
+    &__menu-hover {
+        min-height: 100vh;
     }
 }
 
