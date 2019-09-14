@@ -20,7 +20,3 @@ addDecorator(
     })
 );
 configure(loadStories, module);
-
-if (module.hot) {
-    module.hot.accept(() => configure(loadStories, module));
-}
