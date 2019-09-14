@@ -3,7 +3,8 @@
 
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, user-scalable=no">
+
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="description" content="Toggle all with one event listener. Tabs, Dropdowns, Accordions, Navigation">
         <script src="./bundle.umd.js" defer></script>
@@ -14,7 +15,8 @@
     </head>
 
     <body>
-        <section class="section section__toggle">
+      <div class="wrapper">
+           <section class="section section__toggle">
             <div class="py-sm"></div>
             <div class="container">
                 <header>
@@ -64,13 +66,13 @@
                                 <span class="sr-only" id="toggle-btn">Toggle Navigation</span>
                                 <button class="dropdown__button" data-toggle="#nav" aria-labelledby="toggle-btn"><span
                                           class="dropdown__open"></span><span class="dropdown__close"></span></button>
-                                <nav id="nav" class="nav nav--fixed nav--default">
+                                <nav id="nav" class="nav nav--absolute nav--default">
                                     <!-- Close button for mobile version -->
                                     <button class="dropdown__button" data-toggle="#nav"><span
                                               class="dropdown__close"></span></button>
                                     <div class="nav__wrap" data-toggle-next>
                                         <ul class="nav__list nav__list-0">
-                                            <li class="nav__item" data-toggle-hover>
+                                            <li class="nav__item">
                                                 <a class="nav__link nav__toggle  nav__parent"
                                                    data-toggle=".nav__dropdown" href="#">Vegetables</a>
                                                 <!-- Submenu 1 -->
@@ -261,9 +263,9 @@
                                 <button class="dropdown__button" data-toggle-group="group-1" data-toggle="#nav2"
                                         data-toggle-global aria-labelledby="toggle-btn-two"><span
                                           class="dropdown__open"></span><span class="dropdown__close"></span></button>
-                                <nav id="nav2" class="nav nav--fixed nav--transition" data-toggle-animate="default">
+                                <nav id="nav2" class="nav nav--absolute nav--transition" data-toggle-animate="default">
                                     <!-- Close button for mobile version -->
-                                    <button class="dropdown__button is--active" data-toggle="#nav2"
+                                    <button class="dropdown__button" data-toggle="#nav2"
                                             data-toggle-global><span class="dropdown__close"></span></button>
                                     <div class="nav__wrap" data-toggle-next>
                                         <ul class="nav__list nav__list-0">
@@ -674,6 +676,180 @@
                 </div>
             </div>
         </section>
+        <section class="section section__menu-hover">
+            <div class="py-sm"></div>
+            <div class="container">
+                <header>
+                    <h2>Menu with Hover</h2>
+                </header>
+                <div class="nav__content">
+                    <div class="div contaner">
+                        <p>Menu</p>
+                        <span class="sr-only" id="toggle-btn-three">Toggle Navigation</span>
+                        <button class="dropdown__button nav-menu__button" data-toggle-group="group-1" data-toggle="#nav3"
+                                data-toggle-global aria-labelledby="toggle-btn-three"><span
+                                    class="dropdown__open"></span><span class="dropdown__close"></span></button>
+                        <div  id="nav3" class="nav-menu--transition" data-toggle-animate="default">
+                            <!-- Close button for mobile version -->
+                            <button class="dropdown__button nav-menu__button" data-toggle="#nav3"
+                            data-toggle-global><span class="dropdown__close"></span></button>
+                            <div class="nav-menu__scroll"> 
+                                <nav class="nav nav-menu"  data-toggle-next>
+
+                                    <ul class="nav__list nav-menu--horizontal nav__list-0">
+                                        <li class="nav__item" data-toggle-hover>
+                                            <a class="nav__link nav__toggle  nav__parent"
+                                                data-toggle=".nav__dropdown" data-toggle-global data-toggle-group="nav-menu" href="http://google.com">Vegetables</a>
+                                           
+                                            <!-- Submenu 1 -->
+                                            <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate="default">
+                                                <button class="nav-menu__back" data-toggle-back>back</button>
+                                                <li class="nav__item"><a class="nav__link" href="#">Stalk
+                                                        Vegetables</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Roots &
+                                                        Seeds</a></li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Cabbages</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Salad Greens</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Mushrooms</a>
+                                                </li>
+                                                <li class="nav__item">
+                                                    <a class="nav__link nav__toggle nav__parent  nav__link--last-child"
+                                                        data-toggle=".nav__dropdown" href="#">Sale
+                                                        %</a>
+                                                    <!-- Submenu 1-1 -->
+                                                    <ul class="nav__list  nav__list-2  nav__sub nav__dropdown" data-toggle-animate="default">
+                                                            <button class="nav-menu__back" data-toggle-back>back</button>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Fair
+                                                                Trade Roots</a>
+                                                        </li>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Dried
+                                                                Veggies</a></li>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Our
+                                                                Brand</a></li>
+                                                        <li class="nav__item"><a
+                                                                class="nav__link  nav__link--last-child"
+                                                                href="#">Homemade</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav__item"  data-toggle-hover>
+
+                                            <a class="nav__link nav__toggle  nav__parent"
+                                                data-toggle=".nav__dropdown" data-toggle-global data-toggle-group="nav-menu" href="#">Fruits</a>
+                                            <!-- Submenu 2 -->
+                                            <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate="default">
+                                                    <button class="nav-menu__back" data-toggle-back>back</button>
+                                                <li class="nav__item"><a class="nav__link" href="#">Citrus
+                                                        Fruits</a></li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Berries</a></li>
+                                                <li class="nav__item"><a class="nav__link nav__toggle nav__parent"
+                                                        data-toggle=".nav__dropdown" href="#">Special Selection</a>
+                                                    <!-- Submenu 2-1 -->
+                                                    <ul class="nav__list  nav__list-2  nav__sub nav__dropdown" data-toggle-animate="default">
+                                                            <button class="nav-menu__back" data-toggle-back>back</button>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Exotic
+                                                                Mixes</a></li>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Wild
+                                                                Pick</a></li>
+                                                        <li class="nav__item"><a
+                                                                class="nav__link nav__link--last-child"
+                                                                href="#">Vitamin
+                                                                Boosters</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link  nav__link--last-child"
+                                                        href="#">Tropical
+                                                        Fruits</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Melons</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav__item"  data-toggle-hover>
+                                            <a class="nav__link nav__toggle  nav__parent"
+                                                data-toggle=".nav__dropdown" data-toggle-global data-toggle-group="nav-menu" href="#">Grains</a>
+                                            <!-- Submenu 3 -->
+                                            <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate="default">
+                                                    <button class="nav-menu__back" data-toggle-back>back</button>
+                                                <li class="nav__item"><a class="nav__link" href="#">Buckwheat</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Millet</a></li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Quinoa</a></li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Wild Rice</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Durum Wheat</a>
+                                                </li>
+                                                <li class="nav__item">
+                                                    <a class="nav__link nav__toggle nav__parent nav__link--last-child"
+                                                        data-toggle=".nav__dropdown" href="#">Promo
+                                                        Packs</a>
+                                                    <!-- Submenu 3-1 -->
+                                                    <ul class="nav__list  nav__list-2  nav__sub nav__dropdown" data-toggle-animate="default">
+                                                            <button class="nav-menu__back" data-toggle-back>back</button>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Starter
+                                                                Kit</a></li>
+                                                        <li class="nav__item"><a class="nav__link" href="#">The
+                                                                Essential 8</a>
+                                                        </li>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Bolivian
+                                                                Secrets</a>
+                                                        </li>
+                                                        <li class="nav__item"><a
+                                                                class="nav__link nav__link--last-child"
+                                                                href="#">Flour
+                                                                Packs</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="nav__item"  data-toggle-hover>
+                                            <a class="nav__link nav__toggle  nav__parent"
+                                                data-toggle=".nav__dropdown" data-toggle-global data-toggle-group="nav-menu" href="#">Mylk & Drinks</a>
+                                            <!-- Submenu 4 -->
+                                            <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate="default">
+                                                    <button class="nav-menu__back" data-toggle-back>back</button>
+                                                <li class="nav__item"><a class="nav__link" href="#">Grain Mylks</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Seed Mylks</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Nut Mylks</a>
+                                                </li>
+                                                <li class="nav__item"><a class="nav__link" href="#">Nutri Drinks</a>
+                                                </li>
+                                                <li class="nav__item">
+                                                    <a class="nav__link nav__toggle nav__parent nav__link--last-child"
+                                                        data-toggle=".nav__dropdown" href="#">Selection</a>
+                                                    <!-- Submenu 4-1 -->
+                                                    <ul class="nav__list  nav__list-2  nav__sub nav__dropdown" data-toggle-animate="default">
+                                                            <button class="nav-menu__back" data-toggle-back>back</button>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Nut Mylk
+                                                                Packs</a>
+                                                        </li>
+                                                        <li class="nav__item"><a class="nav__link" href="#">Amino
+                                                                Acid Heaven</a>
+                                                        </li>
+                                                        <li class="nav__item"><a
+                                                                class="nav__link nav__link--last-child"
+                                                                href="#">Allergy
+                                                                Free</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+      </div> 
     </body>
 
 </html>
