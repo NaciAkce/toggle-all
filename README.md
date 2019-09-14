@@ -20,7 +20,7 @@ Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped an
     toggleCollapseClass: 'is--collapsing', // Class while animating height
     toggleShowClass: 'is--show', // Class for default animation
     onHover: false,
-    onnHoverMediaQuery: '(max-width: 992px)', // Disable hover e.g up to 992px
+    onnHoverMediaQuery: '(max-width: 992px)', // Disable hover e.g  smaller then 992px
     stopVideo: true,
     callbackOpen: false,
     callbackClose: false,
