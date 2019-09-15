@@ -546,7 +546,7 @@ const Toggle = (userSettings = {}) => {
     const mouseHandler = (event) => {
         if (!event.target.matches(selectorHover)) return;
         start = performance.now();
-
+        event.stopPropagation();
         const eventTarget = getEventTarget(event.target, event.type, selectorToggle);
 
         toggleItems(eventTarget);
