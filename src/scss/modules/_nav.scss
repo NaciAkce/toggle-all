@@ -95,6 +95,7 @@
 // Menu Hover | focussable
 .nav-menu {
     &__scroll {
+        overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         height: calc(100vh - 30px);

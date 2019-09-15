@@ -29,9 +29,9 @@
         "watch:server": "concurrently --kill-others \"yarn run dev\" \"yarn run css:watch\" \"yarn run server\"",
         "storybook": "start-storybook -p 9001 -c storybook",
         "storybook:build": "build-storybook  -c storybook",
+        "prebuild": "npm run build",
         "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist",
-        "prebuild": "npm run build"
+        "deploy": "gh-pages -d dist"
     },
     "browserslist": [
         "Chrome >= 72",
