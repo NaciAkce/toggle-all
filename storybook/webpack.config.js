@@ -9,11 +9,12 @@ module.exports = {
                 loaders: [
                     'style-loader',
                     'css-loader',
+                    'resolve-url-loader',
                     {
                         loader: 'sass-loader'
                     }
                 ],
-                include: path.resolve(__dirname, '../src')
+                include: [path.resolve(__dirname, '../src'), path.resolve(__dirname, '../dist')]
             },
             {
                 test: /\.(png|woff|woff2|eot|ttf|svg)$/,
