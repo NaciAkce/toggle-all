@@ -99,14 +99,13 @@
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         height: calc(100vh - 30px);
-        width: 100%;
     }
 
     &--transition {
         background: $c-white;
 
         @include media-breakpoint-down(md) {
-            position: absolute;
+            position: fixed;
             top: 0;
             /* bottom: 0; */
             width: 100vw;
@@ -117,6 +116,7 @@
             transform: translate(100vw, 0);
             display: none;
             overflow: hidden;
+
             &.is--active {
                 display: block;
             }
@@ -183,7 +183,6 @@
                 position: absolute;
                 background-color: #ffffff;
                 transform: translate(100vw, 0);
-                overflow-y: auto;
                 top: 50px;
                 height: 100vh;
                 left: 0;
@@ -194,6 +193,8 @@
 
                 &.is--active {
                     display: block;
+                    overflow-x: hidden;
+                    overflow-y: auto;
                 }
                 &.is--show {
                     transform: translate(0, 0);
