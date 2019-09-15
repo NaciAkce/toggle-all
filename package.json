@@ -4,6 +4,11 @@
     "description": "Javascript plugin toggle dropdown, accordion, tabs",
     "main": "dist/bundle.cjs.js",
     "module": "dist/bundle.esm.js",
+    "sideEffects": false,
+    "files": [
+        "dist",
+        "src"
+    ],
     "scripts": {
         "clean": "rimraf dist",
         "build:sass": "node-sass -r --output-style compressed src/scss -d -o src",
@@ -25,7 +30,8 @@
         "storybook": "start-storybook -p 9001 -c storybook",
         "storybook:build": "build-storybook  -c storybook",
         "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist"
+        "deploy": "gh-pages -d dist",
+        "prebuild": "npm run build"
     },
     "browserslist": [
         "Chrome >= 72",

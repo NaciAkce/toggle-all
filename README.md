@@ -33,8 +33,32 @@ Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped an
 
 ```
 
-## Example Simple
 
+## Installation
+
+#### npm
+```
+npm i toggle-all
+```
+
+#### yarn
+```
+yarn add toggle-all
+```
+
+#### unpkg
+```
+<script src="https://unpkg.com/toggle-all@1.0.0/dist/bundle.umd.js" defer></script>
+```
+
+#### js
+```
+import Toggle from 'toggle-all'
+```
+
+## Usage
+
+### Simple
 
 ```html
 
@@ -52,10 +76,7 @@ Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped an
 
 ```
 
-
-## Example
-
-Enable Hover Support
+### Example - Enable Hover Support
 
 ```js
 Toggle({
