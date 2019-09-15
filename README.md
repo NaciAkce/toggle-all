@@ -48,7 +48,7 @@ yarn add toggle-all
 
 #### unpkg
 ```
-<script src="https://unpkg.com/toggle-all@1.0.0/dist/bundle.umd.js" defer></script>
+<script src="https://unpkg.com/toggle-all@latest/dist/bundle.umd.js" defer></script>
 ```
 
 #### js
