@@ -1,6 +1,6 @@
 {
     "name": "toggle-all",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Javascript plugin toggle dropdown, accordion, tabs",
     "main": "dist/bundle.cjs.js",
     "module": "dist/bundle.esm.js",
