@@ -112,11 +112,7 @@ Toggle({
 
 ## HTML and CSS
 
-`Touch`  if you use overlays which covers the whole screen in combination with transitions (last example). Please change your meta viewport `scalable=no` to avoid side effects
-
-```
-<meta name="viewport" content="width=device-width, user-scalable=no">
-```
+`Touch`  if you use overlays which covers the whole screen in combination with transitions (last example)
 
 `Click ios` trigger click events on non tapable elements. You have to add the css property cursor:pointer. There is already a class for the body tag `is--ios` if you use `data-toggle-global`
 
@@ -130,4 +126,9 @@ body {
 html {
     touch-action: manipulation;
 }
+
+a, button {
+    touch-action: manipulation;
+}
+
 ```

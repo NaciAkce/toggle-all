@@ -2,7 +2,6 @@ import { storiesOf, forceReRender } from '@storybook/html';
 import Toggle from '../src/index';
 
 import '../src/scss/styles.scss';
-import '../src/scss/fonts.scss';
 
 storiesOf('Toggle', module)
     .add('Simple Example', () => {
@@ -868,7 +867,7 @@ function runOnPageChange() {
     count++;
     if (count > 2) {
         count = 1;
-        location.reload();
+        // location.reload();
     }
 }
 
@@ -879,6 +878,7 @@ document.addEventListener(
         const callback = function(mutationsList) {
             for (let i = 0, len = mutationsList.length; i < len; i++) {
                 if (mutationsList[i].type == 'childList') {
+                    console.log(mutationsList);
                     runOnPageChange();
                     break;
                 }
