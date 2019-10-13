@@ -148,7 +148,8 @@
 
         @include media-breakpoint-up(lg) {
             > .nav__item {
-                margin: 0 5px;
+                margin: 0 15px;
+                padding: 10px;
                 position: relative;
                 flex: 1 1 auto;
             }
@@ -169,11 +170,15 @@
 
             .nav__list-1 {
                 transform: translate(0, -20px);
-                transition: transform 0.2s ease 0s, opacity 0.2s ease-in;
+                transition: transform 0.2s ease, opacity 0.2s ease-in;
+                pointer-events: none;
                 opacity: 0;
+                will-change: transform, opacity;
+
                 &.is--show {
                     transform: translate(0, 0);
                     opacity: 1;
+                    pointer-events: all;
                 }
             }
         }

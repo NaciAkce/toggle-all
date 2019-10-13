@@ -25,6 +25,7 @@ div[class*='col-md'] {
 .section {
     @extend .py-xl;
     position: relative;
+    overflow: hidden;
     &:nth-child(even) {
         background-color: $c-gray-lightest;
     }

@@ -25,7 +25,7 @@
         "test:staged": "jest --findRelatedTests",
         "css": "node-sass src/scss -d -o dist",
         "css:watch": "yarn run css && node-sass src/scss -d -wo dist",
-        "server": "browser-sync start --server 'dist' --files 'dist'",
+        "server": "browser-sync --port 6477 start --server 'dist' --files 'dist'",
         "watch:server": "concurrently --kill-others \"yarn run dev\" \"yarn run css:watch\" \"yarn run server\"",
         "storybook": "start-storybook -p 9001 -c storybook",
         "storybook:build": "build-storybook  -c storybook",
@@ -90,6 +90,7 @@
         "eslint-config-prettier": "^6.2.0",
         "eslint-config-standard": "^14.1.0",
         "eslint-plugin-import": "^2.18.2",
+        "eslint-plugin-jest": "^22.17.0",
         "eslint-plugin-node": "^10.0.0",
         "eslint-plugin-prettier": "^3.1.0",
         "eslint-plugin-promise": "^4.2.1",
@@ -103,15 +104,16 @@
         "postcss": "^7.0.18",
         "prettier-eslint": "^9.0.0",
         "purgecss": "^1.4.0",
+        "resolve-url-loader": "^3.1.0",
         "rollup": "^1.20.3",
         "rollup-plugin-babel": "^4.3.3",
         "rollup-plugin-gzip": "^2.2.0",
         "rollup-plugin-node-resolve": "^5.2.0",
         "rollup-plugin-terser": "^5.1.1",
         "rollup-watch": "^4.3.1",
-        "eslint-plugin-jest": "^22.17.0",
-        "resolve-url-loader": "^3.1.0",
         "sass-loader": "^8.0.0"
     },
-    "dependencies": {}
+    "dependencies": {
+        "uuid": "^3.3.3"
+    }
 }
