@@ -425,10 +425,10 @@ const { enter, leave, end } = window.PointerEvent ? {
     enter: 'pointerenter',
     leave: 'pointerleave'
 } : {
-    end: 'touchend',
-    enter: 'mouseenter',
-    leave: 'mouseleave'
-};
+        end: 'touchend',
+        enter: 'mouseenter',
+        leave: 'mouseleave'
+    };
 const mouseEvents = [enter, leave];
 
 /**
