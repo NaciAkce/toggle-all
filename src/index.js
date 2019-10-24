@@ -1,43 +1,114 @@
 /* eslint-disable prettier/prettier */
-import { throttle, useMedia, debounce } from './Helper';
+import { throttle, useMedia, polyfill } from './Helper';
 const $ = element => document.querySelector(element);
 const $$ = elements => document.querySelectorAll(elements);
 
 let transitionCollapse = false,
     transitionExpand = false,
-    enterLocked = false,
-    leaveLocked = false,
-    setMedia = null;
+    setMedia = null,
+    allHoverElements = [],
+    activeElements,
+    tHandler = null,
+    eventType = null,
+    isActive = null,
+    tabbableBreadcrumb = [],
+    previousElement,
+    focusable = null;
+
+const ENTER_KEY_CODE = 'Enter',
+    UP_KEY_CODE = 'ArrowDown',
+    DOWN_KEY_CODE = 'ArrowUp',
+    TAB_KEY_CODE = 'Tab',
+    SHIFT_KEY_CODE = 16,
+    ESCAPE_KEY_CODE = 'Escape';
 
 
-const ENTER_KEY_CODE = 13;
+const focusableAll = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable], audio[controls], video[controls], summary';
 
-if (!Element.prototype.matches) {
-    Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+/**
+ *
+ * @param {Event} String
+ * @return {Boolean}...
+ */
+const keyEvents = ({ code }) => code === UP_KEY_CODE || code === DOWN_KEY_CODE || code === TAB_KEY_CODE || code === ESCAPE_KEY_CODE || code === SHIFT_KEY_CODE;
+
+/**
+ *
+ * @param {String} mq
+ */
+const matchMedia = (mq) => {
+    const matches = mq.matches;
+
+    if (
+        matches &&
+        (isActive === false || isActive === null)
+    ) {
+        isActive = true;
+        checkEvent();
+    }
+    if (!matches && (isActive === true || isActive === null)) {
+        isActive = false;
+        checkEvent();
+    }
+
+};
+
+/**
+ *
+ * @param {Function} handleMouseEvent
+ */
+const detectMouse = (handleMouseEvent) => event => {
+    if (
+        (eventType !== null &&
+            eventType === event.pointerType &&
+            (isActive && eventType === 'touch')) ||
+        (!isActive && eventType === 'mouse')
+    ) return;
+
+    eventType = isActive ? 'touch' : event.pointerType;
+    handleMouseEvent(eventType);
+
+    document.removeEventListener('pointerover', tHandler, false);
+};
+
+const checkEvent = () => {
+    document.addEventListener('pointerover', tHandler, false);
+
+};
+
+/**
+ *
+ * @param {String} selectorHover
+ * @param {String} onnHoverMediaQuery
+ * @param {Function} matchMedia
+ * @param {Function} handleMouseEvent
+ */
+function handleHover(selectorHover, onnHoverMediaQuery, matchMedia, handleMouseEvent) {
+    allHoverElements = [].slice.call($$(selectorHover));
+    tHandler = throttle(detectMouse(handleMouseEvent), 100);
+    checkEvent();
+    setMedia = useMedia(onnHoverMediaQuery, matchMedia);
+    if (setMedia) {
+        isActive = true;
+    }
 }
 
-if (!Element.prototype.closest) {
-    Element.prototype.closest = function (s) {
-        var el = this;
-
-        do {
-            if (el.matches(s)) return el;
-            el = el.parentElement || el.parentNode;
-        } while (el !== null && el.nodeType === 1);
-        return null;
-    };
-}
-
-
+/**
+ *
+ * @param {Node} item
+ */
 const animationExist = (item) => {
     const prop = window.getComputedStyle(item.value, null);
     const duration = prop.getPropertyValue('transition-duration');
     const property = prop.getPropertyValue('transition-property');
-    console.log('property', property);
-    return item.type === 'drop' && duration !== '0s';
+
+    return {
+        exist: item.type === 'drop' && duration !== '0s',
+        animation: property
+    };
 };
 
-/** 
+/**
  * @param  {Node}.......The element to check
  * @return {Object}     A set of booleans for each side of the element
  */
@@ -84,7 +155,7 @@ const isTabActive = (item, target, splitselectorToggle) => item === target || it
 
 /**
  * Item Object
- * @param {String} type
+ * @param {String} typ
  * @param {Node} value
  * @param {String} role
  * @param {String} toggleActiveClass
@@ -92,15 +163,14 @@ const isTabActive = (item, target, splitselectorToggle) => item === target || it
  */
 const createElementObject = (type, value, role, toggleActiveClass, eventType, target, splitselectorToggle, selectorAnimate) => {
     const isActive = value.classList.contains(toggleActiveClass);
-    const animate = value.hasAttribute(selectorAnimate) ? value.getAttribute(selectorAnimate) : false;
+    const animate = value.hasAttribute(selectorAnimate) ? value.hasAttribute(selectorAnimate) : false;
 
     return {
         type: type,
         value: value,
         role: role ? role : 'default',
         active: isActive,
-        isAnimateHeight: type === 'drop' && animate === 'height',
-        isAnimate: type === 'drop' && animate === 'default',
+        isAnimate: type === 'drop' && animate,
         eventType: eventType,
         tabActive: role === 'tab' && isActive && isTabActive(value, target, splitselectorToggle)
     };
@@ -108,13 +178,13 @@ const createElementObject = (type, value, role, toggleActiveClass, eventType, ta
 
 /**
  * Get Grouped
- * @param {Node} target 
- * @param {String} toggleActiveClass 
- * @param {String} selectorAnimate 
- * @param {String} group 
- * @param {String} role 
- * @param {String} splitselectorToggle 
- * @param {String} splitselectorGroup 
+ * @param {Node} target
+ * @param {String} toggleActiveClass
+ * @param {String} selectorAnimate
+ * @param {String} group
+ * @param {String} role
+ * @param {String} splitselectorToggle
+ * @param {String} splitselectorGroup
  * @return {Array}
  */
 const getGrouped = (target, toggleActiveClass, group, role, splitselectorToggle, splitselectorGroup, eventType, next, selectorAnimate) => {
@@ -132,12 +202,12 @@ const getGrouped = (target, toggleActiveClass, group, role, splitselectorToggle,
 
 /**
  * Get Toggles
- * @param {Node} target 
- * @param {String} toggleActiveClass 
- * @param {String} selector 
- * @param {String} role 
- * @param {String} selectorNext 
- * @param {String} splitselectorToggle 
+ * @param {Node} target
+ * @param {String} toggleActiveClass
+ * @param {String} selector
+ * @param {String} role
+ * @param {String} selectorNext
+ * @param {String} splitselectorToggle
  * @return {Array}
  */
 const getToggles = (target, toggleActiveClass, selector, role, next, splitselectorToggle, eventType, splitselectorBack) => {
@@ -150,12 +220,12 @@ const getToggles = (target, toggleActiveClass, selector, role, next, splitselect
 
 /**
  * Get Drops
- * @param {Node} target 
- * @param {String} toggleActiveClass 
- * @param {String} selectorAnimate 
- * @param {String} selector 
- * @param {String} role 
- * @param {String} selectorNext 
+ * @param {Node} target
+ * @param {String} toggleActiveClass
+ * @param {String} selectorAnimate
+ * @param {String} selector
+ * @param {String} role
+ * @param {String} selectorNext
  * @return {Array}
  */
 const getDrops = (target, toggleActiveClass, selector, role, next, splitselectorToggle, eventType, selectorAnimate) => next
@@ -166,23 +236,26 @@ const getDrops = (target, toggleActiveClass, selector, role, next, splitselector
 
 
 /**
-* 
-* @param {Array} items 
-* @param {String} toggleShowClass 
-* @param {String} toggleActiveClass 
+*
+* @param {Array} items
+* @param {String} toggleShowClass
+* @param {String} toggleActiveClass
 */
-const animateDefault = (item, toggleShowClass, toggleActiveClass, eventType) => {
+const animateDefault = (item, toggleShowClass, toggleActiveClass, eventType, toggleCurrentClass) => {
 
-    const transitionExist = animationExist(item);
-
+    /**
+     *
+     * @param {Node} item
+     */
     const collapseSection = (item) => {
-        if (!transitionExist) return removeAll(item);
 
         if (item.role === 'tab') {
             item.value.classList.remove(toggleShowClass);
             item.value.classList.remove(toggleActiveClass);
 
         } else {
+            item.value.setAttribute('data-toggle-hidden', true);
+
             item.value.addEventListener('transitionend', transitionEndCollapse);
             item.value.classList.remove(toggleShowClass);
             transitionCollapse = true;
@@ -190,6 +263,10 @@ const animateDefault = (item, toggleShowClass, toggleActiveClass, eventType) => 
         }
     };
 
+    /**
+     *
+     * @param {Event} event
+     */
     function transitionEndCollapse(event) {
         item.value.removeEventListener('transitionend', transitionEndCollapse);
         item.value.classList.remove(toggleActiveClass);
@@ -197,15 +274,13 @@ const animateDefault = (item, toggleShowClass, toggleActiveClass, eventType) => 
 
     };
 
-    const removeAll = (item) => {
-        item.value.classList.remove(toggleShowClass);
-        item.value.classList.remove(toggleActiveClass);
-        transitionCollapse = false;
-    };
-
+    /**
+     *
+     * @param {Node} item
+     */
     function expandSection(item) {
-        if (!transitionExist) return addAll(item);
         transitionExpand = true;
+        item.value.removeAttribute('data-toggle-hidden', true);
 
         window.requestAnimationFrame(function () {
             item.value.classList.add(toggleActiveClass);
@@ -217,17 +292,18 @@ const animateDefault = (item, toggleShowClass, toggleActiveClass, eventType) => 
 
     }
 
+    /**
+     *
+     *
+     * @param {Event} event
+     */
     function transitionEndExpand(event) {
         item.value.removeEventListener('transitionend', transitionEndExpand);
         transitionExpand = false;
         item.value.enterLocked = false;
-    };
-
-    const addAll = (item) => {
-        item.value.classList.add(toggleActiveClass);
-        item.value.classList.add(toggleShowClass);
-        transitionExpand = false;
-
+        if (tabbableBreadcrumb.length > 0 && checkTabbable(item)) {
+            createFocusable(toggleCurrentClass);
+        }
     };
 
     if (eventType === enter || (eventType !== enter && !item.active)) {
@@ -235,30 +311,25 @@ const animateDefault = (item, toggleShowClass, toggleActiveClass, eventType) => 
     } else if (eventType === leave || (eventType !== enter && item.active)) {
         collapseSection(item, toggleShowClass, toggleActiveClass);
     }
-
 };
 
 /**
- * 
- * @param {Node} item 
- * @param {String} toggleCollapseClass 
- * @param {String} toggleActiveClass 
+ *
+ * @param {Node} item
+ * @param {String} toggleCollapseClass
+ * @param {String} toggleActiveClass
  */
-const animateHeight = (item, toggleCollapseClass, toggleActiveClass) => {
+const animateHeight = (item, toggleCollapseClass, toggleActiveClass, toggleCurrentClass) => {
     const collapseSection = item => {
         transitionCollapse = true;
         const sectionHeight = item.value.scrollHeight;
+        item.value.setAttribute('data-toggle-hidden', true);
 
         window.requestAnimationFrame(function () {
             item.value.style.height = sectionHeight + 'px';
             item.value.classList.add(toggleCollapseClass);
-            const transitionExist = animationExist(item);
             window.requestAnimationFrame(function () {
-                if (transitionExist) {
-                    item.value.addEventListener('transitionend', transitionEndCollapse);
-                } else {
-                    endCollapse(item.value);
-                }
+                item.value.addEventListener('transitionend', transitionEndCollapse);
                 item.value.style.height = 0 + 'px';
             });
         });
@@ -271,13 +342,16 @@ const animateHeight = (item, toggleCollapseClass, toggleActiveClass) => {
         item.value.classList.add(toggleCollapseClass);
         const sectionHeight = item.value.scrollHeight;
         item.value.style.height = sectionHeight + 'px';
-        const transitionExist = animationExist(item);
-        transitionExist ? item.value.addEventListener('transitionend', transitionEndExpand) : endExpand(item.value);
+        item.value.removeAttribute('data-toggle-hidden', true);
+        item.value.addEventListener('transitionend', transitionEndExpand);
     }
 
     function transitionEndExpand(event) {
         event.target.removeEventListener('transitionend', transitionEndExpand);
         endExpand(event.target);
+        if (tabbableBreadcrumb.length > 0 && checkTabbable(item)) {
+            createFocusable(toggleCurrentClass);
+        }
     }
 
     function transitionEndCollapse(event) {
@@ -306,15 +380,15 @@ const animateHeight = (item, toggleCollapseClass, toggleActiveClass) => {
 };
 
 /**
- * 
+ *
  * @param {String} selector
- * @return {String} 
+ * @return {String}
  */
 const splitSelector = (selector) => selector.replace(/\[|\]/g, '');
 
 /**
- * 
- * @param {Node} item 
+ *
+ * @param {Node} item
  */
 const setPosition = (item) => {
     if (item.type === 'toggle') return;
@@ -346,24 +420,22 @@ const setPosition = (item) => {
     }
 };
 
-
-
 const { enter, leave, end } = window.PointerEvent ? {
     end: 'pointerup',
     enter: 'pointerenter',
     leave: 'pointerleave'
 } : {
-        end: 'touchend',
-        enter: 'mouseenter',
-        leave: 'mouseleave'
-    };
+    end: 'touchend',
+    enter: 'mouseenter',
+    leave: 'mouseleave'
+};
 const mouseEvents = [enter, leave];
 
 /**
- * 
- * @param {Node} target 
- * @param {String} type 
- * @param {String} selectorToggle 
+ *
+ * @param {Node} target
+ * @param {String} type
+ * @param {String} selectorToggle
  */
 const getEventTarget = (target, type, selectorToggle) => {
     const item = target.querySelector(selectorToggle);
@@ -373,7 +445,12 @@ const getEventTarget = (target, type, selectorToggle) => {
     };
 };
 
-
+/**
+ *
+ * @param {Node} item
+ * @param {String} splitselectorValidate
+ * @param {String} toggleErrorClass
+ */
 const checkValidity = (item, splitselectorValidate, toggleErrorClass) => {
     var form =
         item.type === 'drop' && item.value.hasAttribute(splitselectorValidate)
@@ -404,35 +481,80 @@ const checkValidity = (item, splitselectorValidate, toggleErrorClass) => {
     }
 };
 
+/**
+ *
+ * @param {Node} el
+ */
+const isHidden = function isVisible(el) {
+    var style = window.getComputedStyle(el);
+    return style.display !== 'none' && style.visibility !== 'hidden'
+        && (el.parentElement ? isVisible(el.parentElement) : true);
+};
 
-const tab = (item) => (event) => {
-    const previousElement = document.activeElement;
-    // Show the modal and overlay
-    const focusable = [].slice.call(item.value.querySelectorAll(focusableAll));
-    const firstItem = focusable[0];
-    const lastItem = focusable[focusable.length - 1];
+/**
+ *
+ * @param {Object} item
+ * @param {Node} target
+ */
+const addTabbable = (item, target, tab, toggleCurrentClass) => {
 
-    console.log(focusable, event);
-    if (event.keyCode === 9) {
-        if (event.shiftKey) {
-            if (document.activeElement === firstItem) {
-                event.preventDefault();
-                lastItem.focus();
-            }
-        } else {
-            if (document.activeElement === lastItem) {
-                event.preventDefault();
-                firstItem.focus();
+    tabbableBreadcrumb.forEach(item => item.element.classList.contains(toggleCurrentClass) && item.element.classList.remove(toggleCurrentClass));
+
+    if (tabbableBreadcrumb.length > 0 && !tabbableBreadcrumb[0].element.contains(target)) {
+
+        for (var i = 0; i < tabbableBreadcrumb.length; i++) {
+            tabbableBreadcrumb.pop();
+        }
+
+    }
+
+    if (!item.active) {
+        const obj = {
+            active: target,
+            element: item.value
+        };
+
+        tabbableBreadcrumb.push(obj);
+
+    } else if (item.active) {
+
+        for (var i = 0; i < tabbableBreadcrumb.length; i++) {
+            if (tabbableBreadcrumb[i].element === item.value) {
+                tabbableBreadcrumb.length === 1 && tabbableBreadcrumb[0].element.removeEventListener('keydown', tab);
+                tabbableBreadcrumb.splice(i, 1);
+                break;
             }
         }
-    } else if (event.keyCode === 27) {
-        close(item);
+
+    }
+
+};
+
+/**
+ *
+ * @param {String} toggleCurrentClass
+ */
+const createFocusable = (toggleCurrentClass) => {
+    const tabLength = tabbableBreadcrumb.length;
+    tabbableBreadcrumb[tabLength - 1].element.classList.add(toggleCurrentClass);
+
+    focusable = [].slice.call(tabbableBreadcrumb[0].element.querySelectorAll(focusableAll)).filter(e => isHidden(e));
+    focusable.unshift(tabbableBreadcrumb[0].active);
+
+    if (tabLength === 1) {
+        focusable[1].focus();
     }
 };
 
-const focusableAll = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable], audio[controls], video[controls], summary';
+/**
+ * Check if element tabbable to add to breadcrumb
+ *
+ * @param {Node} item
+ * @param {String} eventType
+ */
 
-let focusableBreadcrumb = {};
+const checkTabbable = (item, eventType = item.eventType) => (eventType === 'click' || eventType === 'keydown') && item.type === 'drop' && item.role !== 'tab' && item.role !== 'accordion';
+
 
 const defaultConfig = {
     selectorToggle: '[data-toggle]',
@@ -448,6 +570,7 @@ const defaultConfig = {
     toggleErrorClass: 'is--error',
     toggleCollapseClass: 'is--collapsing',
     toggleShowClass: 'is--show',
+    toggleCurrentClass: 'is--current',
     onHover: false,
     onnHoverMediaQuery: '(max-width: 992px)',
     stopVideo: true,
@@ -472,6 +595,7 @@ const Toggle = (userSettings = {}) => {
         toggleErrorClass,
         toggleCollapseClass,
         toggleShowClass,
+        toggleCurrentClass,
         onHover,
         onnHoverMediaQuery,
         stopVideo,
@@ -490,12 +614,6 @@ const Toggle = (userSettings = {}) => {
         ...userSettings
     };
 
-    let allHoverElements = [],
-        activeElement,
-        tHandler = null,
-        eventType = null,
-        isActive = null;
-
     const body = $('body'),
 
         isiOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
@@ -508,13 +626,7 @@ const Toggle = (userSettings = {}) => {
         isiOS && body.classList.add('is--ios');
 
         if (onHover) {
-            allHoverElements = [].slice.call($$(selectorHover));
-            tHandler = throttle(detectMouse, 100);
-            checkEvent();
-            setMedia = useMedia(onnHoverMediaQuery, matchMedia);
-            if (setMedia) {
-                isActive = true;
-            }
+            handleHover(selectorHover, onnHoverMediaQuery, matchMedia, handleMouseEvent);
         }
 
         events();
@@ -524,61 +636,21 @@ const Toggle = (userSettings = {}) => {
     const destroy = () => {
         isiOS && body.classList.remove('is--ios');
         document.removeEventListener('click', clickHandler, false);
+        document.removeEventListener('keydown', keyHandler, false);
+
 
         if (onHover && isActive) {
             allHoverElements.map(item => {
                 mouseEvents.map(type => {
                     item.removeEventListener(type, mouseHandler);
                 });
-                item.querySelector(selectorToggle).removeEventListener('keydown', keyHandler);
             });
         }
     };
 
     const events = () => {
         document.addEventListener('click', clickHandler, false);
-    };
-
-    const matchMedia = (mq) => {
-        const matches = mq.matches;
-
-        if (
-            matches &&
-            (isActive === false || isActive === null)
-        ) {
-            isActive = true;
-            checkEvent();
-        }
-        if (!matches && (isActive === true || isActive === null)) {
-            isActive = false;
-            checkEvent();
-        }
-
-    };
-
-    const detectMouse = event => {
-        // remove event bindings, so it only runs once
-        console.log(event.type)
-        if (
-            (eventType !== null &&
-                eventType === event.type &&
-                (isActive && eventType === 'touchstart')) ||
-            (!isActive && eventType === event.type)
-        )
-            return;
-
-        eventType = isActive ? 'touchstart' : event.type;
-        handleMouseEvent(eventType);
-
-        [('touchstart', 'mouseover')].map(function (events) {
-            document.removeEventListener(events, tHandler, false);
-        });
-    };
-
-    const checkEvent = () => {
-        ['touchstart', 'mouseover'].map(function (events) {
-            document.addEventListener(events, tHandler, false);
-        });
+        document.addEventListener('keydown', keyHandler, false);
 
     };
 
@@ -609,30 +681,38 @@ const Toggle = (userSettings = {}) => {
 
     const handleMouseEvent = (eventType) => {
 
-        if (eventType === 'touchstart') {
+        if (eventType === 'touch') {
             allHoverElements.map(function (item) {
                 item.removeEventListener(enter, mouseHandler, false);
                 item.removeEventListener(leave, mouseHandler, false);
-                item.querySelector(selectorToggle).removeEventListener('keydown', keyHandler);
+
             });
         }
 
-        if (eventType === 'mouseover') {
+        if (eventType === 'mouse') {
             allHoverElements.map(function (item) {
                 item.addEventListener(enter, mouseHandler, false);
                 item.addEventListener(leave, mouseHandler, false);
-                item.querySelector(selectorToggle).addEventListener('keydown', keyHandler);
             });
 
         }
     };
 
+    const enterItems = (event) => !event.target.closest(selectorToggle) || !event.target.closest(selectorHover) || event.code !== ENTER_KEY_CODE;
+
     const keyHandler = (event) => {
-        if (event.keyCode !== ENTER_KEY_CODE) return;
-        x
         if (transitionExpand || transitionCollapse) return;
-        event.preventDefault();
-        toggleItems(event);
+        if (enterItems(event) && !keyEvents(event)) return;
+        previousElement = document.activeElement;
+
+        if (!enterItems) {
+            event.preventDefault();
+            toggleItems(event);
+        } else if (keyEvents(event)) {
+            tabbableBreadcrumb.length > 0 && tab(event);
+        }
+        return;
+
     };
 
     const toggleItems = event => {
@@ -650,27 +730,34 @@ const Toggle = (userSettings = {}) => {
             allElements = [...allGrouped, ...allToggles, ...allDrops];
 
         if (allToggles[0].tabActive) return;
+
         const hasToValidate = allElements.filter(item => item.active && item.type === 'drop' && item.value.hasAttribute(splitselectorValidate));
 
         if (hasToValidate) {
             const isValid = checkValidity(hasToValidate, splitselectorValidate, toggleErrorClass);
             if (isValid) return;
         }
-
         for (let item of allElements) {
-            reduceToggle(item, toggleCollapseClass, toggleActiveClass, eventType);
+            reduceToggle(item, toggleCollapseClass, toggleActiveClass, eventType, target);
         }
 
     };
 
-    const reduceToggle = (item, toggleCollapseClass, toggleActiveClass, eventType) => {
-        const { isAnimateHeight, isAnimate, tabActive } = item;
+    const reduceToggle = (item, toggleCollapseClass, toggleActiveClass, eventType, target) => {
+        const { isAnimate } = item,
+            { exist, animation } = animationExist(item),
+            isAnimateHeight = animation.match(/height/gi);
 
-        if (isAnimateHeight) {
-            animateHeight(item, toggleCollapseClass, toggleActiveClass);
-        } else if (isAnimate) {
-            animateDefault(item, toggleShowClass, toggleActiveClass, eventType);
+        const tabbable = checkTabbable(item, eventType);
 
+        if (tabbable) {
+            addTabbable(item, target, tab, toggleCurrentClass);
+        }
+
+        if (isAnimate && isAnimateHeight) {
+            animateHeight(item, toggleCollapseClass, toggleActiveClass, toggleCurrentClass);
+        } else if (isAnimate && exist) {
+            animateDefault(item, toggleShowClass, toggleActiveClass, eventType, toggleCurrentClass);
         } else {
             item.active ? close(item) : open(item);
 
@@ -679,36 +766,64 @@ const Toggle = (userSettings = {}) => {
 
     const open = item => {
         callbackOpen && callbackOpen(item);
-        console.log('open');
 
         item.role === 'tooltip' && setPosition(item);
         item.value.classList.add(toggleActiveClass);
         item.type === 'toggle' && item.value.setAttribute('aria-expanded', true);
-        // if (item.type === 'drop' && item.role !== 'tab' && item.role !== 'accordion') {
-        //     const id = Date.now();
-        //     item.value.setAttribute('data-toggle-id', id);
-        //     focusableBreadcrumb[id] = item.value;
-        //     item.value.addEventListener('keydown', tab(item));
-        //     console.log(focusableBreadcrumb);
-        // }
+        item.type === 'drop' && item.value.removeAttribute('data-toggle-hidden', true);
+
+        if (tabbableBreadcrumb.length > 0 && checkTabbable(item)) {
+            createFocusable(toggleCurrentClass);
+        }
     };
 
     const close = item => {
         callbackClose && callbackClose(item);
 
-        console.log('close');
         item.value.classList.remove(toggleActiveClass);
         item.type === 'toggle' && item.value.setAttribute('aria-expanded', false);
+        item.type === 'drop' && item.value.setAttribute('data-toggle-hidden', true);
 
-        // if (item.type === 'drop' && item.role !== 'tab' && item.role !== 'accordion') {
-        //     const id = item.value.getAttribute('data-toggle-id');
-        //     item.value.removeEventListener('keydown', tab);
-        //     delete focusableBreadcrumb[id];
-        //     item.value.removeAttribute('data-toggle-id', id);
+    };
 
-        //     console.log(focusableBreadcrumb);
-        // }
 
+    /**
+     *
+     * @param {Event} event
+     */
+    const tab = (event) => {
+        previousElement = document.activeElement;
+        // Show the modal and overlay
+        const parentItem = {
+            item: tabbableBreadcrumb[0].active,
+            type: event.type
+        };
+
+        const firstItem = focusable[1];
+        const lastItem = focusable[focusable.length - 1];
+
+        if (event.code === TAB_KEY_CODE) {
+            if (event.shiftKey) {
+                if (document.activeElement === firstItem) {
+                    toggleItems(parentItem);
+                }
+            } else {
+                if (document.activeElement === lastItem) {
+                    toggleItems(parentItem);
+                }
+            }
+
+        } else if (event.code === UP_KEY_CODE && document.activeElement === firstItem) {
+            event.preventDefault();
+            lastItem.focus();
+
+        } else if (event.code === DOWN_KEY_CODE && document.activeElement === lastItem) {
+            event.preventDefault();
+            firstItem.focus();
+        } else if (event.code === ESCAPE_KEY_CODE) {
+            focusable[0].focus();
+            toggleItems(parentItem);
+        }
     };
 
     const closeActiveGlobal = event => {

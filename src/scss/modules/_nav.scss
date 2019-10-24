@@ -30,9 +30,10 @@
         transition: right 0.3s ease 0.1ms;
         will-change: right;
         display: none;
-
+        visibility: collapse;
         &.is--active {
             display: block;
+            visibility: visible;
         }
 
         &.is--show {
@@ -148,7 +149,7 @@
 
         @include media-breakpoint-up(lg) {
             > .nav__item {
-                margin: 0 15px;
+                margin: 0;
                 padding: 10px;
                 position: relative;
                 flex: 1 1 auto;
@@ -200,7 +201,13 @@
                     display: block;
                     overflow-x: hidden;
                     overflow-y: auto;
+                    pointer-events: all;
+
+                    &:not(.is--current) {
+                        pointer-events: none;
+                    }
                 }
+
                 &.is--show {
                     transform: translate(0, 0);
                     z-index: 11;
