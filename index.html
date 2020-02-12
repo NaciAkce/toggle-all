@@ -688,12 +688,11 @@
                         <p>Menu</p>
                         <span class="sr-only" id="toggle-btn-three">Toggle Navigation</span>
                         <button class="dropdown__button nav-menu__button" data-toggle-group="group-1" data-toggle="#nav3"
-                                data-toggle-global aria-labelledby="toggle-btn-three"><span
+                                data-toggle-global data-toggle-role="overlay" aria-labelledby="toggle-btn-three"><span
                                     class="dropdown__open"></span><span class="dropdown__close"></span></button>
                         <div  id="nav3" class="nav-menu--transition" data-toggle-animate>
                             <!-- Close button for mobile version -->
-                            <button class="dropdown__button nav-menu__button" data-toggle="#nav3"
-                            data-toggle-global><span class="dropdown__close"></span></button>
+                            <button class="dropdown__button nav-menu__button" data-toggle-back=".nav__content"><span class="dropdown__close"></span></button>
                             <div class="nav-menu__scroll">
                                 <nav class="nav nav-menu"  data-toggle-next>
 
@@ -704,7 +703,7 @@
 
                                             <!-- Submenu 1 -->
                                             <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate>
-                                                <button class="nav-menu__back" data-toggle-back>back</button>
+                                                <button class="nav-menu__back" data-toggle-back=".nav__item">back</button>
                                                 <li class="nav__item"><a class="nav__link" href="#">Stalk
                                                         Vegetables</a>
                                                 </li>
@@ -722,7 +721,7 @@
                                                         %</a>
                                                     <!-- Submenu 1-1 -->
                                                     <ul class="nav__list  nav__list-2  nav__sub nav__dropdown" data-toggle-animate>
-                                                            <button class="nav-menu__back" data-toggle-back>back</button>
+                                                            <button class="nav-menu__back" data-toggle-back=".nav__item">back</button>
                                                         <li class="nav__item"><a class="nav__link" href="#">Fair
                                                                 Trade Roots</a>
                                                         </li>
@@ -743,7 +742,7 @@
                                                 data-toggle=".nav__dropdown" data-toggle-global data-toggle-group="nav-menu" href="#">Fruits</a>
                                             <!-- Submenu 2 -->
                                             <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate>
-                                                    <button class="nav-menu__back" data-toggle-back>back</button>
+                                                    <button class="nav-menu__back" data-toggle-back=".nav__item">back</button>
                                                 <li class="nav__item"><a class="nav__link" href="#">Citrus
                                                         Fruits</a></li>
                                                 <li class="nav__item"><a class="nav__link" href="#">Berries</a></li>
@@ -751,7 +750,7 @@
                                                         data-toggle=".nav__dropdown" href="#">Special Selection</a>
                                                     <!-- Submenu 2-1 -->
                                                     <ul class="nav__list  nav__list-2  nav__sub nav__dropdown" data-toggle-animate>
-                                                            <button class="nav-menu__back" data-toggle-back>back</button>
+                                                            <button class="nav-menu__back" data-toggle-back=".nav__item">back</button>
                                                         <li class="nav__item"><a class="nav__link" href="#">Exotic
                                                                 Mixes</a></li>
                                                         <li class="nav__item"><a class="nav__link" href="#">Wild
@@ -775,7 +774,7 @@
                                                 data-toggle=".nav__dropdown" data-toggle-global data-toggle-group="nav-menu" href="#">Grains</a>
                                             <!-- Submenu 3 -->
                                             <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate>
-                                                    <button class="nav-menu__back" data-toggle-back>back</button>
+                                                    <button class="nav-menu__back" data-toggle-back=".nav__item">back</button>
                                                 <li class="nav__item"><a class="nav__link" href="#">Buckwheat</a>
                                                 </li>
                                                 <li class="nav__item"><a class="nav__link" href="#">Millet</a></li>
@@ -790,7 +789,7 @@
                                                         Packs</a>
                                                     <!-- Submenu 3-1 -->
                                                     <ul class="nav__list  nav__list-2  nav__sub nav__dropdown" data-toggle-animate>
-                                                            <button class="nav-menu__back" data-toggle-back>back</button>
+                                                            <button class="nav-menu__back" data-toggle-back=".nav__item">back</button>
                                                         <li class="nav__item"><a class="nav__link" href="#">Starter
                                                                 Kit</a></li>
                                                         <li class="nav__item"><a class="nav__link" href="#">The
@@ -812,7 +811,7 @@
                                                 data-toggle=".nav__dropdown" data-toggle-global data-toggle-group="nav-menu" href="#">Mylk & Drinks</a>
                                             <!-- Submenu 4 -->
                                             <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate>
-                                                    <button class="nav-menu__back" data-toggle-back>back</button>
+                                                    <button class="nav-menu__back" data-toggle-back=".nav__item">back</button>
                                                 <li class="nav__item"><a class="nav__link" href="#">Grain Mylks</a>
                                                 </li>
                                                 <li class="nav__item"><a class="nav__link" href="#">Seed Mylks</a>
@@ -826,7 +825,7 @@
                                                         data-toggle=".nav__dropdown" href="#">Selection</a>
                                                     <!-- Submenu 4-1 -->
                                                     <ul class="nav__list  nav__list-2  nav__sub nav__dropdown" data-toggle-animate>
-                                                            <button class="nav-menu__back" data-toggle-back>back</button>
+                                                            <button class="nav-menu__back" data-toggle-back=".nav__item">back</button>
                                                         <li class="nav__item"><a class="nav__link" href="#">Nut Mylk
                                                                 Packs</a>
                                                         </li>
