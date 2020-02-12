@@ -1,7 +1,5 @@
 // Menu
-.is--overlay {
-    overflow: hidden;
-}
+
 .nav {
     &__content {
         padding-bottom: 150px;
@@ -222,5 +220,11 @@
                 }
             }
         }
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .is--overlay {
+        overflow: hidden;
     }
 }
