@@ -419,15 +419,24 @@ const setPosition = (item) => {
     }
 };
 
-const { enter, leave, end } = window.PointerEvent ? {
-    end: 'pointerup',
-    enter: 'pointerenter',
-    leave: 'pointerleave'
-} : {
-        end: 'touchend',
-        enter: 'mouseenter',
-        leave: 'mouseleave'
-    };
+const getPointerEvents = () => {
+    if (window.PointerEvent) {
+        return {
+            end: 'pointerup',
+            enter: 'pointerenter',
+            leave: 'pointerleave'
+        };
+    } else {
+        return {
+            end: 'touchend',
+            enter: 'mouseenter',
+            leave: 'mouseleave'
+        };
+    }
+};
+
+const { enter, leave, end } = getPointerEvents();
+
 const mouseEvents = [enter, leave];
 
 /**
