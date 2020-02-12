@@ -1,5 +1,7 @@
 // Menu
-
+.is--overlay {
+    overflow: hidden;
+}
 .nav {
     &__content {
         padding-bottom: 150px;
@@ -202,10 +204,10 @@
                     overflow-x: hidden;
                     overflow-y: auto;
                     pointer-events: all;
+                }
 
-                    &:not(.is--current) {
-                        pointer-events: none;
-                    }
+                &.is--current {
+                    z-index: 110;
                 }
 
                 &.is--show {
