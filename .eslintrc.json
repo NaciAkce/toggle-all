@@ -1,36 +1,29 @@
 {
-    "root": true,
-    "env": {
-        "browser": true,
-        "node": true,
-        "es6": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "plugins": ["@typescript-eslint"],
-    "rules": {
-        "quotes": [1, "single"],
-        "no-unused-vars": [0],
-        "indent": [
-            2,
-            4,
-            {
-                "SwitchCase": 1
-            }
-        ],
-        "max-statements": [1, 20],
-        "max-depth": [1, 4],
-        "complexity": [1, 10],
-        "no-console": 1,
-        "semi": 2,
-        "no-empty": 1
-    }
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "quotes": [1, "single"],
+    "no-unused-vars": [0],
+    "max-statements": [1, 20],
+    "max-depth": [1, 4],
+    "complexity": [1, 10],
+    "no-console": 1,
+    "semi": 2,
+    "no-empty": 1
+  }
 }

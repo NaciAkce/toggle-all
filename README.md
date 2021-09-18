@@ -32,6 +32,10 @@ Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped an
     callbackToggle: false
 }
 
+
+
+
+
 ```
 
 ## Installation
@@ -65,18 +69,26 @@ import Toggle from 'toggle-all'
 ### Simple
 
 ```html
-
 <div class="dropdown show">
-    <a class="btn btn-primary dropdown__toggle" href="#" role="button"
-        id="dropdownMenuLink-two" data-toggle="#dropdown1" aria-haspopup="true" aria-expanded="false">
-        Dropdown link
-    </a>
-    <div class="dropdown__container" id="dropdown1"
-            aria-labelledby="dropdownMenuLink-two">
-        ...
-    </div>
+  <a
+    class="btn btn-primary dropdown__toggle"
+    href="#"
+    role="button"
+    id="dropdownMenuLink-two"
+    data-toggle="#dropdown1"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    Dropdown link
+  </a>
+  <div
+    class="dropdown__container"
+    id="dropdown1"
+    aria-labelledby="dropdownMenuLink-two"
+  >
+    ...
+  </div>
 </div>
-
 ```
 
 ### Global - close dropdown on click outside
@@ -84,19 +96,27 @@ import Toggle from 'toggle-all'
 'data-toggle-global'
 
 ```html
-
 <div class="dropdown show">
-    <a class="btn btn-primary dropdown__toggle" href="#" role="button"
-        id="dropdownMenuLink-two" data-toggle="#dropdown1" data-toggle-global
-        aria-haspopup="true" aria-expanded="false">
-        Dropdown link
-    </a>
-    <div class="dropdown__container" id="dropdown1"
-            aria-labelledby="dropdownMenuLink-two">
-        ...
-    </div>
+  <a
+    class="btn btn-primary dropdown__toggle"
+    href="#"
+    role="button"
+    id="dropdownMenuLink-two"
+    data-toggle="#dropdown1"
+    data-toggle-global
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    Dropdown link
+  </a>
+  <div
+    class="dropdown__container"
+    id="dropdown1"
+    aria-labelledby="dropdownMenuLink-two"
+  >
+    ...
+  </div>
 </div>
-
 ```
 
 ### Grouped - close grouped element if is active
@@ -138,49 +158,62 @@ in this case 'overlay' adds a class to the body tag 'is--overlay' to prevent scr
 'data-toggle-back' select the parentElement who inherits the toggle
 
 ```html
-
- <div class="nav__content">
-    <p>Menu</p>
-    <span class="sr-only" id="toggle-btn-three">Toggle Navigation</span>
-    <button class="dropdown__button nav-menu__button" data-toggle-group="group-1" data-toggle="#nav3"
-            data-toggle-global data-toggle-role="overlay" aria-labelledby="toggle-btn-three"><span
-                class="dropdown__open"></span><span class="dropdown__close"></span></button>
-    <div  id="nav3" class="nav-menu--transition" data-toggle-animate>
-        <!-- Close button for mobile version -->
-        <button class="dropdown__button nav-menu__button" data-toggle-back=".nav__content"><span class="dropdown__close"></span></button>
-        <div class="nav-menu__scroll">
-            <nav class="nav nav-menu"  data-toggle-next>
-
-                <ul class="nav__list nav-menu--horizontal nav__list-0">
-
-                </ul>
-            </nav>
-        </div>
+<div class="nav__content">
+  <p>Menu</p>
+  <span class="sr-only" id="toggle-btn-three">Toggle Navigation</span>
+  <button
+    class="dropdown__button nav-menu__button"
+    data-toggle-group="group-1"
+    data-toggle="#nav3"
+    data-toggle-global
+    data-toggle-role="overlay"
+    aria-labelledby="toggle-btn-three"
+  >
+    <span class="dropdown__open"></span><span class="dropdown__close"></span>
+  </button>
+  <div id="nav3" class="nav-menu--transition" data-toggle-animate>
+    <!-- Close button for mobile version -->
+    <button
+      class="dropdown__button nav-menu__button"
+      data-toggle-back=".nav__content"
+    >
+      <span class="dropdown__close"></span>
+    </button>
+    <div class="nav-menu__scroll">
+      <nav class="nav nav-menu" data-toggle-next>
+        <ul class="nav__list nav-menu--horizontal nav__list-0"></ul>
+      </nav>
     </div>
+  </div>
 </div>
-
 ```
 
 ### Example - Enable Hover Support
 
 ```js
 Toggle({
-    onHover: true
+  onHover: true,
 });
 ```
 
 ```html
-    <div class="nav__wrap" data-toggle-next>
-         <ul class="nav__list nav__list-0">
-            <li class="nav-two__item" data-toggle-hover>
-                <a class="nav-two__link" data-toggle=".nav-two__dropdown" data-toggle-group="#nav-two-list-0" href="#">...</a>
-                <ul class="nav-two__list  nav-two__dropdown">
-                    ...
-                </ul>
-            </li>
-            ...
-        </ul>
-    </div>
+<div class="nav__wrap" data-toggle-next>
+  <ul class="nav__list nav__list-0">
+    <li class="nav-two__item" data-toggle-hover>
+      <a
+        class="nav-two__link"
+        data-toggle=".nav-two__dropdown"
+        data-toggle-group="#nav-two-list-0"
+        href="#"
+        >...</a
+      >
+      <ul class="nav-two__list  nav-two__dropdown">
+        ...
+      </ul>
+    </li>
+    ...
+  </ul>
+</div>
 ```
 
 ## Browser Support
@@ -197,7 +230,7 @@ Toggle({
 
 ## HTML and CSS
 
-`Touch`  if you use overlays which covers the whole screen in combination with transitions (last example)
+`Touch` if you use overlays which covers the whole screen in combination with transitions (last example)
 
 `Click ios` trigger click events on non tapable elements. You have to add the css property cursor:pointer. There is already a class for the body tag `is--ios` if you use `data-toggle-global`
 
