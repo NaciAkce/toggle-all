@@ -12,22 +12,21 @@
     "scripts": {
         "clean": "rimraf dist",
         "build:sass": "node-sass -r --output-style compressed src/scss -d -o src",
+        "build:css": "node-sass src/scss -d -o dist",
         "build:cjs": "tsc -p ./tsconfig.cjs.json",
         "build:es": "tsc -p ./tsconfig.es.json",
         "build": "yarn run build:sass && yarn run build:es && yarn run build:cjs",
-        "start": "tsc -p ./tsconfig.es.json -w",
-        "dev": "rollup -c -w",
-        "lint": "eslint 'src/**/*.js'",
-        "lint:fix": "node node_modules/prettier-eslint 'src/**/*.js' --write",
+        "start:server": "browser-sync --port 6477 start --server 'dist' --files 'dist'",
+        "start:css": "yarn run build:css && node-sass src/scss -d -wo dist",
+        "start:js": "tsc -p ./tsconfig.es.json -w",
+        "start": "concurrently --kill-others \"yarn run start:js\" \"yarn run start:css\" \"yarn run start:server\"",
+        "lint": "eslint 'src/**/*.ts'",
+        "lint:fix": "node node_modules/prettier-eslint 'src/**/*.ts' --write",
         "test": "jest",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
         "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
         "test:staged": "jest --findRelatedTests",
-        "css": "node-sass src/scss -d -o dist",
-        "css:watch": "yarn run css && node-sass src/scss -d -wo dist",
-        "server": "browser-sync --port 6477 start --server 'dist' --files 'dist'",
-        "watch:server": "concurrently --kill-others \"yarn run dev\" \"yarn run css:watch\" \"yarn run server\"",
         "storybook": "start-storybook -p 9001 -c storybook",
         "storybook:build": "build-storybook  -c storybook",
         "prepublish": "npm run build",
@@ -42,7 +41,7 @@
         "IE >= 11"
     ],
     "engines": {
-        "node": ">=8"
+        "node": ">=12"
     },
     "husky": {
         "hooks": {
@@ -76,7 +75,6 @@
         "@babel/core": "^7.8.4",
         "@babel/plugin-proposal-class-properties": "^7.8.3",
         "@babel/preset-env": "^7.8.4",
-        "@babel/preset-react": "^7.8.3",
         "@storybook/addon-actions": "^6.3.8",
         "@storybook/addon-essentials": "^6.3.8",
         "@storybook/addon-links": "^6.3.8",

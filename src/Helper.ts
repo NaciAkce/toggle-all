@@ -1,9 +1,9 @@
 export const throttle = (func, interval) => {
     var timeout;
-    return function() {
+    return function () {
         var context = this,
             args = arguments;
-        var later = function() {
+        var later = function () {
             timeout = false;
         };
         if (!timeout) {
@@ -16,7 +16,8 @@ export const throttle = (func, interval) => {
 
 export const useMedia = (query, listener) => {
     // eslint-disable-next-line no-console
-    if (!listener || typeof listener !== 'function') console.error('Must be a function');
+    if (!listener || typeof listener !== 'function')
+        console.error('Must be a function');
 
     const matches = window.matchMedia(query).matches,
         media = window.matchMedia(query);
@@ -29,10 +30,10 @@ export const useMedia = (query, listener) => {
 
 export const debounce = (func, interval) => {
     var timeout;
-    return function() {
+    return function () {
         var context = this,
             args = arguments;
-        var later = function() {
+        var later = function () {
             timeout = null;
             func.apply(context, args);
         };
@@ -41,13 +42,15 @@ export const debounce = (func, interval) => {
     };
 };
 
-export const polyfill = (function() {
+export const polyfill = (function () {
     if (!Element.prototype.matches) {
-        Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+        Element.prototype.matches =
+            Element.prototype.msMatchesSelector ||
+            Element.prototype.webkitMatchesSelector;
     }
 
     if (!Element.prototype.closest) {
-        Element.prototype.closest = function(s) {
+        Element.prototype.closest = function (s) {
             var el = this;
 
             do {
