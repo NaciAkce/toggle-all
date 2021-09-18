@@ -1,6 +1,5 @@
 {
   "**/*.+(js|ts)": [
-    "eslint --cache --fix",
-    "yarn run test:staged",
+    "eslint --cache --fix"
   ]
 }
