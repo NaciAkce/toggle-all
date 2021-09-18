@@ -14,31 +14,28 @@ export default {
     output: [
         {
             file: `${dist}/${bundle}.cjs.js`,
-            format: 'cjs'
+            format: 'cjs',
         },
         {
             name: 'toggle',
             file: `${dist}/${bundle}.umd.js`,
             globals: {
-                react: 'React'
+                react: 'React',
             },
-            format: 'umd'
+            format: 'umd',
         },
         {
             file: `${dist}/${bundle}.esm.js`,
-            format: 'esm'
-        }
+            format: 'esm',
+        },
     ],
     plugins: [
         resolve(),
 
         babel({
-            exclude: 'node_modules/**'
+            exclude: 'node_modules/**',
         }),
-        production &&
-            terser({
-                sourcemap: false
-            }),
-        production && gzipPlugin()
-    ]
+        production && terser({}),
+        production && gzipPlugin(),
+    ],
 };

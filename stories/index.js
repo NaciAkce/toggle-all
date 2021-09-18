@@ -1,4 +1,4 @@
-import { storiesOf, forceReRender } from '@storybook/html';
+import { storiesOf } from '@storybook/html';
 import Toggle from '../src/index';
 
 import '../src/scss/styles.scss';
@@ -699,14 +699,14 @@ storiesOf('Toggle', module)
                         <!-- Close button for mobile version -->
                         <button class="dropdown__button nav-menu__button" data-toggle="#nav3"
                         data-toggle-global><span class="dropdown__close"></span></button>
-                        <div class="nav-menu__scroll"> 
+                        <div class="nav-menu__scroll">
                             <nav class="nav nav-menu"  data-toggle-next>
 
                                 <ul class="nav__list nav-menu--horizontal nav__list-0">
                                     <li class="nav__item" data-toggle-hover>
                                         <a class="nav__link nav__toggle  nav__parent"
                                             data-toggle=".nav__dropdown" data-toggle-global data-toggle-group="nav-menu" href="http://google.com">Vegetables</a>
-                                       
+
                                         <!-- Submenu 1 -->
                                         <ul class="nav__list  nav__list-1  nav__sub nav__dropdown" data-toggle-animate="default">
                                             <button class="nav-menu__back" data-toggle-back>back</button>
@@ -847,7 +847,7 @@ storiesOf('Toggle', module)
                                         </ul>
                                     </li>
                                 </ul>
-                                
+
                             </nav>
                         </div>
                     </div>
@@ -873,9 +873,9 @@ function runOnPageChange() {
 
 document.addEventListener(
     'DOMContentLoaded',
-    function() {
+    function () {
         runOnInit();
-        const callback = function(mutationsList) {
+        const callback = function (mutationsList) {
             for (let i = 0, len = mutationsList.length; i < len; i++) {
                 if (mutationsList[i].type == 'childList') {
                     console.log(mutationsList);
@@ -893,5 +893,5 @@ document.addEventListener(
 );
 
 Toggle({
-    onHover: true
+    onHover: true,
 });

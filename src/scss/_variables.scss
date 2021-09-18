@@ -18,7 +18,7 @@ $w-container-custom: 560px;
 // if you want to have hard breaktpoints for containers
 // add them here
 $container-max-widths: (
-    xl: $w-container-lg
+    xl: $w-container-lg,
 );
 
 // for media queries and infixes
@@ -27,7 +27,7 @@ $grid-breakpoints: (
     sm: 576px,
     md: 768px,
     lg: 992px,
-    xl: 1140px
+    xl: 1140px,
 );
 
 // Spacer
@@ -50,7 +50,7 @@ $spacers: map-merge(
         base: $base,
         md: $md,
         lg: $lg,
-        xl: $xl
+        xl: $xl,
     ),
     $spacers
 );
@@ -103,7 +103,8 @@ $border-base: 1px solid $c-border-base;
 // Typography
 $f-sans-serif: 'Open Sans', 'Helvetica', Arial, sans-serif;
 $f-serif: Georgia, 'Times New Roman', serif;
-$f-monospace: Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+$f-monospace: Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
 $f-icon: 'Client';
 $f-base: $f-sans-serif;
 
