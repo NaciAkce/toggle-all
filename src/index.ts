@@ -56,7 +56,7 @@ const matchMedia = mq => {
 
 /**
  *
- * @param {Function} handleMouseEvent
+ * @param {Function} handleMouseEvent test
  */
 const detectMouse = handleMouseEvent => event => {
   if (
