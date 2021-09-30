@@ -1,11 +1,11 @@
 import { storiesOf } from '@storybook/html';
-import Toggle from '../src/index';
+import Toggle from '../lib/es/index';
 
 import '../src/scss/styles.scss';
 
 storiesOf('Toggle', module)
-    .add('Simple Example', () => {
-        return `
+  .add('Simple Example', () => {
+    return `
         <section class="section section__toggle">
         <div class="py-sm"></div>
         <div class="container">
@@ -206,9 +206,9 @@ storiesOf('Toggle', module)
         </div>
     </section>
             `;
-    })
-    .add('Simple Example Grouped', () => {
-        return `
+  })
+  .add('Simple Example  Grouped', () => {
+    return `
         <section class="section section__toggle">
         <div class="py-sm"></div>
         <div class="container">
@@ -406,9 +406,9 @@ storiesOf('Toggle', module)
         </div>
     </section>
         `;
-    })
-    .add('Accordion', () => {
-        return `
+  })
+  .add('Accordion', () => {
+    return `
         <section class="section section__toggle">
             <div class="accordion container">
                 <header>
@@ -612,9 +612,9 @@ storiesOf('Toggle', module)
             </div>
         </section
         `;
-    })
-    .add('Tabs', () => {
-        return `
+  })
+  .add('Tabs', () => {
+    return `
         <section class="section section__toggle">
         <div class="tabs container">
             <header>
@@ -679,9 +679,9 @@ storiesOf('Toggle', module)
         </div>
     </section>
         `;
-    })
-    .add('Menu with Hover', () => {
-        return `
+  })
+  .add('Menu with Hover', () => {
+    return `
         <section class="section section__menu-hover">
         <div class="py-sm"></div>
         <div class="container">
@@ -856,42 +856,42 @@ storiesOf('Toggle', module)
         </div>
     </section>
         `;
-    });
+  });
 
 // Hack to hard reload page
 let count = 1;
 function runOnInit() {
-    console.log('Init');
+  console.log('Init');
 }
 function runOnPageChange() {
-    count++;
-    if (count > 2) {
-        count = 1;
-        // location.reload();
-    }
+  count++;
+  if (count > 2) {
+    count = 1;
+    // location.reload();
+  }
 }
 
 document.addEventListener(
-    'DOMContentLoaded',
-    function () {
-        runOnInit();
-        const callback = function (mutationsList) {
-            for (let i = 0, len = mutationsList.length; i < len; i++) {
-                if (mutationsList[i].type == 'childList') {
-                    console.log(mutationsList);
-                    runOnPageChange();
-                    break;
-                }
-            }
-        };
+  'DOMContentLoaded',
+  function () {
+    runOnInit();
+    const callback = function (mutationsList) {
+      for (let i = 0, len = mutationsList.length; i < len; i++) {
+        if (mutationsList[i].type == 'childList') {
+          console.log(mutationsList);
+          runOnPageChange();
+          break;
+        }
+      }
+    };
 
-        const observer = new MutationObserver(callback);
-        const config = { childList: true, subtree: false };
-        observer.observe(document.getElementById('root'), config);
-    },
-    false
+    const observer = new MutationObserver(callback);
+    const config = { childList: true, subtree: false };
+    observer.observe(document.getElementById('root'), config);
+  },
+  false
 );
 
 Toggle({
-    onHover: true,
+  onHover: true,
 });
