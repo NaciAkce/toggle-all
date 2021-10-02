@@ -1,0 +1,127 @@
+// ----------------------------------------------
+// Variables
+@import 'variables';
+// ----------------------------------------------
+// libs
+@import 'libs/bootstrap/bootstrap';
+
+// ----------------------------------------------
+// mixins
+@import 'mixins/buttons';
+@import 'mixins/font-face';
+
+// ----------------------------------------------
+// base
+@import 'common/box-shadow/box-shadow';
+@import 'common/icons/icons';
+
+.tool-tip {
+  &__content {
+    @extend .d-inline-flex;
+    @extend .justify-content-center;
+    position: relative;
+  }
+
+  &__toggle {
+    background: transparent;
+    border: 1px solid $c-black;
+    color: $c-black;
+    font-size: 0.875rem;
+    height: 2rem;
+    padding: 0.1rem;
+    width: 2rem;
+
+    &:after {
+      border: 1px solid $c-black;
+      height: calc(100% - 4px);
+      width: calc(100% - 4px);
+    }
+  }
+
+  &__dropdown {
+    @extend .pt-md;
+    @extend .pb-lg;
+    @extend .px-lg;
+    @extend %shadow-xs;
+    background: $c-white;
+    display: none;
+    font-size: $fs-sm;
+    font-weight: $fw-normal;
+    position: absolute;
+    text-transform: none;
+    z-index: 5;
+    width: 300px;
+
+    &:not(.is--position-left):not(.is--position-right) {
+      left: 50%;
+      transform: translate(-50%, 0);
+      &:after {
+        left: calc(50% - 8px);
+      }
+    }
+
+    &:not(.is--position-bottom) {
+      bottom: calc(100% + 15px);
+      &:after {
+        @extend %shadow-triangle;
+        bottom: -0.625rem;
+        transform: rotate(-45deg);
+      }
+    }
+
+    &.is--position-left {
+      left: 0;
+      transform: translate(0%, 0);
+
+      &:after {
+        left: 5px;
+      }
+    }
+
+    &.is--position-right {
+      right: 0;
+      transform: translate(0%, 0);
+      &:after {
+        right: 10px;
+      }
+    }
+
+    &.is--position-bottom {
+      top: calc(100% + 15px);
+      &:after {
+        @extend %shadow-triangle2;
+        top: -0.625rem;
+        transform: rotate(135deg);
+      }
+    }
+
+    &:after {
+      border: 0.625rem solid black;
+      border-color: transparent transparent $c-white $c-white;
+      content: '';
+      height: 0;
+      position: absolute;
+      width: 0;
+    }
+
+    @include media-breakpoint-up(md) {
+      max-width: inherit;
+      width: 374px;
+    }
+
+    &.is--show {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    &.is--active {
+      display: block;
+    }
+  }
+
+  &__icon {
+    &:before {
+      @extend .mx-0;
+    }
+  }
+}

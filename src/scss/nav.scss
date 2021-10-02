@@ -1,0 +1,245 @@
+/// ----------------------------------------------
+// Variables
+@import 'variables';
+// ----------------------------------------------
+// libs
+@import 'libs/bootstrap/bootstrap';
+
+// ----------------------------------------------
+// mixins
+@import 'mixins/buttons';
+@import 'mixins/font-face';
+
+// ----------------------------------------------
+// base
+@import 'common/box-shadow/box-shadow';
+@import 'common/icons/icons';
+
+.nav {
+  &__content {
+    padding-bottom: 150px;
+  }
+
+  &__dropdown {
+    display: none;
+
+    &.is--active {
+      display: block;
+    }
+  }
+
+  &--absolute {
+    background: $c-white;
+    bottom: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    z-index: 2;
+    overflow: hidden;
+    overflow-y: scroll;
+  }
+
+  &--transition {
+    right: -100%;
+    transition: right 0.3s ease 0.1ms;
+    will-change: right;
+    display: none;
+    visibility: collapse;
+    &.is--active {
+      display: block;
+      visibility: visible;
+    }
+
+    &.is--show {
+      right: 0;
+    }
+  }
+  &--default {
+    display: none;
+
+    &.is--active {
+      display: block;
+    }
+  }
+
+  &__list {
+    @extend .p-0;
+    @extend .m-0;
+    list-style-type: none;
+  }
+
+  &__link {
+    @extend .px-md;
+    @extend .py-base;
+    color: $c-base;
+    position: relative;
+    display: block;
+    transition: color 0.1s;
+    will-change: color;
+    border-bottom: 1px solid $c-border-light;
+  }
+
+  &__item {
+    @extend .p-xs;
+  }
+
+  &__sub {
+    .nav__item {
+      @extend .pl-base;
+    }
+  }
+
+  &__parent {
+    display: block;
+    &:before {
+      @extend [class*='i-']:before;
+      @extend .i-down-open:before;
+      display: inline;
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+
+    &.is--active:before {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+// Menu Hover | focussable
+.nav-menu {
+  &__scroll {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    height: calc(100vh - 30px);
+  }
+
+  &--transition {
+    background: $c-white;
+
+    @include media-breakpoint-down(md) {
+      position: fixed;
+      top: 0;
+
+      width: 100vw;
+      height: 100vh;
+      transition: transform 0.3s ease;
+      will-change: transform;
+      left: 0;
+      transform: translate(100vw, 0);
+      display: none;
+      overflow: hidden;
+
+      &.is--active {
+        display: block;
+      }
+      &.is--show {
+        transform: translate(0, 0);
+        z-index: 11;
+      }
+    }
+  }
+
+  &__button {
+    @include media-breakpoint-up(lg) {
+      display: none;
+    }
+  }
+
+  &__back {
+    @extend .px-md;
+    @extend .py-sm;
+    cursor: pointer;
+    @include media-breakpoint-up(lg) {
+      display: none;
+    }
+    background: $c-white;
+  }
+
+  &--horizontal {
+    @extend .d-lg-flex;
+
+    @include media-breakpoint-up(lg) {
+      > .nav__item {
+        margin: 0;
+        padding: 10px;
+        position: relative;
+        flex: 1 1 auto;
+      }
+
+      .nav__sub {
+        width: 100%;
+      }
+
+      .nav__list-1 {
+        background: $c-gray-lightest;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
+        position: absolute;
+      }
+
+      .nav__link {
+        border: 0 none;
+      }
+
+      .nav__list-1 {
+        transform: translate(0, -20px);
+        transition: transform 0.2s ease, opacity 0.2s ease-in;
+        pointer-events: none;
+        opacity: 0;
+        will-change: transform, opacity;
+
+        &.is--show {
+          transform: translate(0, 0);
+          opacity: 1;
+          pointer-events: all;
+        }
+      }
+    }
+
+    @include media-breakpoint-down(md) {
+      .nav__dropdown {
+        position: absolute;
+        background-color: #ffffff;
+        transform: translate(100vw, 0);
+        top: 50px;
+        height: 100vh;
+        left: 0;
+        width: 100vw;
+        transition: transform 0.3s ease 0.1ms;
+        will-change: transform;
+        display: none;
+
+        &.is--active {
+          display: block;
+          overflow-x: hidden;
+          overflow-y: auto;
+          pointer-events: all;
+        }
+
+        &.is--current {
+          z-index: 110;
+        }
+
+        &.is--show {
+          transform: translate(0, 0);
+          z-index: 11;
+        }
+      }
+
+      .nav__list-2 {
+        &.nav__dropdown {
+          top: 0;
+        }
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .is--overlay {
+    overflow: hidden;
+  }
+}

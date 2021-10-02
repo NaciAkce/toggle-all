@@ -1,14 +1,21 @@
 const path = require('path');
 
-// Export a function. Accept the base config as the only param.
 module.exports = {
-  stories: ['../stories/**/*.stories.js'],
+  stories: [
+    '../stories/**/*.stories.mdx',
+    '../stories/**/*.stories.@(js|jsx|ts|tsx)',
+  ],
   addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-actions',
-    '@storybook/html',
-    '@storybook/addons',
     '@storybook/addon-links',
+    {
+      name: '@storybook/addon-essentials',
+      options: {
+        actions: false,
+      },
+    },
+    '@storybook/addon-viewport',
+    '@storybook/addon-cssresources',
+    '@reapit/storybook-addon-html',
   ],
   webpackFinal: async (config, { configType }) => {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
@@ -16,13 +23,15 @@ module.exports = {
     // 'PRODUCTION' is used when building the static version of storybook.
 
     // Make whatever fine-grained changes you need
+
     config.module.rules.push({
       test: /\.scss$/,
       use: ['style-loader', 'css-loader', 'sass-loader'],
       include: path.resolve(__dirname, '../'),
     });
-
-    // Return the altered config
     return config;
+  },
+  core: {
+    builder: 'webpack5',
   },
 };

@@ -1,0 +1,129 @@
+// ----------------------------------------------
+// Variables
+@import 'variables';
+// ----------------------------------------------
+// libs
+@import 'libs/bootstrap/bootstrap';
+
+// ----------------------------------------------
+// mixins
+@import 'mixins/buttons';
+@import 'mixins/font-face';
+
+// ----------------------------------------------
+// base
+@import 'common/box-shadow/box-shadow';
+@import 'common/icons/icons';
+@import 'common/container/container';
+
+body {
+  &.is--ios {
+    cursor: pointer;
+  }
+}
+
+html {
+  touch-action: manipulation;
+}
+
+button {
+  cursor: pointer;
+}
+div[class*='col-md'] {
+  position: initial;
+  @extend .mt-lg;
+}
+
+.section {
+  @extend .py-xl;
+  position: relative;
+  overflow: hidden;
+  &:nth-child(even) {
+    background-color: $c-gray-lightest;
+  }
+
+  &__menu-hover {
+    min-height: 100vh;
+  }
+}
+
+.container {
+  @extend %container--xl;
+}
+
+.dropdown {
+  position: relative;
+
+  &__button {
+    @extend .py-sm;
+    @extend .px-sm;
+    @extend .d-flex;
+    @extend .align-items-center;
+    @extend .justify-content-between;
+    background: transparent;
+    border: 1px solid $c-gray-light;
+    height: 36px;
+    width: 36px;
+
+    &.is--active {
+      .dropdown__close {
+        @extend .d-flex;
+        @extend .align-items-center;
+      }
+      .dropdown__open {
+        @extend .d-none;
+      }
+    }
+  }
+
+  &__open {
+    @extend .d-flex;
+    @extend .align-items-center;
+    &:before {
+      @extend [class*='i-']:before;
+      @extend .i-menu-2:before;
+    }
+  }
+
+  &__close {
+    @extend .d-none;
+    &:before {
+      @extend [class*='i-']:before;
+      @extend .i-cancel:before;
+    }
+  }
+
+  &__container {
+    @extend .pt-lg;
+    @extend .pb-lg;
+
+    @extend %shadow-sm;
+    background-color: $c-white;
+    position: absolute;
+    z-index: 1;
+
+    &:not(.is--active) {
+      display: none;
+    }
+  }
+
+  &__list {
+    @extend .m-0;
+    @extend .px-0;
+    @extend .py-0;
+
+    list-style: none;
+  }
+
+  &__item {
+    @extend .py-sm;
+    @extend .px-md;
+    @extend .d-block;
+    border-bottom: 1px solid $c-gray-light;
+    color: $c-base;
+  }
+
+  &__link {
+    color: $c-base;
+  }
+}

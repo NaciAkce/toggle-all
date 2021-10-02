@@ -1,0 +1,54 @@
+// ----------------------------------------------
+// Variables
+@import 'variables';
+// ----------------------------------------------
+// libs
+@import 'libs/bootstrap/bootstrap';
+
+// ----------------------------------------------
+// mixins
+@import 'mixins/buttons';
+@import 'mixins/font-face';
+
+// ----------------------------------------------
+// base
+@import 'common/box-shadow/box-shadow';
+@import 'common/icons/icons';
+
+.tabs {
+  &__content {
+    @extend .mt-lg;
+    @extend .mb-lg;
+  }
+
+  &__list {
+    @extend .d-flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__link {
+    @extend .mr-lg;
+    color: $c-base;
+    text-transform: uppercase;
+    text-decoration: none;
+    &.is--active {
+      border-bottom: 2px solid #1d1d1d;
+      color: #1d1d1d;
+    }
+  }
+
+  &__body {
+    transition: opacity 200ms ease-in;
+    will-change: opacity;
+    opacity: 0;
+    &:not(.is--active) {
+      display: none;
+    }
+
+    &.is--show {
+      opacity: 1;
+    }
+  }
+}

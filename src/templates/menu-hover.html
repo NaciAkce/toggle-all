@@ -1,0 +1,321 @@
+<section class="section section__menu-hover">
+  <div class="py-sm"></div>
+  <div class="container">
+    <header>
+      <h2>Menu with Hover</h2>
+    </header>
+    <div class="nav__content">
+      <div class="div contaner">
+        <p>Menu</p>
+        <span class="sr-only" id="toggle-btn-three">Toggle Navigation</span>
+        <button
+          class="dropdown__button nav-menu__button"
+          data-toggle-group="group-1"
+          data-toggle="#nav3"
+          data-toggle-global
+          data-toggle-role="overlay"
+          aria-labelledby="toggle-btn-three"
+        >
+          <span class="dropdown__open"></span
+          ><span class="dropdown__close"></span>
+        </button>
+        <div id="nav3" class="nav-menu--transition" data-toggle-animate>
+          <!-- Close button for mobile version -->
+          <button
+            class="dropdown__button nav-menu__button"
+            data-toggle-back=".nav__content"
+          >
+            <span class="dropdown__close"></span>
+          </button>
+          <div class="nav-menu__scroll">
+            <nav class="nav nav-menu" data-toggle-next>
+              <ul class="nav__list nav-menu--horizontal nav__list-0">
+                <li class="nav__item" data-toggle-hover>
+                  <a
+                    class="nav__link nav__toggle nav__parent"
+                    data-toggle=".nav__dropdown"
+                    data-toggle-global
+                    data-toggle-group="nav-menu"
+                    href="http://google.com"
+                    >Vegetables</a
+                  >
+
+                  <!-- Submenu 1 -->
+                  <ul
+                    class="nav__list nav__list-1 nav__sub nav__dropdown"
+                    data-toggle-animate
+                  >
+                    <button
+                      class="nav-menu__back"
+                      data-toggle-back=".nav__item"
+                    >
+                      back
+                    </button>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Stalk Vegetables</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Roots & Seeds</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Cabbages</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Salad Greens</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Mushrooms</a>
+                    </li>
+                    <li class="nav__item">
+                      <a
+                        class="
+                          nav__link
+                          nav__toggle
+                          nav__parent
+                          nav__link--last-child
+                        "
+                        data-toggle=".nav__dropdown"
+                        href="#"
+                        >Sale %</a
+                      >
+                      <!-- Submenu 1-1 -->
+                      <ul
+                        class="nav__list nav__list-2 nav__sub nav__dropdown"
+                        data-toggle-animate
+                      >
+                        <button
+                          class="nav-menu__back"
+                          data-toggle-back=".nav__item"
+                        >
+                          back
+                        </button>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Fair Trade Roots</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Dried Veggies</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Our Brand</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link nav__link--last-child" href="#"
+                            >Homemade</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav__item" data-toggle-hover>
+                  <a
+                    class="nav__link nav__toggle nav__parent"
+                    data-toggle=".nav__dropdown"
+                    data-toggle-global
+                    data-toggle-group="nav-menu"
+                    href="#"
+                    >Fruits</a
+                  >
+                  <!-- Submenu 2 -->
+                  <ul
+                    class="nav__list nav__list-1 nav__sub nav__dropdown"
+                    data-toggle-animate
+                  >
+                    <button
+                      class="nav-menu__back"
+                      data-toggle-back=".nav__item"
+                    >
+                      back
+                    </button>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Citrus Fruits</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Berries</a>
+                    </li>
+                    <li class="nav__item">
+                      <a
+                        class="nav__link nav__toggle nav__parent"
+                        data-toggle=".nav__dropdown"
+                        href="#"
+                        >Special Selection</a
+                      >
+                      <!-- Submenu 2-1 -->
+                      <ul
+                        class="nav__list nav__list-2 nav__sub nav__dropdown"
+                        data-toggle-animate
+                      >
+                        <button
+                          class="nav-menu__back"
+                          data-toggle-back=".nav__item"
+                        >
+                          back
+                        </button>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Exotic Mixes</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Wild Pick</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link nav__link--last-child" href="#"
+                            >Vitamin Boosters</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link nav__link--last-child" href="#"
+                        >Tropical Fruits</a
+                      >
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Melons</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav__item" data-toggle-hover>
+                  <a
+                    class="nav__link nav__toggle nav__parent"
+                    data-toggle=".nav__dropdown"
+                    data-toggle-global
+                    data-toggle-group="nav-menu"
+                    href="#"
+                    >Grains</a
+                  >
+                  <!-- Submenu 3 -->
+                  <ul
+                    class="nav__list nav__list-1 nav__sub nav__dropdown"
+                    data-toggle-animate
+                  >
+                    <button
+                      class="nav-menu__back"
+                      data-toggle-back=".nav__item"
+                    >
+                      back
+                    </button>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Buckwheat</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Millet</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Quinoa</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Wild Rice</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Durum Wheat</a>
+                    </li>
+                    <li class="nav__item">
+                      <a
+                        class="
+                          nav__link
+                          nav__toggle
+                          nav__parent
+                          nav__link--last-child
+                        "
+                        data-toggle=".nav__dropdown"
+                        href="#"
+                        >Promo Packs</a
+                      >
+                      <!-- Submenu 3-1 -->
+                      <ul
+                        class="nav__list nav__list-2 nav__sub nav__dropdown"
+                        data-toggle-animate
+                      >
+                        <button class="nav-menu__back" data-toggle-back>
+                          back
+                        </button>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Starter Kit</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">The Essential 8</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Bolivian Secrets</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link nav__link--last-child" href="#"
+                            >Flour Packs</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav__item" data-toggle-hover>
+                  <a
+                    class="nav__link nav__toggle nav__parent"
+                    data-toggle=".nav__dropdown"
+                    data-toggle-global
+                    data-toggle-group="nav-menu"
+                    href="#"
+                    >Mylk & Drinks</a
+                  >
+                  <!-- Submenu 4 -->
+                  <ul
+                    class="nav__list nav__list-1 nav__sub nav__dropdown"
+                    data-toggle-animate
+                  >
+                    <button class="nav-menu__back" data-toggle-back>
+                      back
+                    </button>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Grain Mylks</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Seed Mylks</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Nut Mylks</a>
+                    </li>
+                    <li class="nav__item">
+                      <a class="nav__link" href="#">Nutri Drinks</a>
+                    </li>
+                    <li class="nav__item">
+                      <a
+                        class="
+                          nav__link
+                          nav__toggle
+                          nav__parent
+                          nav__link--last-child
+                        "
+                        data-toggle=".nav__dropdown"
+                        href="#"
+                        >Selection</a
+                      >
+                      <!-- Submenu 4-1 -->
+                      <ul
+                        class="nav__list nav__list-2 nav__sub nav__dropdown"
+                        data-toggle-animate
+                      >
+                        <button class="nav-menu__back" data-toggle-back>
+                          back
+                        </button>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Nut Mylk Packs</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link" href="#">Amino Acid Heaven</a>
+                        </li>
+                        <li class="nav__item">
+                          <a class="nav__link nav__link--last-child" href="#"
+                            >Allergy Free</a
+                          >
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

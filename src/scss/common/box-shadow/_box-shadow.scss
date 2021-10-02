@@ -1,21 +1,27 @@
 %shadow-xs {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 %shadow-sm {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.05);
 }
 %shadow-md {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
 }
 %shadow-lg {
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 %shadow-xl {
-    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
 %box-shadow--focus {
-    border-color: $c-secondary;
-    box-shadow: 0 0 0 0.2rem rgba(90, 92, 81, 0.5); //https://www.webpagefx.com/web-design/hex-to-rgb/
-    outline: 0;
+  border-color: $c-secondary;
+  box-shadow: 0 0 0 0.2rem rgba(90, 92, 81, 0.5);
+  outline: 0;
+}
+%shadow-triangle {
+  box-shadow: -4px 4px 4px 0 rgba(0, 0, 0, 0.1);
+}
+%shadow-triangle2 {
+  box-shadow: -4px 4px 4px -3px rgba(0, 0, 0, 0.1);
 }
