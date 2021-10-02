@@ -1,29 +1,35 @@
+// @include font-face(
+//   'Open Sans',
+//   'Fonts/OpenSans/open-sans-v15-latin-300',
+//   300,
+//   normal,
+//   swap
+// );
+// @include font-face(
+//   'Open Sans',
+//   'Fonts/OpenSans/open-sans-v15-latin-regular',
+//   400,
+//   normal,
+//   swap
+// );
+// @include font-face(
+//   'Open Sans',
+//   'Fonts/OpenSans/open-sans-v15-latin-600',
+//   600,
+//   normal,
+//   swap
+// );
+// @include font-face(
+//   'Open Sans',
+//   'Fonts/OpenSans/open-sans-v15-latin-700',
+//   700,
+//   normal,
+//   swap
+// );
 @include font-face(
-  'Open Sans',
-  'Fonts/OpenSans/open-sans-v15-latin-300',
-  300,
+  'icons',
+  '~/src/Fonts/Icons/icons',
   normal,
-  swap
-);
-@include font-face(
-  'Open Sans',
-  'Fonts/OpenSans/open-sans-v15-latin-regular',
-  400,
   normal,
-  swap
+  fallback
 );
-@include font-face(
-  'Open Sans',
-  'Fonts/OpenSans/open-sans-v15-latin-600',
-  600,
-  normal,
-  swap
-);
-@include font-face(
-  'Open Sans',
-  'Fonts/OpenSans/open-sans-v15-latin-700',
-  700,
-  normal,
-  swap
-);
-@include font-face('icons', './Fonts/Icons/icons', normal, normal, fallback);

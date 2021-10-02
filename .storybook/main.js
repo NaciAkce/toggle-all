@@ -7,14 +7,14 @@ module.exports = {
   ],
   addons: [
     '@storybook/addon-links',
-    {
-      name: '@storybook/addon-essentials',
-      options: {
-        actions: false,
-      },
-    },
+    // {
+    //   name: '@storybook/addon-essentials',
+    //   options: {
+    //     actions: false,
+    //   },
+    // },
+    '@storybook/addon-essentials',
     '@storybook/addon-viewport',
-    '@storybook/addon-cssresources',
     '@reapit/storybook-addon-html',
   ],
   webpackFinal: async (config, { configType }) => {
@@ -24,11 +24,23 @@ module.exports = {
 
     // Make whatever fine-grained changes you need
 
-    config.module.rules.push({
-      test: /\.scss$/,
-      use: ['style-loader', 'css-loader', 'sass-loader'],
-      include: path.resolve(__dirname, '../'),
-    });
+    config.module.rules.push(
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'resolve-url-loader',
+          'sass-loader',
+        ],
+        include: path.resolve(__dirname, '../'),
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        use: ['file-loader'],
+        include: path.resolve(__dirname, '../'),
+      }
+    );
     return config;
   },
   core: {
