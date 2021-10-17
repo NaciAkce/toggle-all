@@ -179,6 +179,10 @@ a[class*='i-']:hover span, a[class*='i-']:focus span, a[class*='i-']:active span
   max-width: 1300px;
 }
 
+body.is--ios {
+  cursor: pointer;
+}
+
 html {
   touch-action: manipulation;
 }

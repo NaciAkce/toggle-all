@@ -326,11 +326,20 @@ a[class*='i-']:hover span, a[class*='i-']:focus span, a[class*='i-']:active span
     overflow-y: auto;
     pointer-events: all;
   }
+  .nav-menu--horizontal .nav__dropdown.is--current {
+    z-index: 110;
+  }
   .nav-menu--horizontal .nav__dropdown.is--show {
     transform: translate(0, 0);
     z-index: 11;
   }
   .nav-menu--horizontal .nav__list-2.nav__dropdown {
     top: 0;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .is--overlay {
+    overflow: hidden;
   }
 }

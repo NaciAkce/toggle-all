@@ -11,7 +11,8 @@ let transitionCollapse = false,
   tHandler: () => void | null,
   eventType: null | 'touch' | 'mouse' = null,
   isActive: boolean | null = null,
-  focusable: boolean | null = null;
+  focusable: boolean | null = null,
+  previousElement: HTMLElement;
 
 const tabbableBreadcrumb: HTMLElement[] = [];
 
@@ -674,6 +675,8 @@ const addTabbable = (item, target, tab, toggleCurrentClass) => {
     }
   }
 };
+console.log('tabbableBreadcrumb ', tabbableBreadcrumb);
+console.log('focusable', focusable);
 
 /**
  *
@@ -891,6 +894,7 @@ const Toggle = (userSettings = {}) => {
     return;
   };
 
+  let array = [];
   const toggleItems = event => {
     const target = event.target
       ? event.target.closest(selectorToggle) ||
@@ -900,6 +904,7 @@ const Toggle = (userSettings = {}) => {
       : event.item;
     const eventType = event.type ? event.type : false;
     callbackToggle && callbackToggle(target);
+    !array.includes(target) && array.push(target);
 
     const selector = target.getAttribute(splitselectorToggle),
       group = target.getAttribute(splitselectorGroup),

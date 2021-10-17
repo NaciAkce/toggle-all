@@ -18,16 +18,16 @@ $w-container-custom: 560px;
 // if you want to have hard breaktpoints for containers
 // add them here
 $container-max-widths: (
-    xl: $w-container-lg,
+  xl: $w-container-lg,
 );
 
 // for media queries and infixes
 $grid-breakpoints: (
-    xs: 0,
-    sm: 576px,
-    md: 768px,
-    lg: 992px,
-    xl: 1140px,
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1140px,
 );
 
 // Spacer
@@ -43,16 +43,16 @@ $base: 1rem;
 $spacer: 1rem;
 $spacers: ();
 $spacers: map-merge(
-    (
-        0: 0,
-        xs: $xs,
-        sm: $sm,
-        base: $base,
-        md: $md,
-        lg: $lg,
-        xl: $xl,
-    ),
-    $spacers
+  (
+    0: 0,
+    xs: $xs,
+    sm: $sm,
+    base: $base,
+    md: $md,
+    lg: $lg,
+    xl: $xl,
+  ),
+  $spacers
 );
 
 // ---------------------------------------
@@ -104,7 +104,7 @@ $border-base: 1px solid $c-border-base;
 $f-sans-serif: 'Open Sans', 'Helvetica', Arial, sans-serif;
 $f-serif: Georgia, 'Times New Roman', serif;
 $f-monospace: Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
+  monospace;
 $f-icon: 'Client';
 $f-base: $f-sans-serif;
 

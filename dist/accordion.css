@@ -163,6 +163,14 @@ a[class*='i-']:hover span, a[class*='i-']:focus span, a[class*='i-']:active span
   border-bottom: 1px solid #e4e4e4;
 }
 
+.accordion__dropdown.is--collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.25s ease;
+  will-change: height;
+}
+
 .accordion__button {
   background: transparent;
   border: 1px solid #e4e4e4;
