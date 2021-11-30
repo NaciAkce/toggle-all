@@ -82,6 +82,11 @@ button::-moz-focus-inner,
   border-style: none;
 }
 
+::-webkit-file-upload-button {
+  font: inherit;
+  -webkit-appearance: button;
+}
+
 .container {
   margin-left: auto;
   margin-right: auto;

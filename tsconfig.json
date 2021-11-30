@@ -17,6 +17,6 @@
     "noFallthroughCasesInSwitch": true,
     "noEmit": true
   },
-  "include": ["src", "stories", "toggle.d.ts"],
+  "include": ["src", "toggle.d.ts", "stories"],
   "exclude": ["src/**/*.test.ts", "node_modules", "src/**/__test__"]
 }
