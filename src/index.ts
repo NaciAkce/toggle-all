@@ -120,7 +120,7 @@ const animationExist = item => {
  * @param  {HTMLElement} elem .....The element to check
  * @return {Object}     A set of booleans for each side of the element
  */
-const isOutOfViewport = function (elem: HTMLElement) {
+const isOutOfViewport = function (elem: HTMLElement): Record<string, boolean> {
   const bounding = elem.getBoundingClientRect();
 
   const out: Record<string, boolean> = {};
