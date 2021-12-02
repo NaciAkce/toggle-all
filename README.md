@@ -9,6 +9,8 @@ Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped an
 
 ## Options
 
+`Note`: selectorBack and selectorNext was removed. Cause of high complexity. Use instead unique ids or classes
+
 ```js
  {
     selectorToggle: '[data-toggle]', // Toggle Selector
@@ -16,8 +18,6 @@ Toggle can handle Dropdowns, Accordions, Menu, Tabs, Tooltips. Can be grouped an
     selectorGroup: '[data-toggle-group]', // Group toggles
     selectorValidate: '[data-toggle-validate]', // Form Validation - Prevent Closing if invalid
     selectorRole: '[data-toggle-role]', // tab, accordion, tooltip, overlay, default
-    selectorBack: '[data-toggle-back]', // Close Toggle. You select a parentSelector. see examples
-    selectorNext: '[data-toggle-next]', // Selects next Sibling. Add to Parent. Use Case: for Nested Multiple driopdowns with same classes instead of unique IDs
     selectorAnimate: '[data-toggle-animate]', // Animate. Values: default(all other css transitions), height(accordion)
     selectorHover: '[data-toggle-hover]', // Add to direct Parent
     toggleActiveClass: 'is--active',

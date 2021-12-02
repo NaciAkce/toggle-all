@@ -67,35 +67,43 @@
           </div>
           <div class="col-md-4">
             <h3>Menu</h3>
-            <span class="sr-only" id="toggle-btn">Toggle Navigation</span>
+            <span class="sr-only" id="toggle-btn-two">Toggle Navigation</span>
             <button
               class="dropdown__button"
-              data-toggle="#nav"
-              aria-labelledby="toggle-btn"
+              data-toggle-group="group-1"
+              data-toggle="#nav2"
+              data-toggle-global
+              aria-labelledby="toggle-btn-two"
             >
               <span class="dropdown__open"></span
               ><span class="dropdown__close"></span>
             </button>
             <nav
-              id="nav"
+              id="nav2"
               class="nav nav--absolute nav--transition"
               data-toggle-animate
             >
               <!-- Close button for mobile version -->
-              <button class="dropdown__button" data-toggle="#nav">
+              <button
+                class="dropdown__button"
+                data-toggle="#nav2"
+                data-toggle-global
+              >
                 <span class="dropdown__close"></span>
               </button>
-              <div class="nav__wrap" data-toggle-next>
+              <div class="nav__wrap">
                 <ul class="nav__list nav__list-0">
                   <li class="nav__item">
                     <a
                       class="nav__link nav__toggle nav__parent"
-                      data-toggle=".nav__dropdown"
+                      data-toggle=".nav__dropdown1"
                       href="#"
                       >Vegetables</a
                     >
                     <!-- Submenu 1 -->
-                    <ul class="nav__list nav__list-1 nav__sub nav__dropdown">
+                    <ul
+                      class="nav__list nav__list-1 nav__sub nav__dropdown nav__dropdown1"
+                    >
                       <li class="nav__item">
                         <a class="nav__link" href="#">Stalk Vegetables</a>
                       </li>
@@ -114,13 +122,14 @@
                       <li class="nav__item">
                         <a
                           class="nav__link nav__toggle nav__parent nav__link--last-child"
-                          data-toggle=".nav__dropdown"
+                          data-toggle=".nav__dropdown2"
+                          tabindex="-1"
                           href="#"
                           >Sale %</a
                         >
                         <!-- Submenu 1-1 -->
                         <ul
-                          class="nav__list nav__list-2 nav__sub nav__dropdown"
+                          class="nav__list nav__list-2 nav__sub nav__dropdown nav__dropdown2"
                         >
                           <li class="nav__item">
                             <a class="nav__link" href="#">Fair Trade Roots</a>
@@ -143,12 +152,14 @@
                   <li class="nav__item">
                     <a
                       class="nav__link nav__toggle nav__parent"
-                      data-toggle=".nav__dropdown"
+                      data-toggle=".nav__dropdown3"
                       href="#"
                       >Fruits</a
                     >
                     <!-- Submenu 2 -->
-                    <ul class="nav__list nav__list-1 nav__sub nav__dropdown">
+                    <ul
+                      class="nav__list nav__list-1 nav__sub nav__dropdown nav__dropdown3"
+                    >
                       <li class="nav__item">
                         <a class="nav__link" href="#">Citrus Fruits</a>
                       </li>
@@ -158,14 +169,13 @@
                       <li class="nav__item">
                         <a
                           class="nav__link nav__toggle nav__parent"
-                          data-toggle=".nav__dropdown"
+                          data-toggle=".4"
                           href="#"
+                          >Special Selection</a
                         >
-                          Special Selection
-                        </a>
                         <!-- Submenu 2-1 -->
                         <ul
-                          class="nav__list nav__list-2 nav__sub nav__dropdown"
+                          class="nav__list nav__list-2 nav__sub nav__dropdown nav__dropdown4"
                         >
                           <li class="nav__item">
                             <a class="nav__link" href="#">Exotic Mixes</a>
@@ -193,14 +203,13 @@
                   <li class="nav__item">
                     <a
                       class="nav__link nav__toggle nav__parent"
-                      data-toggle=".nav__dropdown"
+                      data-toggle=".nav__dropdown5"
                       href=" #"
+                      >Grains</a
                     >
-                      Grains
-                    </a>
                     <!-- Submenu 3 -->
                     <ul
-                      class="nav__list nav__list-1 nav__sub nav__sub nav__dropdown"
+                      class="nav__list nav__list-1 nav__sub nav__dropdown nav__dropdown5"
                     >
                       <li class="nav__item">
                         <a class="nav__link" href="#">Buckwheat</a>
@@ -220,14 +229,13 @@
                       <li class="nav__item">
                         <a
                           class="nav__link nav__toggle nav__parent nav__link--last-child"
-                          data-toggle=".nav__dropdown"
+                          data-toggle=".nav__dropdown6"
                           href="#"
+                          >Promo Packs</a
                         >
-                          Promo Packs
-                        </a>
                         <!-- Submenu 3-1 -->
                         <ul
-                          class="nav__list nav__list-2 nav__sub nav__sub nav__dropdown"
+                          class="nav__list nav__list-2 nav__sub nav__dropdown nav__dropdown6"
                         >
                           <li class="nav__item">
                             <a class="nav__link" href="#">Starter Kit</a>
@@ -239,9 +247,9 @@
                             <a class="nav__link" href="#">Bolivian Secrets</a>
                           </li>
                           <li class="nav__item">
-                            <a class="nav__link nav__link--last-child" href="#">
-                              Flour Packs
-                            </a>
+                            <a class="nav__link nav__link--last-child" href="#"
+                              >Flour Packs</a
+                            >
                           </li>
                         </ul>
                       </li>
@@ -250,16 +258,16 @@
                   <li class="nav__item">
                     <a
                       class="nav__link nav__toggle nav__parent"
-                      data-toggle=".nav__dropdown"
+                      data-toggle=".nav__dropdown7"
                       href="#"
+                      >Mylk & Drinks</a
                     >
-                      Mylk & Drinks
-                    </a>
+                    <!-- Submenu 4 -->
                     <ul
-                      class="nav__list nav__list-1 nav__sub nav__sub nav__dropdown"
+                      class="nav__list nav__list-1 nav__sub nav__dropdown nav__dropdown7"
                     >
                       <li class="nav__item">
-                        <a class="nav__link" href="#">Grain Mylks </a>
+                        <a class="nav__link" href="#">Grain Mylks</a>
                       </li>
                       <li class="nav__item">
                         <a class="nav__link" href="#">Seed Mylks</a>
@@ -273,14 +281,13 @@
                       <li class="nav__item">
                         <a
                           class="nav__link nav__toggle nav__parent nav__link--last-child"
-                          data-toggle=".nav__dropdown"
+                          data-toggle=".nav__dropdown8"
                           href="#"
+                          >Selection</a
                         >
-                          Selection
-                        </a>
                         <!-- Submenu 4-1 -->
                         <ul
-                          class="nav__list nav__list-2 nav__sub nav__sub nav__dropdown"
+                          class="nav__list nav__list-2 nav__sub nav__dropdown nav__dropdown8"
                         >
                           <li class="nav__item">
                             <a class="nav__link" href="#">Nut Mylk Packs</a>
@@ -289,9 +296,9 @@
                             <a class="nav__link" href="#">Amino Acid Heaven</a>
                           </li>
                           <li class="nav__item">
-                            <a class="nav__link nav__link--last-child" href="#">
-                              Allergy Free
-                            </a>
+                            <a class="nav__link nav__link--last-child" href="#"
+                              >Allergy Free</a
+                            >
                           </li>
                         </ul>
                       </li>

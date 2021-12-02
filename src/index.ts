@@ -138,8 +138,6 @@ const createElementObject = (
   role,
   toggleActiveClass,
   eventType,
-  target,
-  splitSelectorToggle,
   selectorAnimate
 ) => {
   const isActive = value.classList.contains(toggleActiveClass);
@@ -150,12 +148,43 @@ const createElementObject = (
   return {
     type: type,
     value: value,
-    role: role ? role : 'default',
+    role: role ?? 'default',
     active: isActive,
     isAnimate: type === 'drop' && animate,
     eventType: eventType,
     tabActive: role === 'tab' && isActive,
   };
+};
+
+/**
+ * Get Toggles
+ * @param {HTMLElement} target
+ * @param {String} toggleActiveClass
+ * @param {String} selector
+ * @param {String} role
+ * @param {String} splitSelectorToggle
+ * @return {Array}
+ */
+const getToggles = (
+  target,
+  toggleActiveClass,
+  selector,
+  role,
+  splitSelectorToggle,
+  eventType
+) => {
+  return [].slice
+    .call($$(`[${splitSelectorToggle}="${selector}"]`))
+    .map(toggle =>
+      createElementObject(
+        'toggle',
+        toggle,
+        role,
+        toggleActiveClass,
+        eventType,
+        null
+      )
+    );
 };
 
 /**
@@ -177,24 +206,19 @@ const getGrouped = (
   splitSelectorToggle: string,
   splitselectorGroup: string,
   eventType: string,
-  next: Element,
   selectorAnimate: string
 ) => {
   return [].slice
     .call($$(`[${splitselectorGroup}="${group}"]`))
     .filter(e => e !== target && e.classList.contains(toggleActiveClass))
     .reduce((obj, item) => {
-      const dropItem = next
-          ? getNextSibling(item, item.getAttribute(splitSelectorToggle))
-          : $(item.getAttribute(splitSelectorToggle)),
+      const dropItem = $(item.getAttribute(splitSelectorToggle)),
         toggle = createElementObject(
           'toggle',
           item,
           role,
           toggleActiveClass,
           eventType,
-          target,
-          splitSelectorToggle,
           null
         ),
         drop = createElementObject(
@@ -203,60 +227,10 @@ const getGrouped = (
           role,
           toggleActiveClass,
           eventType,
-          target,
-          splitSelectorToggle,
           selectorAnimate
         );
       return [...obj, toggle, drop];
     }, []);
-};
-
-/**
- * Get Toggles
- * @param {HTMLElement} target
- * @param {String} toggleActiveClass
- * @param {String} selector
- * @param {String} role
- * @param {String} splitSelectorToggle
- * @return {Array}
- */
-const getToggles = (
-  target,
-  toggleActiveClass,
-  selector,
-  role,
-  next,
-  splitSelectorToggle,
-  eventType,
-  splitselectorBack
-) => {
-  return next
-    ? [
-        createElementObject(
-          'toggle',
-          target,
-          role,
-          toggleActiveClass,
-          eventType,
-          target,
-          splitSelectorToggle,
-          null
-        ),
-      ]
-    : [].slice
-        .call($$(`[${splitSelectorToggle}="${selector}"]`))
-        .map(toggle =>
-          createElementObject(
-            'toggle',
-            toggle,
-            role,
-            toggleActiveClass,
-            eventType,
-            target,
-            splitSelectorToggle,
-            null
-          )
-        );
 };
 
 /**
@@ -273,36 +247,20 @@ const getDrops = (
   toggleActiveClass,
   selector,
   role,
-  next,
   splitSelectorToggle,
   eventType,
   selectorAnimate
 ) =>
-  next
-    ? [
-        createElementObject(
-          'drop',
-          getNextSibling(target, selector),
-          role,
-          toggleActiveClass,
-          eventType,
-          target,
-          splitSelectorToggle,
-          selectorAnimate
-        ),
-      ]
-    : [].slice.call($$(selector)).map(drop => {
-        return createElementObject(
-          'drop',
-          drop,
-          role,
-          toggleActiveClass,
-          eventType,
-          target,
-          splitSelectorToggle,
-          selectorAnimate
-        );
-      });
+  [].slice.call($$(selector)).map(drop => {
+    return createElementObject(
+      'drop',
+      drop,
+      role,
+      toggleActiveClass,
+      eventType,
+      selectorAnimate
+    );
+  });
 
 /**
  *
@@ -466,11 +424,15 @@ enum PointerEvents {
  * @param {String} type
  * @param {String} selectorToggle
  */
-const getEventTarget = (target, type, selectorToggle) => {
-  const item = target.querySelector(selectorToggle);
+const eventTarget = (event, selectorToggle) => {
+  const item =
+    event.type === 'click'
+      ? event.target?.closest(selectorToggle)
+      : event.target.querySelector(selectorToggle);
+
   return {
-    item: item,
-    type: type,
+    target: item,
+    type: event.type,
   };
 };
 
@@ -479,13 +441,10 @@ const removeBodyClass = body => body.classList.remove('is--overlay');
 
 interface Config {
   selectorToggle: string;
-  selectorTogglePrevent: string;
   selectorGlobal: string;
   selectorGroup: string;
   selectorValidate: string;
   selectorRole: string;
-  selectorBack: string;
-  selectorNext: string;
   selectorAnimate: string;
   selectorHover: string;
   toggleActiveClass: string;
@@ -495,8 +454,6 @@ interface Config {
   toggleCurrentClass: string;
   onHover: boolean;
   onMediaQuery: string;
-  disableIfMedia: string;
-  disableIfNotMedia: string;
   stopVideo: boolean;
   callbackOpen: (target: HTMLElement) => void | null;
   callbackClose: (target: HTMLElement) => void | null;
@@ -505,13 +462,10 @@ interface Config {
 
 const defaultConfig: Config = {
   selectorToggle: '[data-toggle]',
-  selectorTogglePrevent: '[data-toggle-prevent]',
   selectorGlobal: '[data-toggle-global]',
   selectorGroup: '[data-toggle-group]',
   selectorValidate: '[data-toggle-validate]',
   selectorRole: '[data-toggle-role]',
-  selectorBack: '[data-toggle-back]',
-  selectorNext: '[data-toggle-next]',
   selectorAnimate: '[data-toggle-animate]',
   selectorHover: '[data-toggle-hover]',
   toggleActiveClass: 'is--active',
@@ -521,8 +475,6 @@ const defaultConfig: Config = {
   toggleCurrentClass: 'is--current',
   onHover: false,
   onMediaQuery: '(max-width: 992px)',
-  disableIfMedia: '[data-toggle-media]',
-  disableIfNotMedia: '[data-toggle-not-media]',
   stopVideo: true,
   callbackOpen: null,
   callbackClose: null,
@@ -532,13 +484,10 @@ const defaultConfig: Config = {
 const Toggle = (userSettings: Partial<Config> = {}) => {
   const {
     selectorToggle,
-    selectorTogglePrevent,
     selectorGlobal,
     selectorGroup,
     selectorValidate,
     selectorRole,
-    selectorBack,
-    selectorNext,
     selectorAnimate,
     selectorHover,
     toggleActiveClass,
@@ -548,23 +497,16 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
     toggleCurrentClass,
     onHover,
     onMediaQuery,
-    disableIfMedia,
-    disableIfNotMedia,
     stopVideo,
     callbackOpen,
     callbackClose,
     callbackToggle,
     splitSelectorToggle = selectorToggle.replace(/\[|\]/g, '') as string,
-    splitSelectorTogglePrevent = selectorTogglePrevent.replace(
-      /\[|\]/g,
-      ''
-    ) as string,
     splitselectorValidate = selectorValidate.replace(/\[|\]/g, '') as string,
     splitselectorGroup = selectorGroup.replace(/\[|\]/g, '') as string,
     splitselectorAnimate = selectorAnimate.replace(/\[|\]/g, '') as string,
     splitselectorHover = selectorHover.replace(/\[|\]/g, '') as string,
     splitselectorRole = selectorRole.replace(/\[|\]/g, '') as string,
-    splitselectorBack = selectorBack.replace(/\[|\]/g, '') as string,
   } = {
     ...defaultConfig,
     ...userSettings,
@@ -604,10 +546,7 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
   };
 
   const clickHandler = event => {
-    if (
-      !event.target.closest(selectorToggle) &&
-      !event.target.closest(selectorBack)
-    ) {
+    if (!event.target.closest(selectorToggle)) {
       closeActiveGlobal(event);
       return;
     }
@@ -622,14 +561,8 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
       this.enterLocked = true;
     }
     if (!this.enterLocked && event.type === PointerEvents.ENTER) return;
-    const eventTarget = getEventTarget(
-      event.target,
-      event.type,
-      selectorToggle
-    );
-    // if (eventTarget.active) return;
 
-    toggleItems(eventTarget);
+    toggleItems(event);
   }
 
   const handleMouseEvent = eventType => {
@@ -651,9 +584,7 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
   const returnKey = event =>
     !event.target.closest(selectorToggle) ||
     !event.target.closest(selectorHover) ||
-    event.code !== ENTER_KEY_CODE ||
-    (event.target.closest(disableIfMedia) && isActive) ||
-    (event.target.closest(disableIfNotMedia) && !isActive);
+    event.code !== ENTER_KEY_CODE;
 
   const keyHandler = event => {
     if (returnKey(event) && !keyEvents(event)) return;
@@ -668,20 +599,13 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
   };
 
   const toggleItems = event => {
-    const target: HTMLElement = event.target
-      ? event.target.closest(selectorToggle) ||
-        event.target
-          .closest(selectorBack)
-          .parentNode.parentNode.querySelector(selectorToggle)
-      : event.item;
-    console.log('event', target);
-    const eventType = event.type ? event.type : false;
+    const { target, type } = eventTarget(event, selectorToggle);
+
     callbackToggle && callbackToggle(target);
 
     const selector = target.getAttribute(splitSelectorToggle),
       group = target.getAttribute(splitselectorGroup),
       role = target.getAttribute(splitselectorRole),
-      next = target.closest(selectorNext),
       allGrouped = group
         ? getGrouped(
             target,
@@ -690,8 +614,7 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
             role,
             splitSelectorToggle,
             splitselectorGroup,
-            eventType,
-            next,
+            type,
             splitselectorAnimate
           )
         : [],
@@ -700,23 +623,21 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
         toggleActiveClass,
         selector,
         role,
-        next,
         splitSelectorToggle,
-        eventType,
-        splitselectorBack
+        type
       ),
       allDrops = getDrops(
         target,
         toggleActiveClass,
         selector,
         role,
-        next,
         splitSelectorToggle,
-        eventType,
+        type,
         splitselectorAnimate
       ),
       allElements = [...allGrouped, ...allToggles, ...allDrops];
 
+    console.log('toggles', allToggles);
     if (allToggles[0].tabActive) return;
 
     const hasToValidate = allElements.filter(
