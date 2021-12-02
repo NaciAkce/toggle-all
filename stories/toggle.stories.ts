@@ -36,7 +36,7 @@ export default {
         language: 'css',
       },
       {
-        tab: 'SCSS Global o',
+        tab: 'SCSS Global',
         template: stylesCss,
         language: 'css',
       },
