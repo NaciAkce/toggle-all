@@ -1,8 +1,13 @@
 import { throttle, useMedia } from './Helper';
-const $ = (element: keyof HTMLElementTagNameMap) =>
-  document.querySelector(element);
-const $$ = (elements: keyof HTMLElementTagNameMap) =>
-  document.querySelectorAll(elements);
+import { ToggleEvent, toggleMachine } from './core/stateMachine';
+const $ = (element: string) => document.querySelector(element);
+const $$ = (elements: string) => document.querySelectorAll(elements);
+
+console.log('toggle', toggleMachine.state, toggleMachine.nextEvents);
+toggleMachine.transition(toggleMachine.state, ToggleEvent.TransitionOn);
+console.log('toggle', toggleMachine.state, toggleMachine.nextEvents);
+toggleMachine.transition(toggleMachine.state, ToggleEvent.TransitionOn);
+console.log('toggle', toggleMachine.state, toggleMachine.nextEvents);
 
 let transitionCollapse = false,
   transitionExpand = false,
@@ -11,10 +16,11 @@ let transitionCollapse = false,
   tHandler: () => void | null,
   eventType: null | 'touch' | 'mouse' = null,
   isActive: boolean | null = null,
-  focusable: boolean | null = null,
-  previousElement: HTMLElement;
+  focusable: HTMLElement[],
+  previousElement: Element;
 
-const tabbableBreadcrumb: HTMLElement[] = [];
+const tabbableBreadcrumb: Array<{ element: HTMLElement; active: HTMLElement }> =
+  [];
 
 const ENTER_KEY_CODE = 'Enter',
   UP_KEY_CODE = 'ArrowDown',
@@ -213,15 +219,15 @@ const createElementObject = (
  * @return {Array}
  */
 const getGrouped = (
-  target,
-  toggleActiveClass,
-  group,
-  role,
-  splitselectorToggle,
-  splitselectorGroup,
-  eventType,
-  next,
-  selectorAnimate
+  target: HTMLElement,
+  toggleActiveClass: string,
+  group: string,
+  role: string,
+  splitselectorToggle: string,
+  splitselectorGroup: string,
+  eventType: string,
+  next: Element,
+  selectorAnimate: string
 ) => {
   return [].slice
     .call($$(`[${splitselectorGroup}="${group}"]`))
@@ -421,9 +427,15 @@ const animateDefault = (
     }
   }
 
-  if (eventType === enter || (eventType !== enter && !item.active)) {
+  if (
+    eventType === PointerEvents.ENTER ||
+    (eventType !== PointerEvents.ENTER && !item.active)
+  ) {
     expandSection(item);
-  } else if (eventType === leave || (eventType !== enter && item.active)) {
+  } else if (
+    eventType === PointerEvents.LEAVE ||
+    (eventType !== PointerEvents.ENTER && item.active)
+  ) {
     collapseSection(item);
   }
 };
@@ -547,25 +559,10 @@ const setPosition = item => {
   }
 };
 
-const getPointerEvents = () => {
-  if (window.PointerEvent) {
-    return {
-      end: 'pointerup',
-      enter: 'pointerenter',
-      leave: 'pointerleave',
-    };
-  } else {
-    return {
-      end: 'touchend',
-      enter: 'mouseenter',
-      leave: 'mouseleave',
-    };
-  }
-};
-
-const { enter, leave, end } = getPointerEvents();
-
-const mouseEvents = [enter, leave];
+enum PointerEvents {
+  ENTER = 'pointerenter',
+  LEAVE = 'pointerleave',
+}
 
 /**
  *
@@ -598,7 +595,7 @@ const checkValidity = (item, splitselectorValidate, toggleErrorClass) => {
   if (form) {
     const arrOfInputs = [].slice.call(form),
       checkUnValid = arrOfInputs.filter(item => !item.checkValidity()),
-      valid = checkUnValid.length !== 0 ? valid : false;
+      valid = checkUnValid.length !== 0 ? true : false;
 
     if (valid) {
       valid[0].focus();
@@ -675,8 +672,6 @@ const addTabbable = (item, target, tab, toggleCurrentClass) => {
     }
   }
 };
-console.log('tabbableBreadcrumb ', tabbableBreadcrumb);
-console.log('focusable', focusable);
 
 /**
  *
@@ -712,7 +707,33 @@ const checkTabbable = (item, eventType = item.eventType) =>
 const addBodyClass = body => body.classList.add('is--overlay');
 const removeBodyClass = body => body.classList.remove('is--overlay');
 
-const defaultConfig = {
+interface Config {
+  selectorToggle: string;
+  selectorTogglePrevent: string;
+  selectorGlobal: string;
+  selectorGroup: string;
+  selectorValidate: string;
+  selectorRole: string;
+  selectorBack: string;
+  selectorNext: string;
+  selectorAnimate: string;
+  selectorHover: string;
+  toggleActiveClass: string;
+  toggleErrorClass: string;
+  toggleCollapseClass: string;
+  toggleShowClass: string;
+  toggleCurrentClass: string;
+  onHover: boolean;
+  onMediaQuery: string;
+  disableIfMedia: string;
+  disableIfNotMedia: string;
+  stopVideo: boolean;
+  callbackOpen: (target: HTMLElement) => void | null;
+  callbackClose: (target: HTMLElement) => void | null;
+  callbackToggle: (target: HTMLElement) => void | null;
+}
+
+const defaultConfig: Config = {
   selectorToggle: '[data-toggle]',
   selectorTogglePrevent: '[data-toggle-prevent]',
   selectorGlobal: '[data-toggle-global]',
@@ -733,12 +754,12 @@ const defaultConfig = {
   disableIfMedia: '[data-toggle-media]',
   disableIfNotMedia: '[data-toggle-not-media]',
   stopVideo: true,
-  callbackOpen: false,
-  callbackClose: false,
-  callbackToggle: false,
+  callbackOpen: null,
+  callbackClose: null,
+  callbackToggle: null,
 };
 
-const Toggle = (userSettings = {}) => {
+const Toggle = (userSettings: Partial<Config> = {}) => {
   const {
     selectorToggle,
     selectorTogglePrevent,
@@ -763,14 +784,17 @@ const Toggle = (userSettings = {}) => {
     callbackOpen,
     callbackClose,
     callbackToggle,
-    splitselectorToggle = selectorToggle.replace(/\[|\]/g, ''),
-    splitselectorTogglePrevent = selectorTogglePrevent.replace(/\[|\]/g, ''),
-    splitselectorValidate = selectorValidate.replace(/\[|\]/g, ''),
-    splitselectorGroup = selectorGroup.replace(/\[|\]/g, ''),
-    splitselectorAnimate = selectorAnimate.replace(/\[|\]/g, ''),
-    splitselectorHover = selectorHover.replace(/\[|\]/g, ''),
-    splitselectorRole = selectorRole.replace(/\[|\]/g, ''),
-    splitselectorBack = selectorBack.replace(/\[|\]/g, ''),
+    splitselectorToggle = selectorToggle.replace(/\[|\]/g, '') as string,
+    splitselectorTogglePrevent = selectorTogglePrevent.replace(
+      /\[|\]/g,
+      ''
+    ) as string,
+    splitselectorValidate = selectorValidate.replace(/\[|\]/g, '') as string,
+    splitselectorGroup = selectorGroup.replace(/\[|\]/g, '') as string,
+    splitselectorAnimate = selectorAnimate.replace(/\[|\]/g, '') as string,
+    splitselectorHover = selectorHover.replace(/\[|\]/g, '') as string,
+    splitselectorRole = selectorRole.replace(/\[|\]/g, '') as string,
+    splitselectorBack = selectorBack.replace(/\[|\]/g, '') as string,
   } = {
     ...defaultConfig,
     ...userSettings,
@@ -781,7 +805,6 @@ const Toggle = (userSettings = {}) => {
 
   const init = () => {
     destroy();
-
     isiOS && body.classList.add('is--ios');
 
     if (onHover) {
@@ -798,7 +821,7 @@ const Toggle = (userSettings = {}) => {
 
     if (onHover && isActive) {
       allHoverElements.map(item => {
-        mouseEvents.map(type => {
+        Object.values(PointerEvents).map(type => {
           item.removeEventListener(type, mouseHandler);
         });
       });
@@ -843,17 +866,16 @@ const Toggle = (userSettings = {}) => {
   function mouseHandler(event) {
     if (returnMouse(event)) return;
 
-    if (event.type === enter) {
+    if (event.type === PointerEvents.ENTER) {
       this.enterLocked = true;
     }
-    if (!this.enterLocked && event.type === enter) return;
+    if (!this.enterLocked && event.type === PointerEvents.ENTER) return;
     const eventTarget = getEventTarget(
       event.target,
       event.type,
-      selectorToggle,
-      toggleActiveClass
+      selectorToggle
     );
-    if (eventTarget.active) return;
+    // if (eventTarget.active) return;
 
     toggleItems(eventTarget);
   }
@@ -861,15 +883,15 @@ const Toggle = (userSettings = {}) => {
   const handleMouseEvent = eventType => {
     if (eventType === 'touch') {
       allHoverElements.map(function (item) {
-        item.removeEventListener(enter, mouseHandler, false);
-        item.removeEventListener(leave, mouseHandler, false);
+        item.removeEventListener(PointerEvents.ENTER, mouseHandler, false);
+        item.removeEventListener(PointerEvents.LEAVE, mouseHandler, false);
       });
     }
 
     if (eventType === 'mouse') {
       allHoverElements.map(function (item) {
-        item.addEventListener(enter, mouseHandler, false);
-        item.addEventListener(leave, mouseHandler, false);
+        item.addEventListener(PointerEvents.ENTER, mouseHandler, false);
+        item.addEventListener(PointerEvents.LEAVE, mouseHandler, false);
       });
     }
   };
@@ -894,9 +916,9 @@ const Toggle = (userSettings = {}) => {
     return;
   };
 
-  let array = [];
+  const array = [];
   const toggleItems = event => {
-    const target = event.target
+    const target: HTMLElement = event.target
       ? event.target.closest(selectorToggle) ||
         event.target
           .closest(selectorBack)

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2018",
     "module": "esnext",
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["dom", "DOM.Iterable", "ESNext"],
     "allowJs": true,
-    "jsx": "preserve",
     "isolatedModules": true,
-    "strict": true,
+    "strict": false,
+    "declaration": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -17,6 +17,6 @@
     "noFallthroughCasesInSwitch": true,
     "noEmit": true
   },
-  "include": ["src", "toggle.d.ts", "stories"],
-  "exclude": ["src/**/*.test.ts", "node_modules", "src/**/__test__"]
+  "include": ["src/**/*.ts", "toggle.dt.s"],
+  "exclude": ["*.test.ts", "src/**/__test__"]
 }

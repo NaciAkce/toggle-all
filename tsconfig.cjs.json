@@ -1,9 +1,9 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "module": "CommonJS",
-        "noEmit": false,
-        "declaration": false,
-        "outDir": "lib/cjs"
-    }
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "noEmit": false,
+    "declaration": true,
+    "outDir": "lib/cjs"
+  }
 }

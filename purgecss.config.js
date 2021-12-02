@@ -3,4 +3,5 @@ module.exports = {
   css: ['dist/**/*.css'],
   safelist: [/is--/, /nav--/],
   output: 'dist',
+  trim: false,
 };

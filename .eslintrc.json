@@ -19,9 +19,9 @@
   "rules": {
     "quotes": [1, "single"],
     "no-unused-vars": [0],
-    "max-statements": [1, 20],
+    "max-statements": [1, 50],
     "max-depth": [1, 4],
-    "complexity": [1, 10],
+    "complexity": [1, 50],
     "no-console": 1,
     "semi": 2,
     "no-empty": 1

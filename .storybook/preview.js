@@ -6,16 +6,24 @@ export const parameters = {
   viewport: {
     viewports: INITIAL_VIEWPORTS,
   },
-  storybookCodePanel: {
-    disabled: true,
-    allowedExtensions: ['js', 'jsx', 'ts', 'tsx', 'css', 'sass'],
+  docs: {
+    // Opt-out of inline rendering
+    inlineStories: false,
   },
 };
 
-Toggle({
-  onHover: true,
+window.Toggle = Toggle;
+
+setTimeout(() => {
+  Toggle({
+    onHover: true,
+  });
 });
 
 if (module.hot) {
-  module.hot.accept(['../lib/es/index.js'], () => {});
+  module.hot.accept(['../lib/es/index.js'], () => {
+    Toggle({
+      onHover: true,
+    });
+  });
 }
