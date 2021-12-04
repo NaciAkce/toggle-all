@@ -4,8 +4,18 @@ import {
   setPosition,
   animationExist,
   validateForm,
+  setDataset,
 } from './lib/Helper';
 import { ToggleEvent, toggleMachine } from './core/stateMachine';
+import {
+  Config,
+  EventTargets,
+  PointerEvents,
+  Types,
+  Role,
+  CreateElementObject,
+} from './types/toggle';
+
 const $ = (element: string) => document.querySelector(element);
 const $$ = (elements: string) => document.querySelectorAll(elements);
 
@@ -109,52 +119,15 @@ function handleHover(
   }
 }
 
-/**
- * @param  {EventTarget} elem     The element
- * @param  {String} selector The selector to match against
- */
-const getNextSibling = function (elem, selector) {
-  let sibling = elem.nextElementSibling;
-
-  if (!selector) return sibling;
-
-  while (sibling) {
-    if (sibling.matches(selector)) return sibling;
-    sibling = sibling.nextElementSibling;
-  }
-};
-
-/**
- * Item Object
- * @param {String} type
- * @param {HTMLElement} value
- * @param {String} role
- * @param {String} toggleActiveClass
- * @return {Object}.....Item Object
- */
-const createElementObject = (
-  type,
-  value,
-  role,
-  toggleActiveClass,
-  eventType,
-  selectorAnimate
-) => {
-  const isActive = value.classList.contains(toggleActiveClass);
-  const animate = value.hasAttribute(selectorAnimate)
-    ? value.hasAttribute(selectorAnimate)
-    : false;
-
-  return {
-    type: type,
-    value: value,
-    role: role ?? 'default',
-    active: isActive,
-    isAnimate: type === 'drop' && animate,
-    eventType: eventType,
-    tabActive: role === 'tab' && isActive,
-  };
-};
+export const selectElements = (
+  selectorValue: string,
+  selectorData?: string
+): HTMLElement[] =>
+  [
+    ...document.querySelectorAll(
+      selectorData ? `[${selectorData}="${selectorValue}"]` : selectorValue
+    ),
+  ] as HTMLElement[];
 
 /**
  * Get Toggles
@@ -166,101 +139,74 @@ const createElementObject = (
  * @return {Array}
  */
 const getToggles = (
-  target,
-  toggleActiveClass,
-  selector,
-  role,
-  splitSelectorToggle,
-  eventType
-) => {
-  return [].slice
-    .call($$(`[${splitSelectorToggle}="${selector}"]`))
-    .map(toggle =>
-      createElementObject(
-        'toggle',
-        toggle,
-        role,
-        toggleActiveClass,
-        eventType,
-        null
-      )
-    );
-};
+  { eventType, active, selector, group, target }: EventTargets,
+  {
+    selectorToggle,
+    selectorAnimate,
+    selectorGroup,
+    toggleActiveClass,
+    selectorRole,
+  }: Config
+): {
+  inValid: boolean;
+  allElements: CreateElementObject[];
+  allGrouped: CreateElementObject[];
+} => {
+  let inValid = false;
 
-/**
- * Get Grouped
- * @param {HTMLElement} target
- * @param {String} toggleActiveClass
- * @param {String} selectorAnimate
- * @param {String} group
- * @param {String} role
- * @param {String} splitSelectorToggle
- * @param {String} splitselectorGroup
- * @return {Array}
- */
-const getGrouped = (
-  target: HTMLElement,
-  toggleActiveClass: string,
-  group: string,
-  role: string,
-  splitSelectorToggle: string,
-  splitselectorGroup: string,
-  eventType: string,
-  selectorAnimate: string
-) => {
-  return [].slice
-    .call($$(`[${splitselectorGroup}="${group}"]`))
-    .filter(e => e !== target && e.classList.contains(toggleActiveClass))
-    .reduce((obj, item) => {
-      const dropItem = $(item.getAttribute(splitSelectorToggle)),
-        toggle = createElementObject(
-          'toggle',
-          item,
-          role,
-          toggleActiveClass,
-          eventType,
-          null
-        ),
-        drop = createElementObject(
-          'drop',
-          dropItem,
-          role,
-          toggleActiveClass,
-          eventType,
-          selectorAnimate
-        );
-      return [...obj, toggle, drop];
-    }, []);
-};
-
-/**
- * Get Drops
- * @param {EventTarget} target
- * @param {String} toggleActiveClass
- * @param {String} selectorAnimate
- * @param {String} selector
- * @param {String} role
- * @return {Array}
- */
-const getDrops = (
-  target,
-  toggleActiveClass,
-  selector,
-  role,
-  splitSelectorToggle,
-  eventType,
-  selectorAnimate
-) =>
-  [].slice.call($$(selector)).map(drop => {
-    return createElementObject(
-      'drop',
-      drop,
-      role,
-      toggleActiveClass,
+  const allTargets = selectElements(selector, setDataset(selectorToggle)).map(
+    target => ({
+      type: Types.TOGGLE,
+      target,
+      role:
+        (target.getAttribute(setDataset(selectorRole)) as Role) ?? Role.DEFAULT,
+      active,
+      isAnimate: target.hasAttribute(setDataset(selectorAnimate)) ?? false,
       eventType,
-      selectorAnimate
-    );
+    })
+  );
+  const allGroupedTargets = selectElements(group, setDataset(selectorGroup))
+    .filter(e => e !== target && e.classList.contains(toggleActiveClass))
+    .map(target => ({
+      type: Types.TOGGLE,
+      target,
+      role:
+        (target.getAttribute(setDataset(selectorRole)) as Role) ?? Role.DEFAULT,
+      active,
+      isAnimate: target.hasAttribute(setDataset(selectorAnimate)) ?? false,
+      eventType,
+    }));
+
+  const allGroupedDrops = allGroupedTargets.map(groupTarget => {
+    const target = $(
+      groupTarget.target.getAttribute(setDataset(selectorToggle))
+    ) as HTMLElement;
+
+    return {
+      type: Types.DROP,
+      target,
+      role: groupTarget.role,
+      active,
+      isAnimate: target.hasAttribute(setDataset(selectorAnimate)) ?? false,
+      eventType,
+    };
   });
+
+  const allDrops = selectElements(selector).map(target => ({
+    type: Types.DROP,
+    target,
+    role: allTargets[0].role ?? Role.DEFAULT,
+    active,
+    isAnimate: target.hasAttribute(setDataset(selectorAnimate)) ?? false,
+    eventType,
+  }));
+
+  return {
+    inValid,
+    allElements: [...allTargets, ...allDrops],
+    allGrouped: [...allGroupedTargets, ...allGroupedDrops],
+  };
+};
 
 /**
  *
@@ -269,6 +215,7 @@ const getDrops = (
  * @param {String} toggleActiveClass
  */
 const animateDefault = (
+  active: boolean,
   item,
   toggleShowClass,
   toggleActiveClass,
@@ -280,16 +227,18 @@ const animateDefault = (
    *
    * @param {Object} item
    */
+
   const collapseSection = item => {
+    console.log('item role', item.role);
     if (item.role === 'tab') {
-      item.value.classList.remove(toggleShowClass);
-      item.value.classList.remove(toggleActiveClass);
+      item.target.classList.remove(toggleShowClass);
+      item.target.classList.remove(toggleActiveClass);
     } else {
-      item.value.setAttribute('data-toggle-hidden', true);
+      item.target.setAttribute('data-toggle-hidden', true);
       item.role === 'overlay' && removeBodyClass(body);
 
-      item.value.addEventListener('transitionend', transitionEndCollapse);
-      item.value.classList.remove(toggleShowClass);
+      item.target.addEventListener('transitionend', transitionEndCollapse);
+      item.target.classList.remove(toggleShowClass);
       transitionCollapse = true;
     }
   };
@@ -299,8 +248,8 @@ const animateDefault = (
    * @param {Event} event
    */
   function transitionEndCollapse(event) {
-    item.value.removeEventListener('transitionend', transitionEndCollapse);
-    item.value.classList.remove(toggleActiveClass);
+    item.target.removeEventListener('transitionend', transitionEndCollapse);
+    item.target.classList.remove(toggleActiveClass);
     transitionCollapse = false;
   }
 
@@ -310,14 +259,14 @@ const animateDefault = (
    */
   function expandSection(item) {
     transitionExpand = true;
-    item.value.removeAttribute('data-toggle-hidden', true);
+    item.target.removeAttribute('data-toggle-hidden', true);
     item.role === 'overlay' && addBodyClass(body);
 
     window.requestAnimationFrame(function () {
-      item.value.classList.add(toggleActiveClass);
+      item.target.classList.add(toggleActiveClass);
       window.requestAnimationFrame(function () {
-        item.value.classList.add(toggleShowClass);
-        item.value.addEventListener('transitionend', transitionEndExpand);
+        item.target.classList.add(toggleShowClass);
+        item.target.addEventListener('transitionend', transitionEndExpand);
       });
     });
   }
@@ -328,19 +277,19 @@ const animateDefault = (
    * @param {Event} event
    */
   function transitionEndExpand(event) {
-    item.value.removeEventListener('transitionend', transitionEndExpand);
+    item.target.removeEventListener('transitionend', transitionEndExpand);
     transitionExpand = false;
-    item.value.enterLocked = false;
+    item.target.enterLocked = false;
   }
 
   if (
     eventType === PointerEvents.ENTER ||
-    (eventType !== PointerEvents.ENTER && !item.active)
+    (eventType !== PointerEvents.ENTER && !active)
   ) {
     expandSection(item);
   } else if (
     eventType === PointerEvents.LEAVE ||
-    (eventType !== PointerEvents.ENTER && item.active)
+    (eventType !== PointerEvents.ENTER && active)
   ) {
     collapseSection(item);
   }
@@ -353,6 +302,7 @@ const animateDefault = (
  * @param {String} toggleActiveClass
  */
 const animateHeight = (
+  active: boolean,
   item,
   toggleCollapseClass,
   toggleActiveClass,
@@ -360,27 +310,27 @@ const animateHeight = (
 ) => {
   const collapseSection = item => {
     transitionCollapse = true;
-    const sectionHeight = item.value.scrollHeight;
-    item.value.setAttribute('data-toggle-hidden', true);
+    const sectionHeight = item.target.scrollHeight;
+    item.target.setAttribute('data-toggle-hidden', true);
 
     window.requestAnimationFrame(function () {
-      item.value.style.height = sectionHeight + 'px';
-      item.value.classList.add(toggleCollapseClass);
+      item.target.style.height = sectionHeight + 'px';
+      item.target.classList.add(toggleCollapseClass);
       window.requestAnimationFrame(function () {
-        item.value.addEventListener('transitionend', transitionEndCollapse);
-        item.value.style.height = 0 + 'px';
+        item.target.addEventListener('transitionend', transitionEndCollapse);
+        item.target.style.height = 0 + 'px';
       });
     });
   };
 
   function expandSection(item) {
     transitionExpand = true;
-    item.value.classList.add(toggleActiveClass);
-    item.value.classList.add(toggleCollapseClass);
-    const sectionHeight = item.value.scrollHeight;
-    item.value.style.height = sectionHeight + 'px';
-    item.value.removeAttribute('data-toggle-hidden', true);
-    item.value.addEventListener('transitionend', transitionEndExpand);
+    item.target.classList.add(toggleActiveClass);
+    item.target.classList.add(toggleCollapseClass);
+    const sectionHeight = item.target.scrollHeight;
+    item.target.style.height = sectionHeight + 'px';
+    item.target.removeAttribute('data-toggle-hidden', true);
+    item.target.addEventListener('transitionend', transitionEndExpand);
   }
 
   function transitionEndExpand(event) {
@@ -406,17 +356,12 @@ const animateHeight = (
     transitionExpand = false;
   };
 
-  if (item.active) {
+  if (active) {
     return collapseSection(item);
   } else {
     return expandSection(item);
   }
 };
-
-enum PointerEvents {
-  ENTER = 'pointerenter',
-  LEAVE = 'pointerleave',
-}
 
 /**
  *
@@ -424,41 +369,39 @@ enum PointerEvents {
  * @param {String} type
  * @param {String} selectorToggle
  */
-const eventTarget = (event, selectorToggle) => {
-  const item =
-    event.type === 'click'
-      ? event.target?.closest(selectorToggle)
-      : event.target.querySelector(selectorToggle);
+const setEventTarget = (
+  {
+    target,
+    type,
+  }: {
+    target: HTMLElement;
+    type: Event['type'];
+  },
+  config: Config
+): EventTargets => {
+  const item: HTMLElement =
+    type === 'click' || type === 'keydown'
+      ? target?.closest(config.selectorToggle)
+      : target.querySelector(config.selectorToggle);
+  const selector = item.getAttribute(setDataset(config.selectorToggle));
+  const group = item.getAttribute(setDataset(config.selectorGroup));
+  const role =
+    (target.getAttribute(setDataset(config.selectorRole)) as Role) ??
+    Role.DEFAULT;
+  const active = item.classList.contains(config.toggleActiveClass);
 
   return {
     target: item,
-    type: event.type,
+    eventType: type,
+    selector,
+    group,
+    role,
+    active,
   };
 };
 
 const addBodyClass = body => body.classList.add('is--overlay');
 const removeBodyClass = body => body.classList.remove('is--overlay');
-
-interface Config {
-  selectorToggle: string;
-  selectorGlobal: string;
-  selectorGroup: string;
-  selectorValidate: string;
-  selectorRole: string;
-  selectorAnimate: string;
-  selectorHover: string;
-  toggleActiveClass: string;
-  toggleErrorClass: string;
-  toggleCollapseClass: string;
-  toggleShowClass: string;
-  toggleCurrentClass: string;
-  onHover: boolean;
-  onMediaQuery: string;
-  stopVideo: boolean;
-  callbackOpen: (target: HTMLElement) => void | null;
-  callbackClose: (target: HTMLElement) => void | null;
-  callbackToggle: (target: HTMLElement) => void | null;
-}
 
 const defaultConfig: Config = {
   selectorToggle: '[data-toggle]',
@@ -481,33 +424,8 @@ const defaultConfig: Config = {
   callbackToggle: null,
 };
 
-const Toggle = (userSettings: Partial<Config> = {}) => {
-  const {
-    selectorToggle,
-    selectorGlobal,
-    selectorGroup,
-    selectorValidate,
-    selectorRole,
-    selectorAnimate,
-    selectorHover,
-    toggleActiveClass,
-    toggleErrorClass,
-    toggleCollapseClass,
-    toggleShowClass,
-    toggleCurrentClass,
-    onHover,
-    onMediaQuery,
-    stopVideo,
-    callbackOpen,
-    callbackClose,
-    callbackToggle,
-    splitSelectorToggle = selectorToggle.replace(/\[|\]/g, '') as string,
-    splitselectorValidate = selectorValidate.replace(/\[|\]/g, '') as string,
-    splitselectorGroup = selectorGroup.replace(/\[|\]/g, '') as string,
-    splitselectorAnimate = selectorAnimate.replace(/\[|\]/g, '') as string,
-    splitselectorHover = selectorHover.replace(/\[|\]/g, '') as string,
-    splitselectorRole = selectorRole.replace(/\[|\]/g, '') as string,
-  } = {
+const Toggle = (userSettings: Partial<Config> = {}): void => {
+  const config = {
     ...defaultConfig,
     ...userSettings,
   };
@@ -515,8 +433,8 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
   const body = $('body'),
     isiOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
 
-  const init = () => {
-    destroy();
+  const init = ({ onHover, selectorHover, onMediaQuery }: Config) => {
+    destroy(config);
     isiOS && body.classList.add('is--ios');
 
     if (onHover) {
@@ -526,12 +444,12 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
     events();
   };
 
-  const destroy = () => {
+  const destroy = (config: Config) => {
     isiOS && body.classList.remove('is--ios');
     document.removeEventListener('click', clickHandler, false);
     document.removeEventListener('keydown', keyHandler, false);
 
-    if (onHover && isActive) {
+    if (config.onHover && isActive) {
       allHoverElements.map(item => {
         Object.values(PointerEvents).map(type => {
           item.removeEventListener(type, mouseHandler);
@@ -546,7 +464,7 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
   };
 
   const clickHandler = event => {
-    if (!event.target.closest(selectorToggle)) {
+    if (!event.target.closest(config.selectorToggle)) {
       closeActiveGlobal(event);
       return;
     }
@@ -561,7 +479,6 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
       this.enterLocked = true;
     }
     if (!this.enterLocked && event.type === PointerEvents.ENTER) return;
-
     toggleItems(event);
   }
 
@@ -582,8 +499,8 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
   };
 
   const returnKey = event =>
-    !event.target.closest(selectorToggle) ||
-    !event.target.closest(selectorHover) ||
+    !event.target.closest(config.selectorToggle) ||
+    !event.target.closest(config.selectorHover) ||
     event.code !== ENTER_KEY_CODE;
 
   const keyHandler = event => {
@@ -599,125 +516,105 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
   };
 
   const toggleItems = event => {
-    const { target, type } = eventTarget(event, selectorToggle);
+    const eventTarget = setEventTarget(event, config);
 
-    callbackToggle && callbackToggle(target);
+    if (eventTarget.role === Role.TAB && eventTarget.active) return;
 
-    const selector = target.getAttribute(splitSelectorToggle),
-      group = target.getAttribute(splitselectorGroup),
-      role = target.getAttribute(splitselectorRole),
-      allGrouped = group
-        ? getGrouped(
-            target,
-            toggleActiveClass,
-            group,
-            role,
-            splitSelectorToggle,
-            splitselectorGroup,
-            type,
-            splitselectorAnimate
-          )
-        : [],
-      allToggles = getToggles(
-        target,
-        toggleActiveClass,
-        selector,
-        role,
-        splitSelectorToggle,
-        type
-      ),
-      allDrops = getDrops(
-        target,
-        toggleActiveClass,
-        selector,
-        role,
-        splitSelectorToggle,
-        type,
-        splitselectorAnimate
-      ),
-      allElements = [...allGrouped, ...allToggles, ...allDrops];
+    config.callbackToggle && config.callbackToggle(eventTarget);
 
-    console.log('toggles', allToggles);
-    if (allToggles[0].tabActive) return;
+    const { allElements, inValid, allGrouped } = getToggles(
+      eventTarget,
+      config
+    );
 
     const hasToValidate = allElements.filter(
       item =>
         item.active &&
-        item.type === 'drop' &&
-        item.value.hasAttribute(splitselectorValidate)
+        item.type === Types.DROP &&
+        item.target.getAttribute(setDataset(config.selectorValidate))
     );
 
-    if (hasToValidate) {
-      const isValid = validateForm(
-        hasToValidate,
-        splitselectorValidate,
-        toggleErrorClass
-      );
+    if (hasToValidate.length > 0) {
+      const isValid = validateForm(hasToValidate, config.toggleErrorClass);
       if (isValid) return;
     }
 
+    allGrouped.forEach(item => {
+      reduceToggle(
+        true,
+        item,
+        config.toggleCollapseClass,
+        config.toggleActiveClass,
+        eventType
+      );
+    });
+
     for (let i = 0; i < allElements.length; i++) {
       reduceToggle(
+        eventTarget.active,
         allElements[i],
-        toggleCollapseClass,
-        toggleActiveClass,
-        eventType,
-        target
+        config.toggleCollapseClass,
+        config.toggleActiveClass,
+        eventType
       );
     }
   };
 
   const reduceToggle = (
-    item,
+    active,
+    item: CreateElementObject,
     toggleCollapseClass,
     toggleActiveClass,
-    eventType,
-    target
+    eventType
   ) => {
     const { isAnimate } = item,
       { exist, animation } = animationExist(item),
       isAnimateHeight = animation.match(/height/gi);
+    console.log('animate', exist, isAnimate, animation);
 
     if (isAnimate && isAnimateHeight) {
       animateHeight(
+        active,
         item,
         toggleCollapseClass,
         toggleActiveClass,
-        toggleCurrentClass
+        config.toggleCurrentClass
       );
     } else if (isAnimate && exist) {
       animateDefault(
+        active,
         item,
-        toggleShowClass,
+        config.toggleShowClass,
         toggleActiveClass,
         eventType,
-        toggleCurrentClass,
+        config.toggleCurrentClass,
         body
       );
     } else {
-      item.active ? close(item) : open(item);
+      active ? close(item) : open(item);
     }
   };
 
   const open = item => {
-    callbackOpen && callbackOpen(item);
+    config.callbackOpen && config.callbackOpen(item);
 
     item.role === 'tooltip' && setPosition(item);
     item.role === 'overlay' && addBodyClass(body);
-    item.value.classList.add(toggleActiveClass);
-    item.type === 'toggle' && item.value.setAttribute('aria-expanded', true);
+    item.target.classList.add(config.toggleActiveClass);
+    item.type === 'toggle' && item.target.setAttribute('aria-expanded', true);
     item.type === 'drop' &&
-      item.value.removeAttribute('data-toggle-hidden', true);
+      item.target.removeAttribute('data-toggle-hidden', true);
   };
 
   const close = item => {
-    callbackClose && callbackClose(item);
+    config.callbackClose && config.callbackClose(item);
 
     item.role === 'overlay' && removeBodyClass(body);
 
-    item.value.classList.remove(toggleActiveClass);
-    item.type === 'toggle' && item.value.setAttribute('aria-expanded', false);
-    item.type === 'drop' && item.value.setAttribute('data-toggle-hidden', true);
+    item.target.classList.remove(config.toggleActiveClass);
+    item.type === 'toggle' && item.target.setAttribute('aria-expanded', false);
+    item.type === 'drop' &&
+      item.target.setAttribute('data-toggle-hidden', true);
   };
 
   /**
@@ -760,31 +657,38 @@ const Toggle = (userSettings: Partial<Config> = {}) => {
 
   const closeActiveGlobal = event => {
     const groupGlobal = [].slice.call(
-      $$(`${selectorGlobal}.${toggleActiveClass}`)
+      $$(`${config.selectorGlobal}.${config.toggleActiveClass}`)
     );
 
     if (groupGlobal.length === 0) return;
 
     if (
-      event.target.closest(groupGlobal[0].getAttribute(splitSelectorToggle)) !==
-      null
+      event.target.closest(
+        groupGlobal[0].getAttribute(setDataset(config.selectorToggle))
+      ) !== null
     )
       return;
 
     const getToggleTarget = groupGlobal.map(item =>
-      $(`${item.getAttribute(splitSelectorToggle)}.${toggleActiveClass}`)
+      $(
+        `${item.getAttribute(setDataset(config.selectorToggle))}.${
+          config.toggleActiveClass
+        }`
+      )
     );
 
-    groupGlobal.forEach(item => item.classList.remove(toggleActiveClass));
+    groupGlobal.forEach(item =>
+      item.classList.remove(config.toggleActiveClass)
+    );
     getToggleTarget.forEach(item => {
       if (item === null) return;
-      item.classList.remove(toggleActiveClass);
-      item.classList.contains(toggleShowClass) &&
-        item.classList.remove(toggleShowClass);
+      item.classList.remove(config.toggleActiveClass);
+      item.classList.contains(config.toggleShowClass) &&
+        item.classList.remove(config.toggleShowClass);
     });
   };
 
-  init();
+  init(config);
 };
 
 export default Toggle;
