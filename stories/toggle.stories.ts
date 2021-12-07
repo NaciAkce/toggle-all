@@ -5,6 +5,8 @@ import '../dist/tabs.css';
 import '../dist/accordion.css';
 import '../dist/nav.css';
 
+import Toggle from '../lib/es/index';
+
 import toggleCss from '!!raw-loader!../dist/toggle.css';
 import tabCss from '!!raw-loader!../dist/tabs.css';
 import tooltipCss from '!!raw-loader!../dist/tooltip.css';
@@ -55,3 +57,9 @@ export const Grouped = (): string => groupedToggle;
 export const Tabs = (): string => tabsToggle;
 export const Accordions = (): string => accordionsToggle;
 export const Menu = (): string => menuHoverToggle;
+
+setTimeout(() => {
+  Toggle({
+    onHover: true,
+  });
+});

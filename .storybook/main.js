@@ -1,4 +1,5 @@
-const path = require('path');
+const { resolve, sep } = require('path');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = {
   stories: [
@@ -20,13 +21,20 @@ module.exports = {
   ],
   managerWebpack: async (config, options) => {
     // update config here
+
     return config;
   },
   webpackFinal: async (config, { configType }) => {
+    console.log('cond', configType);
+    config.plugins = [
+      configType !== 'production' && new ReactRefreshWebpackPlugin(),
+      ...config.plugins,
+    ].filter(Boolean);
+
     config.module.rules.push({
       test: /\.scss$/,
       use: ['style-loader', 'css-loader', 'sass-loader'],
-      include: path.resolve(__dirname, '../'),
+      include: resolve(__dirname, '../'),
     });
     return config;
   },

@@ -15,7 +15,8 @@
     "forceConsistentCasingInFileNames": true,
     "downlevelIteration": true,
     "noFallthroughCasesInSwitch": true,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": "."
   },
   "include": ["src/**/*.ts", "toggle.dt.s"],
   "exclude": ["*.test.ts", "src/**/__test__"]

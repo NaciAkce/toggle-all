@@ -1,5 +1,5 @@
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
-import Toggle from '../lib/es/index';
+// import Toggle from '../lib/es/index';
 import '../dist/styles.css';
 
 export const parameters = {
@@ -12,18 +12,28 @@ export const parameters = {
   },
 };
 
-window.Toggle = Toggle;
+// window.Toggle = Toggle;
 
-setTimeout(() => {
-  Toggle({
-    onHover: true,
-  });
-});
+// Toggle({
+//   onHover: true,
+// });
 
-if (module.hot) {
-  module.hot.accept(['../lib/es/index.js'], () => {
-    Toggle({
-      onHover: true,
-    });
-  });
-}
+// export const decorators = [
+//   story => {
+//     setTimeout(() => {
+//       Toggle({
+//         onHover: true,
+//       });
+//     });
+//     return story();
+//   },
+// ];
+
+// if (module.hot) {
+//   console.log('module', module.hot);
+//   module.hot.accept(['../lib/es/index.js'], () => {
+//     Toggle({
+//       onHover: true,
+//     });
+//   });
+// }

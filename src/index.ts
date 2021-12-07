@@ -19,7 +19,7 @@ import {
 const $ = (element: string) => document.querySelector(element);
 const $$ = (elements: string) => document.querySelectorAll(elements);
 
-console.log('toggle', toggleMachine.state, toggleMachine.nextEvents);
+console.log('toggle oder', toggleMachine.state, toggleMachine.nextEvents);
 toggleMachine.transition(toggleMachine.state, ToggleEvent.TransitionOn);
 console.log('toggle', toggleMachine.state, toggleMachine.nextEvents);
 toggleMachine.transition(toggleMachine.state, ToggleEvent.TransitionOn);
@@ -229,7 +229,6 @@ const animateDefault = (
    */
 
   const collapseSection = item => {
-    console.log('item role', item.role);
     if (item.role === 'tab') {
       item.target.classList.remove(toggleShowClass);
       item.target.classList.remove(toggleActiveClass);
@@ -570,7 +569,6 @@ const Toggle = (userSettings: Partial<Config> = {}): void => {
     const { isAnimate } = item,
       { exist, animation } = animationExist(item),
       isAnimateHeight = animation.match(/height/gi);
-    console.log('animate', exist, isAnimate, animation);
 
     if (isAnimate && isAnimateHeight) {
       animateHeight(
