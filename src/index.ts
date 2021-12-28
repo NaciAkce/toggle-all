@@ -5,21 +5,30 @@ import {
   animationExist,
   validateForm,
   setDataset,
-} from './lib/Helper';
-import { ToggleEvent, toggleMachine } from './core/stateMachine';
+} from '~/lib/Helper';
+import { ToggleEvent, toggleMachine } from '~/core/stateMachine';
 import {
   Config,
-  EventTargets,
-  PointerEvents,
+  EventTarget,
+  EventTypes,
   Types,
   Role,
-  CreateElementObject,
-} from './types/toggle';
+  ToggleElement,
+  KEY_CODE,
+  KeyCode,
+  HTMLElementEvent,
+  ToggleState,
+} from '~/types/toggle';
+import {
+  setConfig,
+  defaultConfig,
+  createToggles,
+} from '~/core/toggle/createToggles';
 
 const $ = (element: string) => document.querySelector(element);
 const $$ = (elements: string) => document.querySelectorAll(elements);
 
-console.log('toggle oder', toggleMachine.state, toggleMachine.nextEvents);
+console.log('toggle', toggleMachine.state, toggleMachine.nextEvents);
 toggleMachine.transition(toggleMachine.state, ToggleEvent.TransitionOn);
 console.log('toggle', toggleMachine.state, toggleMachine.nextEvents);
 toggleMachine.transition(toggleMachine.state, ToggleEvent.TransitionOn);
@@ -27,35 +36,11 @@ console.log('toggle', toggleMachine.state, toggleMachine.nextEvents);
 
 let transitionCollapse = false,
   transitionExpand = false,
-  setMedia = null,
-  allHoverElements: HTMLElement[] = [],
-  tHandler: () => void | null,
-  eventType: null | 'touch' | 'mouse' = null,
   isActive: boolean | null = null,
-  focusable: HTMLElement[],
-  previousElement: Element;
+  allHoverElements: HTMLElement[] = [],
+  setMedia = null;
 
-const tabbableBreadcrumb: Array<{ element: HTMLElement; active: HTMLElement }> =
-  [];
-
-const ENTER_KEY_CODE = 'Enter',
-  UP_KEY_CODE = 'ArrowDown',
-  DOWN_KEY_CODE = 'ArrowUp',
-  TAB_KEY_CODE = 'Tab',
-  SHIFT_KEY_CODE = 16,
-  ESCAPE_KEY_CODE = 'Escape';
-
-/**
- *
- * @param {Object} code
- * @return {Boolean}...
- */
-const keyEvents = ({ code }: { code: string | number }) =>
-  code === UP_KEY_CODE ||
-  code === DOWN_KEY_CODE ||
-  code === TAB_KEY_CODE ||
-  code === ESCAPE_KEY_CODE ||
-  code === SHIFT_KEY_CODE;
+const eventType: null | 'touch' | 'mouse' = null;
 
 /**
  *
@@ -69,55 +54,7 @@ const matchMedia = (mq: MediaQueryList) => {
   if (!matches && (isActive === true || isActive === null)) {
     isActive = false;
   }
-  checkEvent();
 };
-
-/**
- *
- * @param {Function} handleMouseEvent test
- */
-const detectMouse = handleMouseEvent => event => {
-  if (
-    (eventType !== null &&
-      eventType === event.pointerType &&
-      isActive &&
-      eventType === 'touch') ||
-    (!isActive && eventType === 'mouse')
-  )
-    return;
-
-  eventType = isActive ? 'touch' : event.pointerType;
-  handleMouseEvent(eventType);
-
-  document.removeEventListener('pointerover', tHandler, false);
-};
-
-const checkEvent = () => {
-  document.addEventListener('pointerover', tHandler, false);
-};
-
-/**
- *
- * @param {String} selectorHover
- * @param {String} onnHoverMediaQuery
- * @param {Function} matchMedia
- * @param {Function} handleMouseEvent
- */
-function handleHover(
-  selectorHover,
-  onnHoverMediaQuery,
-  matchMedia,
-  handleMouseEvent
-) {
-  allHoverElements = [].slice.call($$(selectorHover));
-  tHandler = throttle(detectMouse(handleMouseEvent), 100);
-  checkEvent();
-  setMedia = useMedia(onnHoverMediaQuery, matchMedia);
-
-  if (setMedia) {
-    isActive = true;
-  }
-}
 
 export const selectElements = (
   selectorValue: string,
@@ -139,7 +76,7 @@ export const selectElements = (
  * @return {Array}
  */
 const getToggles = (
-  { eventType, active, selector, group, target }: EventTargets,
+  { active, selector, group, target }: EventTarget,
   {
     selectorToggle,
     selectorAnimate,
@@ -148,12 +85,9 @@ const getToggles = (
     selectorRole,
   }: Config
 ): {
-  inValid: boolean;
-  allElements: CreateElementObject[];
-  allGrouped: CreateElementObject[];
+  allElements: ToggleElement[];
+  allGrouped: ToggleElement[];
 } => {
-  let inValid = false;
-
   const allTargets = selectElements(selector, setDataset(selectorToggle)).map(
     target => ({
       type: Types.TOGGLE,
@@ -161,8 +95,13 @@ const getToggles = (
       role:
         (target.getAttribute(setDataset(selectorRole)) as Role) ?? Role.DEFAULT,
       active,
-      isAnimate: target.hasAttribute(setDataset(selectorAnimate)) ?? false,
-      eventType,
+      animate:
+        (target.getAttribute(setDataset(selectorAnimate)) ||
+          target.hasAttribute(setDataset(selectorAnimate))) ??
+        '',
+      selector,
+      group,
+      valid: false,
     })
   );
   const allGroupedTargets = selectElements(group, setDataset(selectorGroup))
@@ -173,8 +112,13 @@ const getToggles = (
       role:
         (target.getAttribute(setDataset(selectorRole)) as Role) ?? Role.DEFAULT,
       active,
-      isAnimate: target.hasAttribute(setDataset(selectorAnimate)) ?? false,
-      eventType,
+      animate:
+        (target.getAttribute(setDataset(selectorAnimate)) ||
+          target.hasAttribute(setDataset(selectorAnimate))) ??
+        '',
+      selector,
+      group,
+      valid: false,
     }));
 
   const allGroupedDrops = allGroupedTargets.map(groupTarget => {
@@ -187,8 +131,13 @@ const getToggles = (
       target,
       role: groupTarget.role,
       active,
-      isAnimate: target.hasAttribute(setDataset(selectorAnimate)) ?? false,
-      eventType,
+      animate:
+        (target.getAttribute(setDataset(selectorAnimate)) ||
+          target.hasAttribute(setDataset(selectorAnimate))) ??
+        '',
+      selector,
+      group,
+      valid: false,
     };
   });
 
@@ -197,12 +146,16 @@ const getToggles = (
     target,
     role: allTargets[0].role ?? Role.DEFAULT,
     active,
-    isAnimate: target.hasAttribute(setDataset(selectorAnimate)) ?? false,
-    eventType,
+    animate:
+      (target.getAttribute(setDataset(selectorAnimate)) ||
+        target.hasAttribute(setDataset(selectorAnimate))) ??
+      '',
+    selector,
+    group,
+    valid: false,
   }));
 
   return {
-    inValid,
     allElements: [...allTargets, ...allDrops],
     allGrouped: [...allGroupedTargets, ...allGroupedDrops],
   };
@@ -233,7 +186,6 @@ const animateDefault = (
       item.target.classList.remove(toggleShowClass);
       item.target.classList.remove(toggleActiveClass);
     } else {
-      item.target.setAttribute('data-toggle-hidden', true);
       item.role === 'overlay' && removeBodyClass(body);
 
       item.target.addEventListener('transitionend', transitionEndCollapse);
@@ -258,7 +210,7 @@ const animateDefault = (
    */
   function expandSection(item) {
     transitionExpand = true;
-    item.target.removeAttribute('data-toggle-hidden', true);
+
     item.role === 'overlay' && addBodyClass(body);
 
     window.requestAnimationFrame(function () {
@@ -282,13 +234,13 @@ const animateDefault = (
   }
 
   if (
-    eventType === PointerEvents.ENTER ||
-    (eventType !== PointerEvents.ENTER && !active)
+    eventType === EventTypes.ENTER ||
+    (eventType !== EventTypes.ENTER && !active)
   ) {
     expandSection(item);
   } else if (
-    eventType === PointerEvents.LEAVE ||
-    (eventType !== PointerEvents.ENTER && active)
+    eventType === EventTypes.LEAVE ||
+    (eventType !== EventTypes.ENTER && active)
   ) {
     collapseSection(item);
   }
@@ -377,7 +329,7 @@ const setEventTarget = (
     type: Event['type'];
   },
   config: Config
-): EventTargets => {
+): EventTarget => {
   const item: HTMLElement =
     type === 'click' || type === 'keydown'
       ? target?.closest(config.selectorToggle)
@@ -402,67 +354,57 @@ const setEventTarget = (
 const addBodyClass = body => body.classList.add('is--overlay');
 const removeBodyClass = body => body.classList.remove('is--overlay');
 
-const defaultConfig: Config = {
-  selectorToggle: '[data-toggle]',
-  selectorGlobal: '[data-toggle-global]',
-  selectorGroup: '[data-toggle-group]',
-  selectorValidate: '[data-toggle-validate]',
-  selectorRole: '[data-toggle-role]',
-  selectorAnimate: '[data-toggle-animate]',
-  selectorHover: '[data-toggle-hover]',
-  toggleActiveClass: 'is--active',
-  toggleErrorClass: 'is--error',
-  toggleCollapseClass: 'is--collapsing',
-  toggleShowClass: 'is--show',
-  toggleCurrentClass: 'is--current',
-  onHover: false,
-  onMediaQuery: '(max-width: 992px)',
-  stopVideo: true,
-  callbackOpen: null,
-  callbackClose: null,
-  callbackToggle: null,
-};
-
-const Toggle = (userSettings: Partial<Config> = {}): void => {
-  const config = {
-    ...defaultConfig,
-    ...userSettings,
+function Toggle(userSettings: Partial<Config> = {}): {
+  init: () => void;
+  destroy: () => void;
+} {
+  const config = setConfig(defaultConfig, userSettings);
+  const state: ToggleState = {
+    activeElement: null,
+    activeToggles: [],
+    globals: [],
+    grouped: {},
+    previousActiveElement: null,
+    touch: false,
   };
 
   const body = $('body'),
     isiOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
 
-  const init = ({ onHover, selectorHover, onMediaQuery }: Config) => {
-    destroy(config);
+  function init() {
     isiOS && body.classList.add('is--ios');
-
-    if (onHover) {
-      handleHover(selectorHover, onMediaQuery, matchMedia, handleMouseEvent);
-    }
-
-    events();
-  };
-
-  const destroy = (config: Config) => {
-    isiOS && body.classList.remove('is--ios');
-    document.removeEventListener('click', clickHandler, false);
-    document.removeEventListener('keydown', keyHandler, false);
-
-    if (config.onHover && isActive) {
-      allHoverElements.map(item => {
-        Object.values(PointerEvents).map(type => {
-          item.removeEventListener(type, mouseHandler);
-        });
-      });
-    }
-  };
-
-  const events = () => {
     document.addEventListener('click', clickHandler, false);
     document.addEventListener('keydown', keyHandler, false);
+
+    setMedia = useMedia(config.onMediaQuery, matchMedia);
+
+    if (config.onHover) {
+      allHoverElements = selectElements(config.selectorHover);
+      console.log('events all', allHoverElements, EventTypes);
+      allHoverElements.map(function (item) {
+        item.addEventListener(EventTypes.ENTER, mouseHandler, false);
+        item.addEventListener(EventTypes.LEAVE, mouseHandler, false);
+      });
+    }
+  }
+
+  const destroy = () => {
+    document.removeEventListener('click', clickHandler, false);
+    document.removeEventListener('keydown', keyHandler, false);
+    config.onHover &&
+      allHoverElements.map(function (item) {
+        item.removeEventListener(EventTypes.ENTER, mouseHandler, false);
+        item.removeEventListener(EventTypes.LEAVE, mouseHandler, false);
+      });
   };
 
-  const clickHandler = event => {
+  function handleChange(event) {
+    console.log('toggle handlechae', state);
+    // const toggle = createToggles({ event, config, state });
+  }
+
+  const clickHandler = (event: HTMLElementEvent<Event>) => {
+    handleChange(event);
     if (!event.target.closest(config.selectorToggle)) {
       closeActiveGlobal(event);
       return;
@@ -473,45 +415,13 @@ const Toggle = (userSettings: Partial<Config> = {}): void => {
     toggleItems(event);
   };
 
-  function mouseHandler(event) {
-    if (event.type === PointerEvents.ENTER) {
-      this.enterLocked = true;
-    }
-    if (!this.enterLocked && event.type === PointerEvents.ENTER) return;
+  function mouseHandler(event: HTMLElementEvent<MouseEvent>) {
+    handleChange(event);
     toggleItems(event);
   }
 
-  const handleMouseEvent = eventType => {
-    if (eventType === 'touch') {
-      allHoverElements.map(function (item) {
-        item.removeEventListener(PointerEvents.ENTER, mouseHandler, false);
-        item.removeEventListener(PointerEvents.LEAVE, mouseHandler, false);
-      });
-    }
-
-    if (eventType === 'mouse') {
-      allHoverElements.map(function (item) {
-        item.addEventListener(PointerEvents.ENTER, mouseHandler, false);
-        item.addEventListener(PointerEvents.LEAVE, mouseHandler, false);
-      });
-    }
-  };
-
-  const returnKey = event =>
-    !event.target.closest(config.selectorToggle) ||
-    !event.target.closest(config.selectorHover) ||
-    event.code !== ENTER_KEY_CODE;
-
-  const keyHandler = event => {
-    if (returnKey(event) && !keyEvents(event)) return;
-    previousElement = document.activeElement;
-    if (!returnKey(event)) {
-      event.preventDefault();
-      toggleItems(event);
-    } else if (keyEvents(event)) {
-      tabbableBreadcrumb.length > 0 && tab(event);
-    }
-    return;
+  const keyHandler = (event: HTMLElementEvent<KeyboardEvent>) => {
+    handleChange(event);
   };
 
   const toggleItems = event => {
@@ -521,22 +431,7 @@ const Toggle = (userSettings: Partial<Config> = {}): void => {
 
     config.callbackToggle && config.callbackToggle(eventTarget);
 
-    const { allElements, inValid, allGrouped } = getToggles(
-      eventTarget,
-      config
-    );
-
-    const hasToValidate = allElements.filter(
-      item =>
-        item.active &&
-        item.type === Types.DROP &&
-        item.target.getAttribute(setDataset(config.selectorValidate))
-    );
-
-    if (hasToValidate.length > 0) {
-      const isValid = validateForm(hasToValidate, config.toggleErrorClass);
-      if (isValid) return;
-    }
+    const { allElements, allGrouped } = getToggles(eventTarget, config);
 
     allGrouped.forEach(item => {
       reduceToggle(
@@ -561,16 +456,16 @@ const Toggle = (userSettings: Partial<Config> = {}): void => {
 
   const reduceToggle = (
     active,
-    item: CreateElementObject,
+    item: ToggleElement,
     toggleCollapseClass,
     toggleActiveClass,
     eventType
   ) => {
-    const { isAnimate } = item,
-      { exist, animation } = animationExist(item),
-      isAnimateHeight = animation.match(/height/gi);
-
-    if (isAnimate && isAnimateHeight) {
+    const { animate } = item,
+      animation = animationExist(item.target);
+    console.log('anum animation ', animation);
+    console.log('anum animate', Boolean(animate), animation, item);
+    if (animation?.match(/height/gi)) {
       animateHeight(
         active,
         item,
@@ -578,7 +473,7 @@ const Toggle = (userSettings: Partial<Config> = {}): void => {
         toggleActiveClass,
         config.toggleCurrentClass
       );
-    } else if (isAnimate && exist) {
+    } else if (animation && animate) {
       animateDefault(
         active,
         item,
@@ -600,8 +495,6 @@ const Toggle = (userSettings: Partial<Config> = {}): void => {
     item.role === 'overlay' && addBodyClass(body);
     item.target.classList.add(config.toggleActiveClass);
     item.type === 'toggle' && item.target.setAttribute('aria-expanded', true);
-    item.type === 'drop' &&
-      item.target.removeAttribute('data-toggle-hidden', true);
   };
 
   const close = item => {
@@ -611,82 +504,56 @@ const Toggle = (userSettings: Partial<Config> = {}): void => {
 
     item.target.classList.remove(config.toggleActiveClass);
     item.type === 'toggle' && item.target.setAttribute('aria-expanded', false);
-    item.type === 'drop' &&
-      item.target.setAttribute('data-toggle-hidden', true);
-  };
-
-  /**
-   *
-   * @param {Event} event
-   */
-  const tab = event => {
-    previousElement = document.activeElement;
-
-    const parentItem = {
-      item: tabbableBreadcrumb[0].active,
-      type: event.type,
-    };
-
-    const firstItem = focusable[1];
-    const lastItem = focusable[focusable.length - 1];
-
-    if (event.code === TAB_KEY_CODE) {
-      if (event.shiftKey) {
-        if (document.activeElement === firstItem) {
-          toggleItems(parentItem);
-        }
-      } else {
-        if (document.activeElement === lastItem) {
-          toggleItems(parentItem);
-        }
-      }
-      // } else if (event.code === UP_KEY_CODE && document.activeElement === firstItem) {
-      //     event.preventDefault();
-      //     lastItem.focus();
-
-      // } else if (event.code === DOWN_KEY_CODE && document.activeElement === lastItem) {
-      //     event.preventDefault();
-      //     firstItem.focus();
-    } else if (event.code === ESCAPE_KEY_CODE) {
-      focusable[0].focus();
-      toggleItems(parentItem);
-    }
   };
 
   const closeActiveGlobal = event => {
-    const groupGlobal = [].slice.call(
-      $$(`${config.selectorGlobal}.${config.toggleActiveClass}`)
-    );
+    const targets = [
+      ...$$(`${config.selectorGlobal}.${config.toggleActiveClass}`),
+    ];
 
-    if (groupGlobal.length === 0) return;
+    console.log('group wie', targets, Boolean(targets));
 
-    if (
-      event.target.closest(
-        groupGlobal[0].getAttribute(setDataset(config.selectorToggle))
-      ) !== null
-    )
-      return;
+    if (targets.length === 0) return;
 
-    const getToggleTarget = groupGlobal.map(item =>
-      $(
-        `${item.getAttribute(setDataset(config.selectorToggle))}.${
-          config.toggleActiveClass
-        }`
-      )
-    );
+    targets.forEach(toggleItems);
+    // if (groupGlobal.length === 0) return;
 
-    groupGlobal.forEach(item =>
-      item.classList.remove(config.toggleActiveClass)
-    );
-    getToggleTarget.forEach(item => {
-      if (item === null) return;
-      item.classList.remove(config.toggleActiveClass);
-      item.classList.contains(config.toggleShowClass) &&
-        item.classList.remove(config.toggleShowClass);
-    });
+    // if (
+    //   event.target.closest(
+    //     groupGlobal[0].getAttribute(setDataset(config.selectorToggle))
+    //   ) !== null
+    // )
+    //   return;
+
+    // const getToggleTarget = groupGlobal.map(item =>
+    //   $(
+    //     `${item.getAttribute(setDataset(config.selectorToggle))}.${
+    //       config.toggleActiveClass
+    //     }`
+    //   )
+    // );
+
+    // groupGlobal.forEach(item =>
+    //   item.classList.remove(config.toggleActiveClass)
+    // );
+    // getToggleTarget.forEach(item => {
+    //   if (item === null) return;
+    //   item.classList.remove(config.toggleActiveClass);
+    //   item.classList.contains(config.toggleShowClass) &&
+    //     item.classList.remove(config.toggleShowClass);
+    // });
   };
 
-  init(config);
-};
+  return {
+    init,
+    destroy,
+  };
+}
 
+if (module.hot) {
+  module.hot.accept();
+  module.hot.dispose(_ => {
+    location.reload();
+  });
+}
 export default Toggle;

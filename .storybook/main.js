@@ -1,5 +1,5 @@
 const { resolve, sep } = require('path');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   stories: [
@@ -25,11 +25,12 @@ module.exports = {
     return config;
   },
   webpackFinal: async (config, { configType }) => {
-    console.log('cond', configType);
-    config.plugins = [
-      configType !== 'production' && new ReactRefreshWebpackPlugin(),
-      ...config.plugins,
-    ].filter(Boolean);
+    config.resolve.plugins = [
+      ...(config.resolve.plugins || []),
+      new TsconfigPathsPlugin({
+        extensions: config.resolve.extensions,
+      }),
+    ];
 
     config.module.rules.push({
       test: /\.scss$/,
@@ -40,5 +41,11 @@ module.exports = {
   },
   core: {
     builder: 'webpack5',
+  },
+  reactOptions: {
+    fastRefresh: false,
+  },
+  features: {
+    stroyStoreV7: true,
   },
 };

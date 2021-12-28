@@ -4,6 +4,7 @@
     "module": "ESNext",
     "noEmit": false,
     "declaration": true,
+    "declarationMap": true,
     "outDir": "lib/es"
   },
   "include": ["src/**/*.ts", "toggle.dt.s"]

@@ -44,7 +44,7 @@ export default {
         language: 'css',
       },
       {
-        tab: 'CSS Accordion',
+        tab: 'CSS Accordion O',
         template: accordionCss,
         language: 'css',
       },
@@ -58,8 +58,15 @@ export const Tabs = (): string => tabsToggle;
 export const Accordions = (): string => accordionsToggle;
 export const Menu = (): string => menuHoverToggle;
 
-setTimeout(() => {
-  Toggle({
-    onHover: true,
-  });
+const toggle = Toggle({
+  onHover: true,
 });
+
+setTimeout(() => toggle.init());
+
+if (module.hot) {
+  module.hot.accept();
+  module.hot.dispose(_ => {
+    location.reload();
+  });
+}

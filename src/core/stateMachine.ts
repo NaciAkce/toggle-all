@@ -18,11 +18,11 @@ export const stateMachine = <S extends string, E extends string>(
       return config.states[state].on[event] !== undefined;
     },
     transition: function (currentState: S, event: E) {
-      const nextState = config.states[currentState].on[event] || state;
+      const nextState = config.states[currentState].on[event] || machine.state;
       if (!nextState) {
         return;
       }
-
+      console.log('cur', machine.state, event, nextState);
       machine.previousState = state;
       machine.state = nextState;
       machine.nextEvents = Object.keys(config.states[nextState].on) as E[];

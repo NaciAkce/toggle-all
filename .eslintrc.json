@@ -18,6 +18,7 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "quotes": [1, "single"],
+    "@typescript-eslint/no-namespace": "off",
     "no-unused-vars": [0],
     "max-statements": [1, 50],
     "max-depth": [1, 4],

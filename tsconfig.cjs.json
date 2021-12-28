@@ -4,6 +4,7 @@
     "module": "CommonJS",
     "noEmit": false,
     "declaration": true,
+    "declarationMap": true,
     "outDir": "lib/cjs"
   },
   "include": ["src/**/*.ts", "toggle.dt.s"]

@@ -1,4 +1,4 @@
-import { CreateElementObject } from '../types/toggle';
+import { Config, Role, ToggleElement, Types } from '../types/toggle';
 
 export const throttle = (
   func: (event: any) => void,
@@ -134,14 +134,11 @@ export const isOutOfViewport = function (
  * @param {Node} item
  */
 export const animationExist = item => {
-  const prop = window.getComputedStyle(item.target, null);
+  const prop = window.getComputedStyle(item, null);
   const duration = prop.getPropertyValue('transition-duration');
   const property = prop.getPropertyValue('transition-property');
 
-  return {
-    exist: item.type === 'drop' && duration !== '0s',
-    animation: property,
-  };
+  return duration !== '0s' ? property : null;
 };
 
 export const focusableAll =
@@ -154,10 +151,10 @@ export const focusableAll =
  * @param {String} toggleErrorClass
  */
 export const validateForm = (
-  item: CreateElementObject[],
+  item: ToggleElement['target'],
   toggleErrorClass: string
 ): boolean => {
-  const form = item[0].target.querySelectorAll('[required]') ?? false;
+  const form = item.querySelectorAll('[required]') ?? false;
 
   if (!form) return false;
 
@@ -206,3 +203,13 @@ export const getNextSibling = function (elem, selector) {
 
 export const setDataset = (selector: string): string =>
   selector.replace(/\[|\]/g, '');
+
+export const selectElements = (
+  selectorValue: string,
+  selectorData?: string
+): HTMLElement[] =>
+  [
+    ...document.querySelectorAll(
+      selectorData ? `[${selectorData}="${selectorValue}"]` : selectorValue
+    ),
+  ] as HTMLElement[];
